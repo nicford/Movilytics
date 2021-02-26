@@ -1,7 +1,8 @@
 {
   "version": 1,
   "cli": {
-    "defaultCollection": "@nrwl/angular"
+    "defaultCollection": "@nrwl/angular",
+    "analytics": false
   },
   "defaultProject": "ucl-imdb",
   "schematics": {
@@ -51,7 +52,9 @@
               "apps/ucl-imdb/src/favicon.ico",
               "apps/ucl-imdb/src/assets"
             ],
-            "styles": ["apps/ucl-imdb/src/styles.scss"],
+            "styles": [
+              "apps/ucl-imdb/src/styles.scss"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -113,7 +116,9 @@
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/ucl-imdb"],
+          "outputs": [
+            "coverage/apps/ucl-imdb"
+          ],
           "options": {
             "jestConfig": "apps/ucl-imdb/jest.config.js",
             "passWithNoTests": true
@@ -142,7 +147,9 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/ucl-imdb-e2e/**/*.{js,ts}"]
+            "lintFilePatterns": [
+              "apps/ucl-imdb-e2e/**/*.{js,ts}"
+            ]
           }
         }
       }
@@ -155,12 +162,16 @@
       "architect": {
         "build": {
           "builder": "@nrwl/node:build",
-          "outputs": ["{options.outputPath}"],
+          "outputs": [
+            "{options.outputPath}"
+          ],
           "options": {
             "outputPath": "dist/apps/api",
             "main": "apps/api/src/main.ts",
             "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": ["apps/api/src/assets"]
+            "assets": [
+              "apps/api/src/assets"
+            ]
           },
           "configurations": {
             "production": {
@@ -185,12 +196,16 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/api/**/*.ts"]
+            "lintFilePatterns": [
+              "apps/api/**/*.ts"
+            ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/api"],
+          "outputs": [
+            "coverage/apps/api"
+          ],
           "options": {
             "jestConfig": "apps/api/jest.config.js",
             "passWithNoTests": true
@@ -206,7 +221,9 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/api-interfaces/**/*.ts"]
+            "lintFilePatterns": [
+              "libs/api-interfaces/**/*.ts"
+            ]
           }
         }
       }

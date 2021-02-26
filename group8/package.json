@@ -25,7 +25,8 @@
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
-    "help": "nx help"
+    "help": "nx help",
+    "prettier-format": "prettier --write '**/*.{ts,json,md,yml,js,css,html}'"
   },
   "private": true,
   "dependencies": {
@@ -72,14 +73,20 @@
     "@typescript-eslint/parser": "4.3.0",
     "cypress": "^6.0.1",
     "dotenv": "6.2.0",
-    "eslint": "7.10.0",
+    "eslint": "^7.20.0",
     "eslint-config-prettier": "6.0.0",
     "eslint-plugin-cypress": "^2.10.3",
+    "husky": "^5.1.1",
     "jest": "26.2.2",
     "jest-preset-angular": "8.3.2",
     "prettier": "2.2.1",
     "ts-jest": "26.4.0",
     "ts-node": "~9.1.1",
     "typescript": "~4.0.3"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
   }
 }
