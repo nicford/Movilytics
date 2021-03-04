@@ -1,35 +1,43 @@
 version: '3.7'
 
 services:
-  main:
-    container_name: main
-    build:
-      context: .
-      target: development
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
-    ports:
-      - ${SERVER_PORT}:${SERVER_PORT}
-      - 9229:9229
-    command: npm run start:dev
-    env_file:
-      - .env
-    networks:
-      - webnet
-    depends_on:
-      - postgres
-  postgres:
+  # main:
+  #   container_name: main
+  #   build:
+  #     context: .
+  #     target: development
+  #   volumes:
+  #     - .:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   ports:
+  #     - 9229:9229
+  #   command: npm run start:dev
+  #   env_file:
+  #     - .env
+  #   networks:
+  #     - webnet
+  #   depends_on:
+  #     - db
+  db:
+    image: postgres
     container_name: postgres
-    image: postgres:12
-    networks:
-      - webnet
+    restart: always
     env_file:
-      - database.env
+      - ./env/database.env
     ports:
       - 5432:5432
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - ./apps/db/pgdata:/var/lib/postgresql/data
+      - ./apps/db/schema_init.sql:/docker-entrypoint-initdb.d/1_init.sql
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    env_file:
+      - ./env/pgadmin.env
+    ports:
+      - '8080:80'
+    depends_on:
+      - db
 networks:
   webnet:
 volumes:
