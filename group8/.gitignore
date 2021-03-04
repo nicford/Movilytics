@@ -40,3 +40,6 @@ Thumbs.db
 
 # DB Files 
 /apps/db/pgdata/
+
+# env 
+env/* 
