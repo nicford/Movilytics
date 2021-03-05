@@ -113,7 +113,7 @@ ALTER TABLE people OWNER TO postgres;
 CREATE TABLE production_companies (
     company_id integer NOT NULL,
     company_name character varying(255) NOT NULL,
-    country_id character varying(2) NOT NULL
+    country_id character varying(2) -- Nullable
 );
 
 
