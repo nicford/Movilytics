@@ -66,22 +66,23 @@ ALTER TABLE links OWNER TO postgres;
 CREATE TABLE movie (
     movie_id integer NOT NULL,
     title text NOT NULL,
-    genres integer[],
+    genre_id integer[],
     overview text,
     budget integer,
     adult boolean,
     language_id character varying(2) NOT NULL,
     popularity integer,
+    runtime integer,
     poster_path text,
     company_id integer[],
-    production_countries character varying(2)[],
+    country_id character varying(2)[],
     spoken_languages character varying(2)[],
     video boolean,
     vote_average integer,
     vote_count integer,
     status text,
     tagline text,
-    people_invovled integer[]
+    person_id integer[]
 );
 
 
@@ -92,7 +93,7 @@ ALTER TABLE movie OWNER TO postgres;
 --
  
 CREATE TABLE people (
-    id integer NOT NULL,
+    person_id integer NOT NULL,
     name text NOT NULL,
     department text NOT NULL,
     birthday date DEFAULT CURRENT_DATE NOT NULL,
