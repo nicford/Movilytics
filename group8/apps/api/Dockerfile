@@ -3,13 +3,14 @@ FROM node:12.13-alpine As development
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+VOLUME ../../../../. .
 
-RUN npm install --only=development
+# RUN ls
 
-COPY . .
+# install npm modules
+# RUN npm install --only=development
 
-RUN npm run build
+
 
 
 # PRODUCTION IMAGE
