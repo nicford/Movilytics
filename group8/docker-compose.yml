@@ -4,6 +4,7 @@ services:
   main:
     container_name: api
     build:
+      container_name: "api"
       context: .
       dockerfile: ./apps/api/Dockerfile
       target: development
@@ -12,6 +13,7 @@ services:
       # - /usr/src/app/node_modules
     ports:
       - 3333:3333
+    # command: bash -c "nx"
     command: nx serve api
     # env_file:
     #   - .env
