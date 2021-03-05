@@ -73,7 +73,7 @@ CREATE TABLE movie (
     language_id character varying(2) NOT NULL,
     popularity integer,
     poster_path text,
-    company_id integer,
+    company_id integer[],
     production_countries character varying(2)[],
     spoken_languages character varying(2)[],
     video boolean,
