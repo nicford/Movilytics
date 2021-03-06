@@ -248,7 +248,7 @@ for i, mid in enumerate(df_links[['tmdbid']].values):
         df_movies = df_movies.append(movie_row_series, ignore_index=True)
 
         if i%50==0:
-            print(f"iteration: {i}, progress: {(i/(9734-3127))*100}%")
+            print(f"iteration: {i}, progress: {(i/9734) *100}%")
     except Exception as err:
         print("error msg: ", err, "continue...")
         # print("Hit Error, so just saving interim result to csv...")
