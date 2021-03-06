@@ -103,14 +103,14 @@ for i, mid in enumerate(df_links[['tmdbid']].values):
         movie = request_movie(mid)
         
         credits = request_credits(mid)
+
+        # 1. person_id (max 5)
+        person_id_for_movie = ""  # movie table field
         casts = credits['cast']
         
-        # movie table field
-        person_id_for_movie = ""
-        for cast in casts:
+        for cast in casts[:5]:  # only getting max 5 casts
             person_id = cast['id']
-            
-            if person_id not in df_people['person_id']:
+            if person_id not in df_people['person_id'].values:
                 ## Fill people table
                 # Get result from person API
                 person = request_person(person_id)
@@ -126,10 +126,9 @@ for i, mid in enumerate(df_links[['tmdbid']].values):
                 df_people = df_people.append(person_series, ignore_index=True)
             
             person_id_for_movie += str(person_id)+"|"
-            
-        # remove last '|'
-        person_id_for_movie = person_id_for_movie[:-1]
+        person_id_for_movie = person_id_for_movie[:-1] # remove last '|'
         
+
         # Get single values
         movie_id = movie['id']
         title = movie['title']
@@ -147,13 +146,13 @@ for i, mid in enumerate(df_links[['tmdbid']].values):
         runtime = movie['runtime']
         
         # Get multiple values
-        #1. genres
+        # 2. genres
         genre_list = movie['genres']
         
         genre_id_for_movie = "" # movie table field
         for genre_dict in genre_list:
             genre_id = genre_dict['id']
-            if genre_id not in df_genre['genre_id']:
+            if genre_id not in df_genre['genre_id'].values:
                 ## Fill genre Table
                 genre_series = pd.Series({
                     'genre_id': genre_id,
@@ -165,13 +164,13 @@ for i, mid in enumerate(df_links[['tmdbid']].values):
             genre_id_for_movie += str(genre_id)+'|'
         genre_id_for_movie = genre_id_for_movie[:-1] # remove last '|'
         
-        # 2. company_id
+        # 3. company_id (max 3)
         company_id_list = movie['production_companies']
         
         company_id_for_movie = "" # movie table field
-        for company_dict in company_id_list:
+        for company_dict in company_id_list[:3]:  # only getting max 3 companies
             company_id = company_dict['id']
-            if company_id not in df_production_companies['company_id']:
+            if company_id not in df_production_companies['company_id'].values:
                 ## Fill production_companies Table
                 company_series = pd.Series({
                     'company_id': company_id, 
@@ -185,13 +184,13 @@ for i, mid in enumerate(df_links[['tmdbid']].values):
         company_id_for_movie = company_id_for_movie[:-1] # remove last '|'
         
         
-        # 3. country_id
+        # 4. country_id (max 3)
         countries_list = movie['production_countries']
         
         country_id_for_movie = "" # movie table field
-        for country_dict in countries_list:
+        for country_dict in countries_list[:3]:  # getting max 3
             country_id = country_dict['iso_3166_1']
-            if country_id not in df_countries['country_id']:
+            if country_id not in df_countries['country_id'].values:
                 ## Fill countries Table
                 country_series = pd.Series({
                     'country_id': country_id,
@@ -204,15 +203,13 @@ for i, mid in enumerate(df_links[['tmdbid']].values):
         country_id_for_movie = country_id_for_movie[:-1] # remove last '|'
         
         
-        # 4. spoken_languages
-        
-        
+        # 5. spoken_languages (max 3)
         spoken_languages_list = movie['spoken_languages']
         
         spoken_languages_for_movie = "" # movie table field
-        for spoken_lang_dict in spoken_languages_list:
+        for spoken_lang_dict in spoken_languages_list[:3]:  # max 3
             spoken_lang_id = spoken_lang_dict['iso_639_1']
-            if spoken_lang_id not in df_spoken_languages['language_id']:
+            if spoken_lang_id not in df_spoken_languages['language_id'].values:
                 ## Fill spoken_languages Table
                 sl_series = pd.Series({
                     'language_id': spoken_lang_id,
@@ -251,18 +248,18 @@ for i, mid in enumerate(df_links[['tmdbid']].values):
         df_movies = df_movies.append(movie_row_series, ignore_index=True)
 
         if i%50==0:
-            print(f"iteration: {i}, progress: {(i/9734)*100}%")
-    except:
-        print("Hit Error, so just saving interim result to csv...")
-        df_links.to_csv('./db/links.csv', index=False)
-        df_ratings.to_csv('./db/rating.csv', index=False)
-        df_movies.to_csv('./db/movies.csv', index=False)
-        df_people.to_csv('./db/people.csv', index=False)
-        df_countries.to_csv('./db/countries.csv', index=False)
-        df_genre.to_csv('./db/genre.csv', index=False)
-        df_production_companies.to_csv('./db/production_companies.csv', index=False)
-        df_spoken_languages.to_csv('./db/spoken_languages.csv', index=False)
-        sys.exit(0)
+            print(f"iteration: {i}, progress: {(i/(9734-3127))*100}%")
+    except Exception as err:
+        print("error msg: ", err, "continue...")
+        # print("Hit Error, so just saving interim result to csv...")
+        # print(f"by {i}th row")
+        # df_movies.to_csv(f'./db/movies_tmdbid{i}.csv', index=False)
+        # df_people.to_csv(f'./db/people_tmdbid{i}.csv', index=False)
+        # df_countries.to_csv(f'./db/countries_tmdbid{i}.csv', index=False)
+        # df_genre.to_csv(f'./db/genre_tmdbid{i}.csv', index=False)
+        # df_production_companies.to_csv(f'./db/production_companies_tmdbid{i}.csv', index=False)
+        # df_spoken_languages.to_csv(f'./db/spoken_languages_tmdbid{i}.csv', index=False)
+        continue
 
 #############
 # Save to csv
@@ -278,6 +275,4 @@ df_production_companies.to_csv('./db/production_companies.csv', index=False)
 df_spoken_languages.to_csv('./db/spoken_languages.csv', index=False)
 
 print("Finished")
-
-
 
