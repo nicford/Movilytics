@@ -3,9 +3,11 @@ import pandas as pd
 import numpy as np
 from credential import API_KEY
 import os
+import sys
 
 # csv file output storage
-# os.mkdir('./db')
+if not os.path.isdir('./db'):
+    os.mkdir('./db')
 
 ##########
 # Load given dataset
@@ -95,160 +97,172 @@ for i, mid in enumerate(df_links[['tmdbid']].values):
     except:
         print("tmdbid is NaN")
         continue
-
-    # Get results from API
-    movie = request_movie(mid)
     
-    credits = request_credits(mid)
-    casts = credits['cast']
-    
-    # movie table field
-    person_id_for_movie = ""
-    for cast in casts:
-        person_id = cast['id']
+    try:
+        # Get results from API
+        movie = request_movie(mid)
         
-        if person_id not in df_people['person_id']:
-            ## Fill people table
-            # Get result from person API
-            person = request_person(person_id)
-            person_series = pd.Series({
-                'person_id': person['id'], 
-                'name': person['name'],
-                'department': person['known_for_department'],
-                'birthday': person['birthday'],
-                'gender': person['gender'],
-                'birth_place': person['place_of_birth']
-            })
-
-            df_people = df_people.append(person_series, ignore_index=True)
+        credits = request_credits(mid)
+        casts = credits['cast']
         
-        person_id_for_movie += str(person_id)+"|"
-        
-    # remove last '|'
-    person_id_for_movie = person_id_for_movie[:-1]
-    
-    # Get single values
-    movie_id = movie['id']
-    title = movie['title']
-    overview = movie['overview']
-    budget = movie['budget']
-    adult = movie['adult']
-    language_id = movie['original_language']
-    popularity = movie['popularity']
-    poster_path = movie['poster_path']
-    video = movie['video']
-    vote_average = movie['vote_average']
-    vote_count = movie['vote_count']
-    status = movie['status']
-    tagline = movie['tagline']
-    runtime = movie['runtime']
-    
-    # Get multiple values
-    #1. genres
-    genre_list = movie['genres']
-    
-    genre_id_for_movie = "" # movie table field
-    for genre_dict in genre_list:
-        genre_id = genre_dict['id']
-        if genre_id not in df_genre['genre_id']:
-            ## Fill genre Table
-            genre_series = pd.Series({
-                'genre_id': genre_id,
-                'genre_name': genre_dict['name']
-            })
+        # movie table field
+        person_id_for_movie = ""
+        for cast in casts:
+            person_id = cast['id']
             
-            df_genre = df_genre.append(genre_series, ignore_index=True)
-            
-        genre_id_for_movie += str(genre_id)+'|'
-    genre_id_for_movie = genre_id_for_movie[:-1] # remove last '|'
-    
-    # 2. company_id
-    company_id_list = movie['production_companies']
-    
-    company_id_for_movie = "" # movie table field
-    for company_dict in company_id_list:
-        company_id = company_dict['id']
-        if company_id not in df_production_companies['company_id']:
-            ## Fill production_companies Table
-            company_series = pd.Series({
-                'company_id': company_id, 
-                'company_name': company_dict['name'],
-                'country_id': company_dict['origin_country']
-            })
-            
-            df_production_companies = df_production_companies.append(company_series, ignore_index=True)
-            
-        company_id_for_movie += str(company_id)+'|'
-    company_id_for_movie = company_id_for_movie[:-1] # remove last '|'
-    
-    
-    # 3. country_id
-    countries_list = movie['production_countries']
-    
-    country_id_for_movie = "" # movie table field
-    for country_dict in countries_list:
-        country_id = country_dict['iso_3166_1']
-        if country_id not in df_countries['country_id']:
-            ## Fill countries Table
-            country_series = pd.Series({
-                'country_id': country_id,
-                'country_name': country_dict['name']
-            })
-            
-            df_countries = df_countries.append(country_series, ignore_index=True)
-            
-        country_id_for_movie += str(country_id)+'|'
-    country_id_for_movie = country_id_for_movie[:-1] # remove last '|'
-    
-    
-    # 4. spoken_languages
-    
-    
-    spoken_languages_list = movie['spoken_languages']
-    
-    spoken_languages_for_movie = "" # movie table field
-    for spoken_lang_dict in spoken_languages_list:
-        spoken_lang_id = spoken_lang_dict['iso_639_1']
-        if spoken_lang_id not in df_spoken_languages['language_id']:
-            ## Fill spoken_languages Table
-            sl_series = pd.Series({
-                'language_id': spoken_lang_id,
-                'language_name': spoken_lang_dict['english_name']
-            })
-            
-            df_spoken_languages = df_spoken_languages.append(sl_series, ignore_index=True)
-            
-        spoken_languages_for_movie += str(spoken_lang_id)+'|'
-    spoken_languages_for_movie = spoken_languages_for_movie[:-1] # remove last '|'
-    
-    
-    ## Fill movie Table
-    movie_row_series = pd.Series({
-        'movie_id': movie_id,
-        'title': title,
-        'genre_id': genre_id_for_movie,
-        'overview': overview,
-        'budget': budget,
-        'adult': adult,
-        'language_id': language_id,
-        'popularity': popularity, 
-        'poster_path': poster_path,
-        'company_id': company_id_for_movie,
-        'country_id': country_id_for_movie,
-        'spoken_languages': spoken_languages_for_movie,
-        'video': video,
-        'vote_average': vote_average,
-        'vote_count': vote_count,
-        'status': status,
-        'tagline': tagline,
-        'person_id': person_id_for_movie, 
-        'runtime': runtime
-    })
-    
-    df_movies = df_movies.append(movie_row_series, ignore_index=True)
+            if person_id not in df_people['person_id']:
+                ## Fill people table
+                # Get result from person API
+                person = request_person(person_id)
+                person_series = pd.Series({
+                    'person_id': person['id'], 
+                    'name': person['name'],
+                    'department': person['known_for_department'],
+                    'birthday': person['birthday'],
+                    'gender': person['gender'],
+                    'birth_place': person['place_of_birth']
+                })
 
-    if i%50==0:
-        print(f"iteration: {i}, progress: {(i/9734)*100}%")
+                df_people = df_people.append(person_series, ignore_index=True)
+            
+            person_id_for_movie += str(person_id)+"|"
+            
+        # remove last '|'
+        person_id_for_movie = person_id_for_movie[:-1]
+        
+        # Get single values
+        movie_id = movie['id']
+        title = movie['title']
+        overview = movie['overview']
+        budget = movie['budget']
+        adult = movie['adult']
+        language_id = movie['original_language']
+        popularity = movie['popularity']
+        poster_path = movie['poster_path']
+        video = movie['video']
+        vote_average = movie['vote_average']
+        vote_count = movie['vote_count']
+        status = movie['status']
+        tagline = movie['tagline']
+        runtime = movie['runtime']
+        
+        # Get multiple values
+        #1. genres
+        genre_list = movie['genres']
+        
+        genre_id_for_movie = "" # movie table field
+        for genre_dict in genre_list:
+            genre_id = genre_dict['id']
+            if genre_id not in df_genre['genre_id']:
+                ## Fill genre Table
+                genre_series = pd.Series({
+                    'genre_id': genre_id,
+                    'genre_name': genre_dict['name']
+                })
+                
+                df_genre = df_genre.append(genre_series, ignore_index=True)
+                
+            genre_id_for_movie += str(genre_id)+'|'
+        genre_id_for_movie = genre_id_for_movie[:-1] # remove last '|'
+        
+        # 2. company_id
+        company_id_list = movie['production_companies']
+        
+        company_id_for_movie = "" # movie table field
+        for company_dict in company_id_list:
+            company_id = company_dict['id']
+            if company_id not in df_production_companies['company_id']:
+                ## Fill production_companies Table
+                company_series = pd.Series({
+                    'company_id': company_id, 
+                    'company_name': company_dict['name'],
+                    'country_id': company_dict['origin_country']
+                })
+                
+                df_production_companies = df_production_companies.append(company_series, ignore_index=True)
+                
+            company_id_for_movie += str(company_id)+'|'
+        company_id_for_movie = company_id_for_movie[:-1] # remove last '|'
+        
+        
+        # 3. country_id
+        countries_list = movie['production_countries']
+        
+        country_id_for_movie = "" # movie table field
+        for country_dict in countries_list:
+            country_id = country_dict['iso_3166_1']
+            if country_id not in df_countries['country_id']:
+                ## Fill countries Table
+                country_series = pd.Series({
+                    'country_id': country_id,
+                    'country_name': country_dict['name']
+                })
+                
+                df_countries = df_countries.append(country_series, ignore_index=True)
+                
+            country_id_for_movie += str(country_id)+'|'
+        country_id_for_movie = country_id_for_movie[:-1] # remove last '|'
+        
+        
+        # 4. spoken_languages
+        
+        
+        spoken_languages_list = movie['spoken_languages']
+        
+        spoken_languages_for_movie = "" # movie table field
+        for spoken_lang_dict in spoken_languages_list:
+            spoken_lang_id = spoken_lang_dict['iso_639_1']
+            if spoken_lang_id not in df_spoken_languages['language_id']:
+                ## Fill spoken_languages Table
+                sl_series = pd.Series({
+                    'language_id': spoken_lang_id,
+                    'language_name': spoken_lang_dict['english_name']
+                })
+                
+                df_spoken_languages = df_spoken_languages.append(sl_series, ignore_index=True)
+                
+            spoken_languages_for_movie += str(spoken_lang_id)+'|'
+        spoken_languages_for_movie = spoken_languages_for_movie[:-1] # remove last '|'
+        
+        
+        ## Fill movie Table
+        movie_row_series = pd.Series({
+            'movie_id': movie_id,
+            'title': title,
+            'genre_id': genre_id_for_movie,
+            'overview': overview,
+            'budget': budget,
+            'adult': adult,
+            'language_id': language_id,
+            'popularity': popularity, 
+            'poster_path': poster_path,
+            'company_id': company_id_for_movie,
+            'country_id': country_id_for_movie,
+            'spoken_languages': spoken_languages_for_movie,
+            'video': video,
+            'vote_average': vote_average,
+            'vote_count': vote_count,
+            'status': status,
+            'tagline': tagline,
+            'person_id': person_id_for_movie, 
+            'runtime': runtime
+        })
+        
+        df_movies = df_movies.append(movie_row_series, ignore_index=True)
+
+        if i%50==0:
+            print(f"iteration: {i}, progress: {(i/9734)*100}%")
+    except:
+        print("Hit Error, so just saving interim result to csv...")
+        df_links.to_csv('./db/links.csv', index=False)
+        df_ratings.to_csv('./db/rating.csv', index=False)
+        df_movies.to_csv('./db/movies.csv', index=False)
+        df_people.to_csv('./db/people.csv', index=False)
+        df_countries.to_csv('./db/countries.csv', index=False)
+        df_genre.to_csv('./db/genre.csv', index=False)
+        df_production_companies.to_csv('./db/production_companies.csv', index=False)
+        df_spoken_languages.to_csv('./db/spoken_languages.csv', index=False)
+        sys.exit(0)
 
 #############
 # Save to csv
