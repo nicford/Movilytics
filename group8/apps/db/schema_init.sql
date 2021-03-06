@@ -4,7 +4,7 @@
 
 CREATE TABLE countries (
     country_name text NOT NULL,
-    country_id character varying(2) NOT NULL,
+    country_id character varying(2) NOT NULL
     -- commented out country_code cuz that does not exist in API
     -- country_code integer NOT NULL
 );
@@ -52,8 +52,8 @@ ALTER SEQUENCE genre_genre_id_seq OWNED BY genre.genre_id;
 
 CREATE TABLE links (
     mid integer NOT NULL,
-    imdbid integer NOT NULL,
-    tmbdid integer NOT NULL
+    imdbid integer,
+    tmdbid integer
 );
 
 
@@ -291,7 +291,7 @@ ALTER TABLE ONLY movie
 --
 
 ALTER TABLE ONLY people
-    ADD CONSTRAINT people_id_key UNIQUE (id);
+    ADD CONSTRAINT people_id_pkey PRIMARY KEY (person_id);
 
 
 --
@@ -324,14 +324,6 @@ ALTER TABLE ONLY spoken_languages
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (user_id);
-
-
---
--- Name: people people_country_id_fkey; Type: FK CONSTRAINT; Schema:  Owner: postgres
---
-
-ALTER TABLE ONLY people
-    ADD CONSTRAINT people_country_id_fkey FOREIGN KEY (country_id) REFERENCES countries(country_id);
 
 
 --

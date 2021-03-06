@@ -28,9 +28,12 @@ services:
       - ./env/database.env
     ports:
       - 5432:5432
+    networks:
+      - webnet
     volumes:
       - ./apps/db/pgdata:/var/lib/postgresql/data
       - ./apps/db/schema_init.sql:/docker-entrypoint-initdb.d/1_init.sql
+      - ./apps/db/data_init.sql:/docker-entrypoint-initdb.d/2_data_init.sql
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin
@@ -38,6 +41,8 @@ services:
       - ./env/pgadmin.env
     ports:
       - '8080:80'
+    networks:
+      - webnet
     depends_on:
       - db
 networks:
