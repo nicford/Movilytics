@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Pool } from 'pg';
+import { Pool, QueryResult } from 'pg';
 import { ConfigService } from '@nestjs/config';
-import { Tracing } from 'trace_events';
 
 
 @Injectable()
@@ -13,16 +12,16 @@ export class DatabaseService {
         database: this.configService.get<string>('POSTGRES_DB'),
         password: this.configService.get<string>('POSTGRES_PASSWORD'),
         port: this.configService.get<number>('POSTGRES_PORT'),
-        test: process.env.POSTGRES_PORT
     }
 
+    pool: Pool = new Pool(this.postgres_config);
 
     constructor(private configService: ConfigService) {}
 
-    runQuery(query: string): string {
+    async runQuery(query: string): Promise<QueryResult> {
+        const result = await this.pool.query(query)
         console.log(query);
-        console.log(this.postgres_config);
-        return "Success";
+        return result;
     }
 
 

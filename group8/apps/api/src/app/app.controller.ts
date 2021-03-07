@@ -16,7 +16,7 @@ export class AppController {
 
 
   @Get("database")
-  testDatabase() {
-    return this.databaseService.runQuery("test");
+  async testDatabase() {
+    return await this.databaseService.runQuery("SELECT * FROM LINKS");
   }
 }
