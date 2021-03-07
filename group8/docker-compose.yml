@@ -16,8 +16,8 @@ services:
     command: nx serve api
     # env_file:
     #   - .env
-    networks:
-      - webnet
+    # networks:
+    #   - webnet
     depends_on:
       - db
   db:
@@ -40,7 +40,7 @@ services:
       - '8080:80'
     depends_on:
       - db
-networks:
-  webnet:
+# networks:
+#   webnet:
 # volumes:
 #   pgdata:

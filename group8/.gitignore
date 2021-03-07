@@ -42,4 +42,5 @@ Thumbs.db
 /apps/db/pgdata/
 
 # env 
-*.env*
+/env
+
