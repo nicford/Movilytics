@@ -4,20 +4,21 @@ import numpy as np
 from credential import API_KEY
 import os
 import sys
+import glob
 
 # csv file output storage
-if not os.path.isdir('./db'):
-    os.mkdir('./db')
+if not os.path.isdir('../csv_data'):
+    os.mkdir('../csv_data')
 
 ##########
 # Load given dataset
 ##########
 # Table: links
-df_links = pd.read_csv('./links.csv')
+df_links = pd.read_csv('../csv_data/links.csv')
 df_links.columns = ['mid', 'imdbid', 'tmdbid']
 
 # Table: ratings
-df_ratings = pd.read_csv('./ratings.csv')
+df_ratings = pd.read_csv('../csv_data/ratings.csv')
 df_ratings.columns = ['user_id', 'mid', 'rating', 'timestamp']
 
 # API's API
@@ -265,14 +266,49 @@ for i, mid in enumerate(df_links[['tmdbid']].values):
 # Save to csv
 #############
 print("Saving to csv...")
-df_links.to_csv('./db/links.csv', index=False)
-df_ratings.to_csv('./db/rating.csv', index=False)
-df_movies.to_csv('./db/movies.csv', index=False)
-df_people.to_csv('./db/people.csv', index=False)
-df_countries.to_csv('./db/countries.csv', index=False)
-df_genre.to_csv('./db/genre.csv', index=False)
-df_production_companies.to_csv('./db/production_companies.csv', index=False)
-df_spoken_languages.to_csv('./db/spoken_languages.csv', index=False)
+df_links.to_csv('../csv_data/links.csv', index=False)
+df_ratings.to_csv('../csv_data/rating.csv', index=False)
+df_movies.to_csv('../csv_data/movies.csv', index=False)
+df_people.to_csv('../csv_data/people.csv', index=False)
+df_countries.to_csv('../csv_data/countries.csv', index=False)
+df_genre.to_csv('../csv_data/genre.csv', index=False)
+df_production_companies.to_csv('../csv_data/production_companies.csv', index=False)
+df_spoken_languages.to_csv('../csv_data/spoken_languages.csv', index=False)
 
 print("Finished")
+
+########
+# Create init_csv.sql
+########
+# Format:
+"""
+COPY links(mid,imdbid,tmdbid)
+FROM './var/lib/postgresql/data/db_files/persons.csv'
+DELIMITER ','
+CSV HEADER;
+"""
+
+files = glob.glob("../csv_data/*.csv")
+string = ""
+for file in files:
+    df = pd.read_csv(file)
+    cols = list(df.columns)
+    name = file.split('/')[-1].split('.')[0]
+    
+    string += f"COPY {name}("
+    for col in cols:
+        string += f"{col},"
+    string = string[:-1]
+    string += ")\n"  # First line finished
+    
+    string += f"FROM \'./var/lib/postgresql/data/db_files/{name}.csv\' \n"  # second line finished
+    
+    string += "DELIMITER \',\' \n"  # third line
+    string += "CSV HEADER;"         # last line
+    
+    string += "\n \n \n"
+
+# Write
+with open('../init_csv.sql', "w") as f:
+    f.write(string)
 
