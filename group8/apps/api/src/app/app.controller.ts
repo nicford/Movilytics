@@ -17,6 +17,6 @@ export class AppController {
 
   @Get("database")
   async testDatabase() {
-    return await this.databaseService.runQuery("SELECT * FROM LINKS");
+    return await this.databaseService.runQuery("SELECT * FROM MOVIES");
   }
 }

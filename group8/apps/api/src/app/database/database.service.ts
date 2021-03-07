@@ -18,11 +18,10 @@ export class DatabaseService {
 
     constructor(private configService: ConfigService) {}
 
-    async runQuery(query: string): Promise<QueryResult> {
-        const result = await this.pool.query(query)
+    async runQuery(query: string, parameters = []): Promise<QueryResult> {
+        const result = await this.pool.query(query, parameters);
         console.log(query);
+        console.log(result);
         return result;
     }
-
-
 }
