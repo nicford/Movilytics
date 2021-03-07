@@ -1,15 +1,16 @@
 # DEVELOPMENT IMAGE
-FROM node:12.13-alpine As development
+FROM node:latest As development
 
+RUN cd /usr/src && mkdir -p app
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+# VOLUME [ "/data" ]
 
-RUN npm install --only=development
+COPY package.json .
 
-COPY . .
+RUN npm install -g nx
 
-RUN npm run build
+
 
 
 # PRODUCTION IMAGE

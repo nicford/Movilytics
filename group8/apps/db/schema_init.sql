@@ -4,8 +4,9 @@
 
 CREATE TABLE countries (
     country_name text NOT NULL,
-    country_id character varying(2) NOT NULL,
-    country_code integer NOT NULL
+    country_id character varying(2) NOT NULL
+    -- commented out country_code cuz that does not exist in API
+    -- country_code integer NOT NULL
 );
 
 
@@ -14,7 +15,7 @@ ALTER TABLE countries OWNER TO postgres;
 --
 -- Name: genre; Type: TABLE; Schema:  Owner: postgres
 --
-
+ 
 CREATE TABLE genre (
     genre_id integer NOT NULL,
     genre_name character varying(50) NOT NULL
@@ -51,8 +52,8 @@ ALTER SEQUENCE genre_genre_id_seq OWNED BY genre.genre_id;
 
 CREATE TABLE links (
     mid integer NOT NULL,
-    imdbid integer NOT NULL,
-    tmbdid integer NOT NULL
+    imdbid integer,
+    tmdbid integer
 );
 
 
@@ -61,26 +62,27 @@ ALTER TABLE links OWNER TO postgres;
 --
 -- Name: movie; Type: TABLE; Schema:  Owner: postgres
 --
-
+ 
 CREATE TABLE movie (
     movie_id integer NOT NULL,
     title text NOT NULL,
-    genres integer[],
+    genre_id integer[],
     overview text,
     budget integer,
     adult boolean,
     language_id character varying(2) NOT NULL,
     popularity integer,
+    runtime integer,
     poster_path text,
-    company_id integer,
-    production_countries character varying(2)[],
+    company_id integer[],
+    country_id character varying(2)[],
     spoken_languages character varying(2)[],
     video boolean,
     vote_average integer,
     vote_count integer,
     status text,
     tagline text,
-    people_invovled integer[]
+    person_id integer[]
 );
 
 
@@ -89,15 +91,17 @@ ALTER TABLE movie OWNER TO postgres;
 --
 -- Name: people; Type: TABLE; Schema:  Owner: postgres
 --
-
+ 
 CREATE TABLE people (
-    id integer NOT NULL,
+    person_id integer NOT NULL,
     name text NOT NULL,
     department text NOT NULL,
     birthday date DEFAULT CURRENT_DATE NOT NULL,
     deathday date,
-    gender character varying(10),
-    country_id character varying(2)
+    gender integer,
+    -- changing to birth_place text, as the example result from API is: 'Concord, California, USA' 
+    -- country_id character varying(2)
+    birth_place text
 );
 
 
@@ -106,11 +110,11 @@ ALTER TABLE people OWNER TO postgres;
 --
 -- Name: production_companies; Type: TABLE; Schema:  Owner: postgres
 --
-
+ 
 CREATE TABLE production_companies (
     company_id integer NOT NULL,
     company_name character varying(255) NOT NULL,
-    country_id character varying(2) NOT NULL
+    country_id character varying(2) -- Nullable
 );
 
 
@@ -177,7 +181,7 @@ ALTER SEQUENCE rating_user_id_seq OWNED BY rating.user_id;
 --
 -- Name: spoken_languages; Type: TABLE; Schema:  Owner: postgres
 --
-
+ 
 CREATE TABLE spoken_languages (
     language_id character varying(2) NOT NULL,
     language_name character varying(50) NOT NULL
@@ -189,7 +193,7 @@ ALTER TABLE spoken_languages OWNER TO postgres;
 --
 -- Name: users; Type: TABLE; Schema:  Owner: postgres
 --
-
+ 
 CREATE TABLE users (
     user_id integer NOT NULL,
     f_name text NOT NULL,
@@ -287,7 +291,7 @@ ALTER TABLE ONLY movie
 --
 
 ALTER TABLE ONLY people
-    ADD CONSTRAINT people_id_key UNIQUE (id);
+    ADD CONSTRAINT people_id_pkey PRIMARY KEY (person_id);
 
 
 --
@@ -320,14 +324,6 @@ ALTER TABLE ONLY spoken_languages
 
 ALTER TABLE ONLY users
     ADD CONSTRAINT users_pkey PRIMARY KEY (user_id);
-
-
---
--- Name: people people_country_id_fkey; Type: FK CONSTRAINT; Schema:  Owner: postgres
---
-
-ALTER TABLE ONLY people
-    ADD CONSTRAINT people_country_id_fkey FOREIGN KEY (country_id) REFERENCES countries(country_id);
 
 
 --
