@@ -1,29 +1,19 @@
 {
   "implicitDependencies": {
     "angular.json": "*",
-    "package.json": {
-      "dependencies": "*",
-      "devDependencies": "*"
-    },
+    "package.json": { "dependencies": "*", "devDependencies": "*" },
     "tsconfig.base.json": "*",
     "tslint.json": "*",
     ".eslintrc.json": "*",
     "nx.json": "*"
   },
-  "affected": {
-    "defaultBase": "master"
-  },
+  "affected": { "defaultBase": "master" },
   "npmScope": "group8",
   "tasksRunnerOptions": {
     "default": {
       "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": [
-          "build",
-          "lint",
-          "test",
-          "e2e"
-        ],
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
         "accessToken": "N2ZlYzhjYTMtNmRiNC00YmI1LWJiZjItZmJkOWMzMzIzOWE4fHJlYWQtd3JpdGU=",
         "canTrackAnalytics": false,
         "showUsageWarnings": true
@@ -31,20 +21,9 @@
     }
   },
   "projects": {
-    "ucl-imdb": {
-      "tags": []
-    },
-    "ucl-imdb-e2e": {
-      "tags": [],
-      "implicitDependencies": [
-        "ucl-imdb"
-      ]
-    },
-    "api": {
-      "tags": []
-    },
-    "api-interfaces": {
-      "tags": []
-    }
+    "api": { "tags": [] },
+    "api-interfaces": { "tags": [] },
+    "ucl-imdb": { "tags": [] },
+    "ucl-imdb-e2e": { "tags": [], "implicitDependencies": ["ucl-imdb"] }
   }
 }

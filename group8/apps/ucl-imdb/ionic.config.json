@@ -1,0 +1,7 @@
+{
+  "name": "ucl-imdb",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
