@@ -20,8 +20,8 @@ export class DatabaseService {
 
     async runQuery(query: string, parameters = []): Promise<QueryResult> {
         const result = await this.pool.query(query, parameters);
-        console.log(query);
-        console.log(result);
+        // console.log(query);
+        // console.log(result);
         return result;
     }
 }

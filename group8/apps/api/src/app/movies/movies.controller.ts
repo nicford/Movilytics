@@ -1,5 +1,4 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { DatabaseService } from '../database/database.service';
 import { MoviesService } from './movies.service';
 
 @Controller('movies')
