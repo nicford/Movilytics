@@ -8,13 +8,13 @@ export class MoviesService {
 
     cache = {}
 
-    getMovie(movid_id: number) {
+    getMovie(movie_id: number) {
         const query = "SELECT * FROM LINKS WHERE mid = $1";
-        if (movid_id in this.cache) {
-            return this.cache[movid_id];
+        if (movie_id in this.cache) {
+            return this.cache[movie_id];
         }
-        const result = this.databaseService.runQuery(query, [movid_id])
-        this.cache[movid_id] = result;
+        const result = this.databaseService.runQuery(query, [movie_id])
+        this.cache[movie_id] = result;
         return result;
     }
 
