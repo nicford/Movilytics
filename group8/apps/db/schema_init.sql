@@ -64,7 +64,7 @@ ALTER TABLE links OWNER TO postgres;
 --
  
 CREATE TABLE movie (
-    movie_id integer NOT NULL,
+    mid integer NOT NULL,
     title text NOT NULL,
     genre_id integer[],
     overview text,
@@ -283,7 +283,7 @@ ALTER TABLE ONLY links
 --
 
 ALTER TABLE ONLY movie
-    ADD CONSTRAINT movie_pkey PRIMARY KEY (movie_id);
+    ADD CONSTRAINT movie_pkey PRIMARY KEY (mid);
 
 
 --

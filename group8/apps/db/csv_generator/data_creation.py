@@ -55,7 +55,7 @@ def request_person(person_id):
 # Initialising tables (dataframes)
 #########
 movies_cols = [
-    'movie_id',
+    'mid',
     'adult',
     'budget',
     'genre_id',
@@ -97,18 +97,18 @@ print("DataFrames initialised")
 # Final stage where you pull data from API and fill DFs
 ################
 print("Filling dataframes in...")
-for i, mid in enumerate(df_links[['tmdbid']].values):
+for i, movie_id in enumerate(df_links[['tmdbid']].values):
     try:
-        mid = int(mid)
+        movie_id = int(movie_id)
     except:
         print("tmdbid is NaN")
         continue
 
     try:
         # Get results from API
-        movie = request_movie(mid)
+        movie = request_movie(movie_id)
 
-        credits = request_credits(mid)
+        credits = request_credits(movie_id)
 
         # 1. person_id (max 5)
         person_id_for_movie = ""  # movie table field
@@ -135,7 +135,7 @@ for i, mid in enumerate(df_links[['tmdbid']].values):
         person_id_for_movie = person_id_for_movie[:-1]  # remove last '|'
 
         # Get single values
-        movie_id = movie['id']
+        mid = movie['id']
         title = movie['title']
         overview = movie['overview']
         budget = movie['budget']
@@ -231,7 +231,7 @@ for i, mid in enumerate(df_links[['tmdbid']].values):
 
         # Fill movie Table
         movie_row_series = pd.Series({
-            'movie_id': movie_id,
+            'mid': mid,
             'title': title,
             'genre_id': genre_id_for_movie,
             'overview': overview,
