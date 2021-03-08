@@ -9796,7 +9796,7 @@ COPY public.links (mid, imdbid, tmdbid) FROM stdin;
 -- Data for Name: movie; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.movie (movie_id, title, genre_id, overview, budget, adult, language_id, popularity, runtime, poster_path, company_id, country_id, spoken_languages, video, vote_average, vote_count, status, tagline, person_id) FROM stdin;
+COPY public.movie (mid, title, genre_id, overview, budget, adult, language_id, popularity, runtime, poster_path, company_id, country_id, spoken_languages, video, vote_average, vote_count, status, tagline, person_id) FROM stdin;
 \.
 
 
