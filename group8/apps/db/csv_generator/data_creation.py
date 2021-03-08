@@ -309,7 +309,7 @@ for file in files:
     string += ")\n"  # First line finished
 
     # second line finished
-    string += f"FROM \'./var/lib/postgresql/data/db_files/{name}.csv\' \n"
+    string += f"FROM \'/var/lib/postgresql/data/db_files/{name}.csv\' \n"
 
     string += "DELIMITER \',\' \n"  # third line
     string += "CSV HEADER;"         # last line
