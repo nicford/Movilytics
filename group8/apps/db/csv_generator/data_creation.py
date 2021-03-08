@@ -1,10 +1,11 @@
+from credential import API_KEY
 import requests
 import pandas as pd
 import numpy as np
-from credential import API_KEY
 import os
 import sys
 import glob
+import names
 
 # csv file output storage
 if not os.path.isdir('../csv_data'):
@@ -21,9 +22,25 @@ df_links.columns = ['mid', 'imdbid', 'tmdbid']
 df_ratings = pd.read_csv('../csv_data/ratings.csv')
 df_ratings.columns = ['user_id', 'mid', 'rating', 'timestamp']
 
+# Talbe: tags
+df_tags = pd.read_csv('../csv_data/tags.csv')
+df_tags.columns = ['user_id', 'mid', 'tag', 'timestamp']
+
+##########
+# Creating new dataset
+##########
+# Table: user_names
+uniq_user_id = df_ratings['user_id'].unique()
+df_user_names = pd.DataFrame(columns=['user_id', 'fname', 'lname'], index=[i for i in range(len(uniq_user_id))])
+# fill 'user_id'
+df_user_names['user_id'] = uniq_user_id
+# fill first and last name with random name generator
+for i in range(len(uniq_user_id)):
+    df_user_names.at[i, 'fname'] = names.get_first_name()
+    df_user_names.at[i, 'lname'] = names.get_last_name()
+
+
 # API's API
-
-
 def request_movie(mid):
     endpoint = f"https://api.themoviedb.org/3/movie/{mid}?api_key={API_KEY}&language=en-US"
     # sending get request and saving the response as response object
@@ -272,15 +289,18 @@ for i, movie_id in enumerate(df_links[['tmdbid']].values):
 # Save to csv
 #############
 print("Saving to csv...")
-df_links.to_csv('../csv_data/links.csv', index=False)
-df_ratings.to_csv('../csv_data/rating.csv', index=False)
-df_movies.to_csv('../csv_data/movies.csv', index=False)
-df_people.to_csv('../csv_data/people.csv', index=False)
-df_countries.to_csv('../csv_data/countries.csv', index=False)
-df_genre.to_csv('../csv_data/genre.csv', index=False)
-df_production_companies.to_csv(
-    '../csv_data/production_companies.csv', index=False)
-df_spoken_languages.to_csv('../csv_data/spoken_languages.csv', index=False)
+saving_path = '../csv_data/'
+
+df_links.to_csv(saving_path + 'links.csv', index=False)
+df_ratings.to_csv(saving_path + 'rating.csv', index=False)
+df_user_names.to_csv(saving_path + 'user_names.csv', index=False)
+df_tags.to_csv(saving_path + 'tags.csv', index=False)
+df_movies.to_csv(saving_path + 'movies.csv', index=False)
+df_people.to_csv(saving_path + 'people.csv', index=False)
+df_countries.to_csv(saving_path + 'countries.csv', index=False)
+df_genre.to_csv(saving_path + 'genre.csv', index=False)
+df_production_companies.to_csv(saving_path + 'production_companies.csv', index=False)
+df_spoken_languages.to_csv(saving_path + 'spoken_languages.csv', index=False)
 
 print("Finished")
 
@@ -296,6 +316,8 @@ CSV HEADER;
 """
 
 files = glob.glob("../csv_data/*.csv")
+print("Generating init_csv.sql ...")
+
 string = ""
 for file in files:
     df = pd.read_csv(file)
