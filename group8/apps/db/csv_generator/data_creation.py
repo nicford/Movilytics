@@ -10,21 +10,42 @@ import names
 # csv file output storage
 if not os.path.isdir('../csv_data'):
     os.mkdir('../csv_data')
+    print("directory created. Place the given datasets here")
 
 ##########
-# Load given dataset
+# Transform given datasets
+# - the given dataset should be loaded in ../csv_data/
 ##########
-# Table: links
+# links.csv --> not going to be loaded on DB
+# This is only used as a tmdbid link from ratings and tags
 df_links = pd.read_csv('../csv_data/links.csv')
-df_links.columns = ['mid', 'imdbid', 'tmdbid']
+df_links = df_links.drop('imdbId', axis=1)  # will not use imdb
+df_links.columns = ['movie_id', 'tmdbid']
+# Droping rows that have NA in tmdb
+df_links = df_links.dropna()
+# change tmdbid as int
+df_links = df_links.astype({'tmdbid': 'int32'})
+
 
 # Table: ratings
 df_ratings = pd.read_csv('../csv_data/ratings.csv')
+df_ratings.columns = ['user_id', 'movie_id', 'rating', 'timestamp']
+# rating field as an int
+df_ratings = df_ratings.astype({'rating' : 'int32'})
+df_ratings = df_ratings.merge(df_links, on='movie_id', how='inner')
+df_ratings = df_ratings[['user_id', 'tmdbid', 'rating', 'timestamp']]
+# Rule: mid always means tmdbid
 df_ratings.columns = ['user_id', 'mid', 'rating', 'timestamp']
+
 
 # Talbe: tags
 df_tags = pd.read_csv('../csv_data/tags.csv')
+df_tags.columns = ['user_id', 'movie_id', 'tag', 'timestamp']
+df_tags = df_tags.merge(df_links, on='movie_id', how='inner')
+df_tags = df_tags[['user_id', 'tmdbid', 'tag', 'timestamp']]
+# Rule: mid always means tmdbid
 df_tags.columns = ['user_id', 'mid', 'tag', 'timestamp']
+
 
 ##########
 # Creating new dataset
@@ -292,7 +313,7 @@ print("Saving to csv...")
 saving_path = '../csv_data/'
 
 df_links.to_csv(saving_path + 'links.csv', index=False)
-df_ratings.to_csv(saving_path + 'rating.csv', index=False)
+df_ratings.to_csv(saving_path + 'ratings.csv', index=False)
 df_user_names.to_csv(saving_path + 'user_names.csv', index=False)
 df_tags.to_csv(saving_path + 'tags.csv', index=False)
 df_movies.to_csv(saving_path + 'movies.csv', index=False)
