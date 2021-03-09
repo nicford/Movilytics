@@ -46,4 +46,4 @@ env/*
 # *.env*
 
 # sanitization script for test data
-./apps/db/csv_data/convert.py
+apps/db/csv_data/convert.py
