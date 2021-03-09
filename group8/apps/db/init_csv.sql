@@ -1,46 +1,84 @@
-COPY links(mid,imdbid,tmdbid)
-FROM '/var/lib/postgresql/data/csv_data/links.csv' 
-DELIMITER ',' 
-CSV HEADER;
-
- 
-COPY people(person_id,name,department,birthday,deathday,gender,birth_place)
-FROM '/var/lib/postgresql/data/csv_data/people.csv' 
+COPY genre_info(genre_id,genre_name)
+FROM '/var/lib/postgresql/data/db_files/genre_info.csv' 
 DELIMITER ',' 
 CSV HEADER;
  
  
-COPY countries(country_id,country_name)
-FROM '/var/lib/postgresql/data/csv_data/countries.csv' 
+COPY people(index,mid,person_id)
+FROM '/var/lib/postgresql/data/db_files/people.csv' 
 DELIMITER ',' 
 CSV HEADER;
  
  
-COPY spoken_languages(language_id,language_name)
-FROM '/var/lib/postgresql/data/csv_data/spoken_languages.csv' 
+COPY countries(index,mid,country_id)
+FROM '/var/lib/postgresql/data/db_files/countries.csv' 
 DELIMITER ',' 
 CSV HEADER;
  
  
-COPY rating(user_id,mid,rating,timestamp)
-FROM '/var/lib/postgresql/data/csv_data/rating.csv' 
+COPY spoken_languages(index,mid,language_id)
+FROM '/var/lib/postgresql/data/db_files/spoken_languages.csv' 
 DELIMITER ',' 
 CSV HEADER;
  
  
-COPY genre(genre_id,genre_name)
-FROM '/var/lib/postgresql/data/csv_data/genre.csv' 
+COPY rating(index,user_id,mid,rating,timestamp)
+FROM '/var/lib/postgresql/data/db_files/rating.csv' 
 DELIMITER ',' 
 CSV HEADER;
  
  
-COPY production_companies(company_id,company_name,country_id)
-FROM '/var/lib/postgresql/data/csv_data/production_companies.csv' 
+COPY user_names(user_id,fname,lname)
+FROM '/var/lib/postgresql/data/db_files/user_names.csv' 
 DELIMITER ',' 
 CSV HEADER;
  
  
-COPY movies(mid,adult,budget,genre_id,language_id,overview,popularity,poster_path,company_id,country_id,runtime,spoken_languages,status,tagline,title,video,vote_average,vote_count,person_id)
-FROM '/var/lib/postgresql/data/csv_data/movies.csv' 
+COPY language_info(language_id,language_name)
+FROM '/var/lib/postgresql/data/db_files/language_info.csv' 
 DELIMITER ',' 
 CSV HEADER;
+ 
+ 
+COPY companies(index,mid,company_id)
+FROM '/var/lib/postgresql/data/db_files/companies.csv' 
+DELIMITER ',' 
+CSV HEADER;
+ 
+ 
+COPY company_info(company_id,company_name,country_id)
+FROM '/var/lib/postgresql/data/db_files/company_info.csv' 
+DELIMITER ',' 
+CSV HEADER;
+ 
+ 
+COPY tags(index,user_id,mid,tag,timestamp)
+FROM '/var/lib/postgresql/data/db_files/tags.csv' 
+DELIMITER ',' 
+CSV HEADER;
+ 
+ 
+COPY genres(index,mid,genre_id)
+FROM '/var/lib/postgresql/data/db_files/genres.csv' 
+DELIMITER ',' 
+CSV HEADER;
+ 
+ 
+COPY country_info(country_id,country_name)
+FROM '/var/lib/postgresql/data/db_files/country_info.csv' 
+DELIMITER ',' 
+CSV HEADER;
+ 
+ 
+COPY person(person_id,name,department,birthday,deathday,gender,birth_place)
+FROM '/var/lib/postgresql/data/db_files/person.csv' 
+DELIMITER ',' 
+CSV HEADER;
+ 
+ 
+COPY movies(mid,adult,budget,language_id,overview,popularity,poster_path,runtime,status,tagline,title,video,vote_average,vote_count)
+FROM '/var/lib/postgresql/data/db_files/movies.csv' 
+DELIMITER ',' 
+CSV HEADER;
+ 
+ 
