@@ -51,6 +51,7 @@
     "@nrwl/angular": "11.3.1",
     "@types/pg": "^7.14.11",
     "cache-manager": "^3.4.1",
+    "cache-manager-redis-store": "^2.0.0",
     "pg": "^8.5.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~6.6.3",

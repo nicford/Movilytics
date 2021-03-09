@@ -45,6 +45,11 @@ services:
       - webnet
     depends_on:
       - db
+  redis:
+    container_name: redis
+    image: redis:latest
+    networks: 
+      - webnet
 networks:
   webnet:
 # volumes:
