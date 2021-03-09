@@ -12,16 +12,15 @@ RUN npm install -g nx
 
 
 
-
 # PRODUCTION IMAGE
-FROM node:12.13-alpine as production
+FROM node:latest as production
 
 ARG NODE_ENV=production
-ENV NODE_ENV=${NODE_ENV}
+# ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+COPY ../../ package*.json ./
 
 RUN npm install --only=production
 
