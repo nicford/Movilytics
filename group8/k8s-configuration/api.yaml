@@ -5,7 +5,7 @@ metadata:
   labels:
     app: api
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: api
@@ -20,6 +20,13 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 3333
+        # resources:
+        #   requests:
+        #     memory: ""
+        #     cpu: ""
+        #   limits:
+        #     memory: ""
+        #     cpu: ""
         env:
           - name: STATIC_FILES_PATH
             value: ./ucl-imdb

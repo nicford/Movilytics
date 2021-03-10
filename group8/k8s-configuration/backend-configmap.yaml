@@ -3,5 +3,10 @@ kind: ConfigMap
 metadata:
   name: backend-configmap
 data:
-  postgres_url: backend-service
+  postgres_url: api-service
   postgres_port: "5432"
+  redis_host: redis-service
+  redis_port: "6379" 
+  cache_timeout: "10"  # cache ttl
+  cache_max: "1000"   # maximum number of things to cache
+

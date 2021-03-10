@@ -20,10 +20,11 @@ FROM node:latest as production
 
 WORKDIR /usr/src/app
 
-COPY dist/apps/api .
-
 # copy in frontend static files (SPA)
 COPY dist/apps/ucl-imdb ./ucl-imdb
+
+# copy in api files
+COPY dist/apps/api .
 
 RUN npm install --only=production
 
