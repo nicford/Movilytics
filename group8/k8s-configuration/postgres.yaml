@@ -26,7 +26,7 @@ spec:
       #   limits:
       #     memory: "128Mi"
       #     cpu: "500m"
-        # env:
+        # -env
         # - name: MONGO_INITDB_ROOT_USERNAME
         #   valueFrom:
         #     secretKeyRef:

@@ -3,4 +3,5 @@ kind: ConfigMap
 metadata:
   name: backend-configmap
 data:
-  database_url: backend-service
+  postgres_url: backend-service
+  postgres_port: "5432"

@@ -20,22 +20,36 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 3333
-        # env:
-        # - name: ME_CONFIG_MONGODB_ADMINUSERNAME
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: mongodb-secret
-        #       key: mongo-root-username
-        # - name: ME_CONFIG_MONGODB_ADMINPASSWORD
-        #   valueFrom: 
-        #     secretKeyRef:
-        #       name: mongodb-secret
-        #       key: mongo-root-password
-        # - name: ME_CONFIG_MONGODB_SERVER
-        #   valueFrom: 
-        #     configMapKeyRef:
-        #       name: mongodb-configmap
-        #       key: database_url
+        env:
+          - name: STATIC_FILES_PATH
+            value: ./ucl-imdb
+          - name: PRODUCTION
+            value: "true"
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: api-secret
+                key: postgres-username
+          - name: POSTGRES_PASSWORD
+            valueFrom: 
+              secretKeyRef:
+                name: api-secret
+                key: postgres-password
+          - name: POSTGRES_DB
+            valueFrom: 
+              secretKeyRef:
+                name: api-secret
+                key: postgres-db
+          - name: POSTGRES_HOST
+            valueFrom: 
+              configMapKeyRef:
+                name: backend-configmap
+                key: postgres_url
+          - name: POSTGRES_PORT
+            valueFrom: 
+              configMapKeyRef:
+                name: backend-configmap
+                key: postgres_port
 ---
 apiVersion: v1
 kind: Service
