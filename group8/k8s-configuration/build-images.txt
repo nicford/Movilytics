@@ -6,4 +6,4 @@ docker build -t api-group8 --target production --no-cache -f apps/api/Dockerfile
 
 # database image
 Run in group8/apps/db
-docker build . -t postgres-group8:latest
+docker build -t postgres-group8:latest --no-cache .

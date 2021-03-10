@@ -5,7 +5,7 @@ metadata:
   labels:
     app: api
 spec:
-  replicas: 4
+  replicas: 1
   selector:
     matchLabels:
       app: api
@@ -15,62 +15,62 @@ spec:
         app: api
     spec:
       containers:
-      - name: api
-        image: api-group8
-        imagePullPolicy: Never
-        ports:
-        - containerPort: 3333
-        env:
-          - name: STATIC_FILES_PATH
-            value: ./ucl-imdb
-          - name: PRODUCTION
-            value: "true"
-          - name: POSTGRES_USER
-            valueFrom:
-              secretKeyRef:
-                name: api-secret
-                key: postgres-username
-          - name: POSTGRES_PASSWORD
-            valueFrom: 
-              secretKeyRef:
-                name: api-secret
-                key: postgres-password
-          - name: POSTGRES_DB
-            valueFrom: 
-              secretKeyRef:
-                name: api-secret
-                key: postgres-db
-          - name: POSTGRES_HOST
-            valueFrom: 
-              configMapKeyRef:
-                name: backend-configmap
-                key: postgres_url
-          - name: POSTGRES_PORT
-            valueFrom: 
-              configMapKeyRef:
-                name: backend-configmap
-                key: postgres_port
-            # redis env variables
-          - name: REDIS_HOST
-            valueFrom: 
-              configMapKeyRef:
-                name: backend-configmap
-                key: redis_host
-          - name: REDIS_PORT
-            valueFrom: 
-              configMapKeyRef:
-                name: backend-configmap
-                key: redis_port
-          - name: CACHE_TIMEOUT
-            valueFrom: 
-              configMapKeyRef:
-                name: backend-configmap
-                key: cache_timeout
-          - name: CACHE_MAX
-            valueFrom: 
-              configMapKeyRef:
-                name: backend-configmap
-                key: cache_max
+        - name: api
+          image: api-group8
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3333
+          env:
+            - name: STATIC_FILES_PATH
+              value: ./ucl-imdb
+            - name: PRODUCTION
+              value: 'true'
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: api-secret
+                  key: postgres-username
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: api-secret
+                  key: postgres-password
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: api-secret
+                  key: postgres-db
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-configmap
+                  key: postgres_url
+            - name: POSTGRES_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-configmap
+                  key: postgres_port
+              # redis env variables
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-configmap
+                  key: redis_host
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-configmap
+                  key: redis_port
+            - name: CACHE_TIMEOUT
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-configmap
+                  key: cache_timeout
+            - name: CACHE_MAX
+              valueFrom:
+                configMapKeyRef:
+                  name: backend-configmap
+                  key: cache_max
 ---
 apiVersion: v1
 kind: Service
@@ -79,7 +79,7 @@ metadata:
 spec:
   selector:
     app: api
-  type: LoadBalancer  
+  type: LoadBalancer
   ports:
     - protocol: TCP
       port: 3333
