@@ -21,6 +21,7 @@ export class MoviesService {
         return this.databaseService.runQuery(query, []);
     }
 
+    // TODO: ignore case when searching!!
     searchMovies(search_query: string) {
         search_query = "%" + search_query + "%";
         console.log(search_query);
