@@ -20,27 +20,6 @@ spec:
         image: redis
         ports:
         - containerPort: 6379
-        env:
-        - name: REDIS_HOST
-          valueFrom: 
-            configMapKeyRef:
-              name: backend-configmap
-              key: redis_host
-        - name: REDIS_PORT
-          valueFrom: 
-            configMapKeyRef:
-              name: backend-configmap
-              key: redis_port
-        - name: CACHE_TIMEOUT
-          valueFrom: 
-            configMapKeyRef:
-              name: backend-configmap
-              key: cache_timeout
-        - name: CACHE_MAX
-          valueFrom: 
-            configMapKeyRef:
-              name: backend-configmap
-              key: cache_max
 ---
 apiVersion: v1
 kind: Service
