@@ -14,14 +14,39 @@ export class DatabaseService {
         port: this.configService.get<number>('POSTGRES_PORT'),
     }
 
-    pool: Pool = new Pool(this.postgres_config);
+    postgres_config_prod = {
+        user: process.env.POSTGRES_USER,
+        host: process.env.POSTGRES_HOST,
+        database: process.env.POSTGRES_DB,
+        password: process.env.POSTGRES_PASSWORD,
+        port: Number(process.env.POSTGRES_PORT),
+    }
 
-    constructor(private configService: ConfigService) {}
+    
 
-    async runQuery(query: string, parameters = []): Promise<QueryResult> {
+    pool: Pool;
+
+    constructor(private configService: ConfigService) {
+        if (process.env.PRODUCTION != undefined) {
+            this.pool = new Pool(this.postgres_config_prod);
+        } else {
+            this.pool = new Pool(this.postgres_config);
+        }
+        
+    }
+
+    async runQuery(query: string, parameters = []): Promise<QueryResult | string>{
         const result = await this.pool.query(query, parameters);
-        // console.log(query);
-        // console.log(result);
+        console.log("running run query in database service");
         return result;
     }
+
+    async runSimpleQuery(query: string): Promise<QueryResult | string>{
+        const result = await this.pool.query(query);
+        console.log("running simple run query in database service");
+        console.log(result);
+        return result;
+    }
+
+
 }

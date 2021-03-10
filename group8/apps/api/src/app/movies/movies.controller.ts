@@ -1,4 +1,5 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query, Req } from '@nestjs/common';
+import { identity } from 'rxjs';
 import { MoviesService } from './movies.service';
 
 @Controller('movies')
@@ -6,9 +7,21 @@ export class MoviesController {
 
     constructor(private movieService: MoviesService) {}
 
-    @Get(":movie_id")
-    getMovie(@Param('movie_id') movie_id: number) {
+    @Get("getAllMovies")
+    getAllMovies() {
+        return this.movieService.getAllMovies();
+    }
+
+    @Get("getMovie")
+    getMovie(@Query('id') movie_id: number) {
         return this.movieService.getMovie(movie_id);
     }
 
+    @Get("searchMovies")
+    searchMovies(@Query('query') query: string) {
+        console.log(query);
+        return this.movieService.searchMovies(query);
+    }
+
+    
 }

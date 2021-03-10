@@ -8,7 +8,7 @@ import * as redisStore from 'cache-manager-redis-store';
             store: redisStore,
             host: 'redis',
             port: 6379,
-            ttl: null,
+            ttl: 5,
             max: null,
         })],
     providers: [{
