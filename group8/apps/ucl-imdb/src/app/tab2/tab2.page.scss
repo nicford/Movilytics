@@ -1,0 +1,43 @@
+.filters {
+    margin-bottom: 20px;
+}
+
+.filters select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 10px 50px 10px 10px;
+    background-color: #262626;
+    border-radius: 5px;
+    border: none;
+    margin-right: 10px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    outline: none;
+    background-image: url(../../assets/icon/select.png);
+    background-repeat: no-repeat;
+    background-position: 100% center;
+}
+
+.breadcrumbs {
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #ebebeb;
+}
+
+.main-content .container {
+    border-radius: 5px;
+    padding: 30px;
+}
+
+body {
+    overflow: auto;
+    overflow-y: auto;
+    overflow-x: auto;
+}
+
+.button {
+    background: none;
+    margin-bottom: 13px;
+    color: white;
+    padding: 0;
+}

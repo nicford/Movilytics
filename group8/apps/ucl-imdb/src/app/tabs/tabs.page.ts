@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'group8-tabs',
+  selector: 'app-tabs',
   templateUrl: 'tabs.page.html',
-  styleUrls: ['tabs.page.scss'],
+  styleUrls: ['tabs.page.scss']
 })
 export class TabsPage {
+
   constructor() {}
+
 }
