@@ -20,13 +20,6 @@ spec:
         imagePullPolicy: Never
         ports:
         - containerPort: 3333
-        # resources:
-        #   requests:
-        #     memory: ""
-        #     cpu: ""
-        #   limits:
-        #     memory: ""
-        #     cpu: ""
         env:
           - name: STATIC_FILES_PATH
             value: ./ucl-imdb
@@ -57,6 +50,27 @@ spec:
               configMapKeyRef:
                 name: backend-configmap
                 key: postgres_port
+            # redis env variables
+          - name: REDIS_HOST
+            valueFrom: 
+              configMapKeyRef:
+                name: backend-configmap
+                key: redis_host
+          - name: REDIS_PORT
+            valueFrom: 
+              configMapKeyRef:
+                name: backend-configmap
+                key: redis_port
+          - name: CACHE_TIMEOUT
+            valueFrom: 
+              configMapKeyRef:
+                name: backend-configmap
+                key: cache_timeout
+          - name: CACHE_MAX
+            valueFrom: 
+              configMapKeyRef:
+                name: backend-configmap
+                key: cache_max
 ---
 apiVersion: v1
 kind: Service
