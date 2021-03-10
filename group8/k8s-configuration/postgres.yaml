@@ -1,52 +1,51 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api
+  name: postgres-deployment
   labels:
-    app: api
+    app: postgres
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: api
+      app: postgres
   template:
     metadata:
       labels:
-        app: api
+        app: postgres
     spec:
       containers:
-      - name: api
-        image: api-group8
+      - name: postgres
         imagePullPolicy: Never
+        image: postgres-group8
         ports:
-        - containerPort: 3333
+        - containerPort: 5432
+      # - resources:
+      #     memory: "64Mi"
+      #     cpu: "250m"
+      #   limits:
+      #     memory: "128Mi"
+      #     cpu: "500m"
         # env:
-        # - name: ME_CONFIG_MONGODB_ADMINUSERNAME
+        # - name: MONGO_INITDB_ROOT_USERNAME
         #   valueFrom:
         #     secretKeyRef:
         #       name: mongodb-secret
         #       key: mongo-root-username
-        # - name: ME_CONFIG_MONGODB_ADMINPASSWORD
+        # - name: MONGO_INITDB_ROOT_PASSWORD
         #   valueFrom: 
         #     secretKeyRef:
         #       name: mongodb-secret
         #       key: mongo-root-password
-        # - name: ME_CONFIG_MONGODB_SERVER
-        #   valueFrom: 
-        #     configMapKeyRef:
-        #       name: mongodb-configmap
-        #       key: database_url
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: api-external-service
+  name: backend-service
 spec:
   selector:
-    app: api
-  type: LoadBalancer  
+    app: postgres
   ports:
     - protocol: TCP
-      port: 3333
-      targetPort: 3333
-      nodePort: 30000
+      port: 5432
+      targetPort: 5432
