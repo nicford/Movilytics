@@ -14,9 +14,26 @@ export class DatabaseService {
         port: this.configService.get<number>('POSTGRES_PORT'),
     }
 
-    pool: Pool = new Pool(this.postgres_config);
+    postgres_config_prod = {
+        user: process.env.POSTGRES_USER,
+        host: process.env.POSTGRES_HOST,
+        database: process.env.POSTGRES_DB,
+        password: process.env.POSTGRES_PASSWORD,
+        port: Number(process.env.POSTGRES_PORT),
+    }
 
-    constructor(private configService: ConfigService) {}
+    
+
+    pool: Pool;
+
+    constructor(private configService: ConfigService) {
+        if (process.env.PRODUCTION != undefined) {
+            this.pool = new Pool(this.postgres_config_prod);
+        } else {
+            this.pool = new Pool(this.postgres_config);
+        }
+        
+    }
 
     async runQuery(query: string, parameters = []): Promise<QueryResult | string>{
         const result = await this.pool.query(query, parameters);

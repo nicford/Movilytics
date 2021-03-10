@@ -8,10 +8,14 @@ import { GlobalCacheModule } from './global-cache/global-cache.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 
+let staticFilesPath = process.env.STATIC_FILES_PATH;  // for production in kubernetes
+if (staticFilesPath == undefined) {
+  staticFilesPath = join(__dirname, '../../../dist/apps/ucl-imdb'); // for local development
+}
 
 @Module({
   imports: [DatabaseModule, MoviesModule, GlobalCacheModule, ServeStaticModule.forRoot({
-    rootPath: join(__dirname, '../../../dist/apps/ucl-imdb')
+    rootPath: staticFilesPath
   })],
   controllers: [AppController],
   providers: [AppService],
