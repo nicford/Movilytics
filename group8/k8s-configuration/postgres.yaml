@@ -5,7 +5,7 @@ metadata:
   labels:
     app: postgres
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: postgres
@@ -15,29 +15,29 @@ spec:
         app: postgres
     spec:
       containers:
-      - name: postgres
-        imagePullPolicy: Never
-        image: postgres-group8
-        ports:
-        - containerPort: 5432
+        - name: postgres
+          imagePullPolicy: Never
+          image: postgres-group8
+          ports:
+            - containerPort: 5432
       # - resources:
       #     memory: "64Mi"
       #     cpu: "250m"
       #   limits:
       #     memory: "128Mi"
       #     cpu: "500m"
-        # -env
-        # - name: MONGO_INITDB_ROOT_USERNAME
-        #   valueFrom:
-        #     secretKeyRef:
-        #       name: mongodb-secret
-        #       key: mongo-root-username
-        # - name: MONGO_INITDB_ROOT_PASSWORD
-        #   valueFrom: 
-        #     secretKeyRef:
-        #       name: mongodb-secret
-        #       key: mongo-root-password
-        # TODO: add env variables here, not Dockerfile
+      # -env
+      # - name: MONGO_INITDB_ROOT_USERNAME
+      #   valueFrom:
+      #     secretKeyRef:
+      #       name: mongodb-secret
+      #       key: mongo-root-username
+      # - name: MONGO_INITDB_ROOT_PASSWORD
+      #   valueFrom:
+      #     secretKeyRef:
+      #       name: mongodb-secret
+      #       key: mongo-root-password
+      # TODO: add env variables here, not Dockerfile
 ---
 apiVersion: v1
 kind: Service
@@ -50,4 +50,3 @@ spec:
     - protocol: TCP
       port: 5432
       targetPort: 5432
-
