@@ -1,0 +1,3 @@
+When creating queries, please use the mid "862" as a placeholder for a movie argument.
+
+When done, run prepare_sql_statements_mid.sh to replace the "862" placeholder with the $1 argument for the api
