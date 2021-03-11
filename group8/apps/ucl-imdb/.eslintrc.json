@@ -29,6 +29,7 @@
     {
       "files": ["*.html"],
       // ... config specific to Angular Component templates
+      "rules": {}
     }
   ]
   
