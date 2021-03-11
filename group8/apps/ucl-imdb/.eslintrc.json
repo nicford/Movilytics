@@ -3,5 +3,36 @@
   "ignorePatterns": [
     "!**/*"
   ],
-  "rules": {}
+  "rules": {},
+  
+  "overrides": [
+    /**
+      * -----------------------------------------------------
+      * TYPESCRIPT FILES (COMPONENTS, SERVICES ETC) (.ts)
+      * -----------------------------------------------------
+      */
+    {
+      "files": ["*.ts"],
+
+      // ... applies a special processor to extract inline Component templates
+      // and treat them like HTML files
+      "extends": ["plugin:@angular-eslint/template/process-inline-templates"]
+
+      // ... other config specific to TypeScript files
+    },
+
+    /**
+      * -----------------------------------------------------
+      * COMPONENT TEMPLATES
+      * -----------------------------------------------------
+      */
+    {
+      "files": ["*.html"],
+      // ... config specific to Angular Component templates
+    }
+  ]
+  
 }
+
+
+
