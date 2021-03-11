@@ -40,12 +40,16 @@
       "architect": {
         "build": {
           "builder": "@nrwl/node:build",
-          "outputs": ["{options.outputPath}"],
+          "outputs": [
+            "{options.outputPath}"
+          ],
           "options": {
             "outputPath": "dist/apps/api",
             "main": "apps/api/src/main.ts",
             "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": ["apps/api/src/assets"],
+            "assets": [
+              "apps/api/src/assets"
+            ],
             "generatePackageJson": true
           },
           "configurations": {
@@ -71,12 +75,16 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/api/**/*.ts"]
+            "lintFilePatterns": [
+              "apps/api/**/*.ts"
+            ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/api"],
+          "outputs": [
+            "coverage/apps/api"
+          ],
           "options": {
             "jestConfig": "apps/api/jest.config.js",
             "passWithNoTests": true
@@ -92,7 +100,9 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/api-interfaces/**/*.ts"]
+            "lintFilePatterns": [
+              "libs/api-interfaces/**/*.ts"
+            ]
           }
         }
       }
@@ -176,14 +186,12 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "apps/ucl-imdb/tsconfig.app.json",
-              "apps/ucl-imdb/tsconfig.spec.json",
-              "apps/ucl-imdb/tsconfig.editor.json"
-            ],
-            "exclude": ["**/node_modules/**", "!apps/ucl-imdb/**/*"]
+            "lintFilePatterns": [
+              "apps/ucl-imdb/**/*.ts",
+              "apps/ucl-imdb/**/*.html"
+            ]
           }
         },
         "test": {
@@ -302,8 +310,13 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["apps/ucl-imdb-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/ucl-imdb-e2e/**/*"]
+            "tsConfig": [
+              "apps/ucl-imdb-e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/ucl-imdb-e2e/**/*"
+            ]
           }
         }
       }
