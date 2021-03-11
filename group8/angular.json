@@ -129,7 +129,8 @@
                             }
                         ],
                         "styles": [
-                            "apps/ucl-imdb/src/styles.scss",
+                              "apps/ucl-imdb/src/theme/variables.scss",
+                              "apps/ucl-imdb/src/global.scss",
                             {
                                 "input": "apps/ucl-imdb/src/theme/variables.scss"
                             }
@@ -418,8 +419,7 @@
                     }
                 }
             }
-        }
-    },
+        },
     "ucl-imdb-e2e": {
         "root": "apps/ucl-imdb-e2e",
         "sourceRoot": "apps/ucl-imdb-e2e/src",
@@ -449,5 +449,5 @@
             }
         }
     }
-}
+  }
 }
