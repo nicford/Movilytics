@@ -1,4 +1,4 @@
-select movies.*, genre.genre_list, lang.language_list, country.country_list, rating.avg_rating from movies 
+select movies.*, genre.genre_list, lang.language_list, country.country_list, rating.avg_rating, translation.translation_list, tags.tags_list from movies 
 inner join(
 	select distinct mid, 
 		   array( select genre_inner.genre_name from genres
@@ -42,3 +42,24 @@ inner join(
     select mid, avg(rating) as avg_rating from ratings where mid = 862 group by mid 
 ) as rating 
 on movies.mid = rating.mid
+inner join(
+	select distinct mid, 
+		   array( select distinct translation_inner.language_name from translations
+				  inner join(
+					select language_id, language_name from language_info 
+				  ) as translation_inner
+				 on translations.language_id = translation_inner.language_id 
+				 where mid = 862
+	) as translation_list
+	from translations 
+	where mid = 862
+) as translation
+on movies.mid = translation.mid
+inner join(
+	select distinct mid, 
+	array(
+		select distinct tag from tags where mid = 862
+	) as tags_list 
+	from tags where mid = 862
+) as tags
+on movies.mid = tags.mid
