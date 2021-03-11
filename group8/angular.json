@@ -308,14 +308,11 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "apps/ucl-imdb-e2e/tsconfig.e2e.json"
-            ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/ucl-imdb-e2e/**/*"
+            "lintFilePatterns": [
+              "apps/ucl-imdb-e2e/**/*.ts",
+              "apps/ucl-imdb-e2e/**/*.html"
             ]
           }
         }
