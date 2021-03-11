@@ -201,6 +201,8 @@ df_movies = pd.concat([movies, df_upcoming])
 #     if not sum(df_movies[col].isna()) ==0:
 #         print(col)
 
+df_movies['year'] = df_movies['year'].replace(0, -1)
+
 df_movies['overview'] = df_movies['overview'].fillna("")
 df_movies['overview'] = df_movies['overview'].replace("None", "")
 
