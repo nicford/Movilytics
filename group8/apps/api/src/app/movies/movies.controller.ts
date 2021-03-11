@@ -23,5 +23,11 @@ export class MoviesController {
         return this.movieService.searchMovies(query);
     }
 
+    @Get('getMovieReport')
+    getMovieReport(@Query('mid') movie_id: number) {
+        return this.movieService.createMovieReport(movie_id);
+    }
+
+
     
 }
