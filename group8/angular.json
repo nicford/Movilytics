@@ -129,7 +129,6 @@
                             }
                         ],
                         "styles": [
-                              "apps/ucl-imdb/src/theme/variables.scss",
                               "apps/ucl-imdb/src/global.scss",
                             {
                                 "input": "apps/ucl-imdb/src/theme/variables.scss"
