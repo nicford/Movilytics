@@ -1,16 +1,21 @@
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, HttpService, Inject, Injectable } from '@nestjs/common';
 // import { QueryResult } from 'pg';
 import { DatabaseService } from '../database/database.service';
 import { Cache } from 'cache-manager';
 import { readFileSync } from 'fs';
 import { exec } from 'child_process';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import * as dotenv from "dotenv";
+dotenv.config({path: './env/.env'});
 // import { format } from 'pg-format';
 
 @Injectable()
 export class MoviesService {
 
   constructor(private databaseService: DatabaseService,
-              @Inject(CACHE_MANAGER) private cache: Cache
+              @Inject(CACHE_MANAGER) private cache: Cache,
+              private httpService: HttpService
               ) {
                 console.log(__dirname);
                 console.log(process.cwd());
@@ -18,6 +23,9 @@ export class MoviesService {
               }
 
   movie_report_sql_query = readFileSync('apps/api/src/app/sql_scripts/fetch_overview.sql').toString();
+  
+  tmdb_api_endpoint = 'http://api.themoviedb.org/3';
+  api_key_suffix = `api_key=${process.env.TMDB_API_KEY}`;
 
   getMovie(movie_id: number) {
     // console.log(this.cache.store)
@@ -43,6 +51,14 @@ export class MoviesService {
   createMovieReport(movie_id: number) {
     console.log(this.movie_report_sql_query);
     return this.databaseService.runQuery(this.movie_report_sql_query, [movie_id]);
-    // return movie_id;
   }
+
+  getMovieReviews(movie_id: number) {
+    const movie_review_endpoint = `${this.tmdb_api_endpoint}/movie/${movie_id}/reviews?` + this.api_key_suffix;
+    return this.httpService.get(movie_review_endpoint).pipe(
+      map(response => response.data),
+    );
+  }
+
+
 }

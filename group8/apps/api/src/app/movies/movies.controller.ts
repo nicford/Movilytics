@@ -28,6 +28,12 @@ export class MoviesController {
         return this.movieService.createMovieReport(movie_id);
     }
 
+    @Get('getReviews')
+    getReviews(@Query('mid') movie_id: number) {
+        console.log(`getting reviews for movie with id ${movie_id}`);
+        return this.movieService.getMovieReviews(movie_id);
+    }
+
 
     
 }
