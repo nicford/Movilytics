@@ -1,6 +1,8 @@
 import os
 import glob
+imoprt requests
 import pandas as pd
+
 """
 Notice:
 This script assume that you have unnormalised csv files under ../csv_data/
@@ -120,6 +122,52 @@ df_movies = movies_orig.drop(columns=['genre_id', 'company_id', 'country_id', 's
 df_movies.to_csv(f'{target_dir}movies.csv', index=False)
 
 
+##########
+# Add more data in normalised form
+##########
+# Table: Translation
+def request_translations(mid):
+    endpoint = f"https://api.themoviedb.org/3/movie/{mid}/translations?api_key={API_KEY}"
+    # sending get request and saving the response as response object 
+    r = requests.get(url=endpoint) 
+    # extracting data in json format 
+    data = r.json()
+    return data
+
+movies = pd.read_csv(f'{target_dir}movies.csv')
+mids = movies['mid'].values
+df_language_info = pd.read_csv(f'{target_dir}language_info.csv')
+# init df
+df_translations = pd.DataFrame(columns=['mid', 'language_id'])
+
+seen_lang = df_language_info['language_id'].values
+
+# Get Translations info from tmdb API, 
+# while checking any updates in df_language_info
+i = 0
+for mid in mids:
+    result = request_translations(mid)
+    try:
+        trans = result['translations']
+    except: # api fail
+        continue
+        
+    for tran in trans:
+        language_id = tran['iso_639_1']
+        
+        # if not in df_language_info
+        if language_id not in seen_lang:
+            eng_name = tran['english_name']
+            # update df_language_info
+            df_language_info.append(pd.Series({'language_id':language_id, 'language_name':eng_name }), ignore_index=True)
+        
+        # update df_translations
+        df_translations.at[i, 'mid'] = mid
+        df_translations.at[i, 'language_id'] = language_id
+        i += 1
+
+df_translations.to_csv(f'{target_dir}translations.csv', index=False)
+df_language_info.to_csv(f'{target_dir}language_info.csv', index=False)
 
 ########
 # Create init_csv.sql
