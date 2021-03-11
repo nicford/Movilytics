@@ -1,7 +1,8 @@
 import os
 import glob
-imoprt requests
+import requests
 import pandas as pd
+from credential import API_KEY
 
 """
 Notice:
