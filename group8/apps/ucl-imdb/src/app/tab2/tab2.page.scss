@@ -1,8 +1,10 @@
-.filters {
+.search-criteria {
     margin-bottom: 20px;
+    display: flex;
+    text-align: justify;
 }
 
-.filters select {
+.search-criteria select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -40,4 +42,34 @@ body {
     margin-bottom: 13px;
     color: white;
     padding: 0;
+}
+
+.filters {
+    align-items: left;
+    display: inline;
+    text-align: left;
+}
+
+.tag-chips {
+    position: relative;
+}
+
+.sortby {
+    align-items: right;
+    display: inline;
+    text-align: right;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+ion-badge {
+    position: absolute;
+    border-radius: 30%;
+    margin: 7.5px;
+    $badge-font-size: 2em;
+    z-index: 1000;
+}
+
+.top_three {
+    $badge-font-weight: 700;
 }

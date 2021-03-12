@@ -17,10 +17,10 @@ export class MoviesController {
         return this.movieService.getMovie(movie_id);
     }
 
-    @Get("searchMovies")
-    searchMovies(@Query('query') query: string) {
+    @Get("search")
+    searchMovies(@Query() query) {
         console.log(query);
-        return this.movieService.searchMovies(query);
+        return this.movieService.search(query);
     }
 
     @Get('getMovieReport')

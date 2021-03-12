@@ -40,7 +40,7 @@ export class MoviesService {
   }
 
   // TODO: ignore case when searching!!
-  searchMovies(search_query: string) {
+  search(search_query: string) {
     search_query = '%' + search_query + '%';
     console.log(search_query);
     const sql_query = 'SELECT * FROM MOVIE WHERE title like $1';
@@ -59,6 +59,8 @@ export class MoviesService {
       map(response => response.data),
     );
   }
+
+
 
 
 }

@@ -14,46 +14,83 @@
                 <div class="container">
                     <div class="page">
 
-                        <div class="filters">
-                            <h2>Filters</h2>
-                            <select name="#" id="#" placeholder="Category">
-                              <option value="#">Action</option>
-                              <option value="#">Drama</option>
-                              <option value="#">Fantasy</option>
-                              <option value="#">Horror</option>
-                              <option value="#">Adventure</option>
-                            </select>
-                            <select name="#" id="#" placeholder="Year">
+                        <div class="search-criteria">
+                            <div class="filter">
+                                <h2>Filters</h2>
+                                <select name="#" id="#" placeholder="Year">
                               <option value="#">2012</option>
                               <option value="#">2013</option>
                               <option value="#">2014</option>
                             </select>
-                            <select name="#" id="#" placeholder="Rating">
+                                <select name="#" id="#" placeholder="Rating">
                               <option value="#">1+</option>
                               <option value="#">2+</option>
                               <option value="#">3+</option>
                               <option value="#">4+</option>
                             </select>
-                            <ion-button> Reset
-                            </ion-button>
+                            </div>
+                            <div class="sortby">
+                                <h2>Sort By</h2>
+                                <select name="#" id="#" placeholder="Category">
+                                <option value="#">Popularity</option>
+                                <option value="#">Polarity</option>
+                                <option value="#">Release Date</option>
+                                </select>
+                                <select name="#" id="#" placeholder="Order">
+                              <option value="#">Ascending</option>
+                              <option value="#">Descending</option>
+                            </select>
+                            </div>
+
+                        </div>
+                        <div class="search-criteria">
+                            <div class="tag-chips">
+                                <ion-chip>
+                                    <ion-label color="warning">Action</ion-label>
+                                </ion-chip>
+                                <ion-chip>
+                                    <ion-label color="danger">Horror</ion-label>
+                                </ion-chip>
+                                <ion-chip>
+                                    <ion-label color="warning">Comedy</ion-label>
+                                </ion-chip>
+                                <ion-chip>
+                                    <ion-label color="success">Adventure</ion-label>
+                                </ion-chip>
+                                <ion-chip>
+                                    <ion-label color="secondary">Fantasy</ion-label>
+                                </ion-chip>
+                                <ion-chip>
+                                    <ion-label color="tertiary">Drama</ion-label>
+                                </ion-chip>
+                                <ion-chip>
+                                    <ion-label color="danger">Gore</ion-label>
+                                </ion-chip>
+
+                            </div>
                         </div>
                         <div class="movie-list">
                             <div class="movie">
+                                <ion-badge color="warning" class="top-three">1</ion-badge>
                                 <figure class="movie-poster"><img src="../../assets/pictures/thumb-3.jpg" alt="#"></figure>
                                 <div class="movie-title"><a href="single.html">Maleficient</a></div>
                                 <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
                             </div>
                             <div class="movie">
+                                <ion-badge color="warning" class="top-three">2</ion-badge>
                                 <figure class="movie-poster"><img src="../../assets/pictures/thumb-4.jpg" alt="#"></figure>
                                 <div class="movie-title"><a href="single.html">The adventure of Tintin</a></div>
                                 <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
                             </div>
                             <div class="movie">
+                                <ion-badge color="warning" class="top-three">3</ion-badge>
+
                                 <figure class="movie-poster"><img src="../../assets/pictures/thumb-5.jpg" alt="#"></figure>
                                 <div class="movie-title"><a href="single.html">Hobbit</a></div>
                                 <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
                             </div>
                             <div class="movie">
+
                                 <figure class="movie-poster"><img src="../../assets/pictures/thumb-6.jpg" alt="#"></figure>
                                 <div class="movie-title"><a href="single.html">Exists</a></div>
                                 <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
