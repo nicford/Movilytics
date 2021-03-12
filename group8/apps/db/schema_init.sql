@@ -16,6 +16,20 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
+--
+-- Name: tablefunc; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS tablefunc WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION tablefunc; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION tablefunc IS 'functions that manipulate whole tables, including crosstab';
+
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -105,7 +119,8 @@ ALTER TABLE public.country_info OWNER TO postgres;
 
 CREATE TABLE public.genre_info (
     genre_id integer NOT NULL,
-    genre_name character varying(20) NOT NULL
+    genre_name character varying(20) NOT NULL,
+    genre_avg_rating numeric
 );
 
 
@@ -331,6 +346,36 @@ ALTER TABLE public.translations ALTER COLUMN index ADD GENERATED ALWAYS AS IDENT
 
 
 --
+-- Name: user_genre_mapping; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.user_genre_mapping (
+    user_id integer NOT NULL,
+    animation numeric,
+    adventure numeric,
+    family numeric,
+    comedy numeric,
+    fantasy numeric,
+    romance numeric,
+    drama numeric,
+    action numeric,
+    crime numeric,
+    thriller numeric,
+    horror numeric,
+    history numeric,
+    science_fiction numeric,
+    mystery numeric,
+    war numeric,
+    music numeric,
+    documentary numeric,
+    western numeric,
+    tv_movie numeric
+);
+
+
+ALTER TABLE public.user_genre_mapping OWNER TO postgres;
+
+--
 -- Name: user_names; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -453,6 +498,14 @@ ALTER TABLE ONLY public.tags
 
 ALTER TABLE ONLY public.translations
     ADD CONSTRAINT translations_pkey PRIMARY KEY (index);
+
+
+--
+-- Name: user_genre_mapping user_genre_mapping_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_genre_mapping
+    ADD CONSTRAINT user_genre_mapping_pkey PRIMARY KEY (user_id);
 
 
 --
@@ -597,6 +650,14 @@ ALTER TABLE ONLY public.translations
 
 ALTER TABLE ONLY public.translations
     ADD CONSTRAINT translations_mid_fkey FOREIGN KEY (mid) REFERENCES public.movies(mid);
+
+
+--
+-- Name: user_genre_mapping user_genre_mapping_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_genre_mapping
+    ADD CONSTRAINT user_genre_mapping_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.user_names(user_id);
 
 
 --
