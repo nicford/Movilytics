@@ -1,322 +1,452 @@
 {
-  "version": 1,
-  "cli": {
-    "defaultCollection": "@nrwl/angular",
-    "analytics": false
-  },
-  "schematics": {
-    "@nrwl/angular": {
-      "application": {
-        "linter": "eslint"
-      },
-      "library": {
-        "linter": "eslint"
-      },
-      "storybook-configuration": {
-        "linter": "eslint"
-      }
+    "version": 1,
+    "cli": {
+        "defaultCollection": "@nrwl/angular",
+        "analytics": false
     },
-    "@nrwl/angular:application": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest",
-      "e2eTestRunner": "cypress"
-    },
-    "@nrwl/angular:library": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest"
-    },
-    "@nrwl/angular:component": {
-      "style": "scss"
-    }
-  },
-  "projects": {
-    "api": {
-      "root": "apps/api",
-      "sourceRoot": "apps/api/src",
-      "projectType": "application",
-      "prefix": "api",
-      "architect": {
-        "build": {
-          "builder": "@nrwl/node:build",
-          "outputs": [
-            "{options.outputPath}"
-          ],
-          "options": {
-            "outputPath": "dist/apps/api",
-            "main": "apps/api/src/main.ts",
-            "tsConfig": "apps/api/tsconfig.app.json",
-            "assets": [
-              "apps/api/src/assets"
-            ],
-            "generatePackageJson": true
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/api/src/environments/environment.ts",
-                  "with": "apps/api/src/environments/environment.prod.ts"
-                }
-              ]
+    "schematics": {
+        "@nrwl/angular": {
+            "application": {
+                "linter": "eslint"
+            },
+            "library": {
+                "linter": "eslint"
+            },
+            "storybook-configuration": {
+                "linter": "eslint"
             }
-          }
         },
-        "serve": {
-          "builder": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "api:build"
-          }
+        "@nrwl/angular:application": {
+            "style": "scss",
+            "linter": "eslint",
+            "unitTestRunner": "jest",
+            "e2eTestRunner": "cypress"
         },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "apps/api/**/*.ts"
-            ]
-          }
+        "@nrwl/angular:library": {
+            "style": "scss",
+            "linter": "eslint",
+            "unitTestRunner": "jest"
         },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/api"
-          ],
-          "options": {
-            "jestConfig": "apps/api/jest.config.js",
-            "passWithNoTests": true
-          }
+        "@nrwl/angular:component": {
+            "style": "scss"
         }
-      }
     },
-    "api-interfaces": {
-      "root": "libs/api-interfaces",
-      "sourceRoot": "libs/api-interfaces/src",
-      "projectType": "library",
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": [
-              "libs/api-interfaces/**/*.ts"
-            ]
-          }
-        }
-      }
-    },
-    "ucl-imdb": {
-      "projectType": "application",
-      "root": "apps/ucl-imdb",
-      "sourceRoot": "apps/ucl-imdb/src",
-      "prefix": "group8",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/apps/ucl-imdb",
-            "index": "apps/ucl-imdb/src/index.html",
-            "main": "apps/ucl-imdb/src/main.ts",
-            "polyfills": "apps/ucl-imdb/src/polyfills.ts",
-            "tsConfig": "apps/ucl-imdb/tsconfig.app.json",
-            "aot": true,
-            "assets": [
-              "apps/ucl-imdb/src/assets",
-              {
-                "glob": "**/*.svg",
-                "input": "node_modules/ionicons/dist/ionicons/svg",
-                "output": "./svg"
-              }
-            ],
-            "styles": [
-              "apps/ucl-imdb/src/styles.scss",
-              {
-                "input": "apps/ucl-imdb/src/theme/variables.scss"
-              }
-            ],
-            "scripts": []
-          },
-          "configurations": {
-            "production": {
-              "fileReplacements": [
-                {
-                  "replace": "apps/ucl-imdb/src/environments/environment.ts",
-                  "with": "apps/ucl-imdb/src/environments/environment.prod.ts"
-                }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "2mb",
-                  "maximumError": "5mb"
+    "projects": {
+        "api": {
+            "root": "apps/api",
+            "sourceRoot": "apps/api/src",
+            "projectType": "application",
+            "prefix": "api",
+            "architect": {
+                "build": {
+                    "builder": "@nrwl/node:build",
+                    "outputs": [
+                        "{options.outputPath}"
+                    ],
+                    "options": {
+                        "outputPath": "dist/apps/api",
+                        "main": "apps/api/src/main.ts",
+                        "tsConfig": "apps/api/tsconfig.app.json",
+                        "assets": [
+                            "apps/api/src/assets"
+                        ],
+                        "generatePackageJson": true
+                    },
+                    "configurations": {
+                        "production": {
+                            "optimization": true,
+                            "extractLicenses": true,
+                            "inspect": false,
+                            "fileReplacements": [{
+                                "replace": "apps/api/src/environments/environment.ts",
+                                "with": "apps/api/src/environments/environment.prod.ts"
+                            }]
+                        }
+                    }
                 },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb",
-                  "maximumError": "10kb"
+                "serve": {
+                    "builder": "@nrwl/node:execute",
+                    "options": {
+                        "buildTarget": "api:build"
+                    }
+                },
+                "lint": {
+                    "builder": "@nrwl/linter:eslint",
+                    "options": {
+                        "lintFilePatterns": [
+                            "apps/api/**/*.ts"
+                        ]
+                    }
+                },
+                "test": {
+                    "builder": "@nrwl/jest:jest",
+                    "outputs": [
+                        "coverage/apps/api"
+                    ],
+                    "options": {
+                        "jestConfig": "apps/api/jest.config.js",
+                        "passWithNoTests": true
+                    }
                 }
-              ]
             }
-          }
         },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "ucl-imdb:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "ucl-imdb:build:production"
+        "api-interfaces": {
+            "root": "libs/api-interfaces",
+            "sourceRoot": "libs/api-interfaces/src",
+            "projectType": "library",
+            "architect": {
+                "lint": {
+                    "builder": "@nrwl/linter:eslint",
+                    "options": {
+                        "lintFilePatterns": [
+                            "libs/api-interfaces/**/*.ts"
+                        ]
+                    }
+                }
             }
-          }
         },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "ucl-imdb:build"
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "apps/ucl-imdb/**/*.ts",
-              "apps/ucl-imdb/**/*.html"
-            ]
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "apps/ucl-imdb/src/test.ts",
-            "tsConfig": "apps/ucl-imdb/tsconfig.spec.json",
-            "karmaConfig": "apps/ucl-imdb/karma.conf.js",
-            "polyfills": "apps/ucl-imdb/src/polyfills.ts",
-            "styles": [],
-            "scripts": [],
-            "assets": []
-          }
-        },
-        "cap": {
-          "builder": "@nxtend/capacitor:cap",
-          "options": {
-            "cmd": "--help"
-          }
-        },
-        "add": {
-          "builder": "@nxtend/capacitor:cap",
-          "options": {
-            "cmd": "add",
-            "packageInstall": true
-          },
-          "configurations": {
-            "ios": {
-              "cmd": "add ios"
+        "ucl-imdb": {
+            "projectType": "application",
+            "root": "apps/ucl-imdb",
+            "sourceRoot": "apps/ucl-imdb/src",
+            "prefix": "group8",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:browser",
+                    "options": {
+                        "outputPath": "dist/apps/ucl-imdb",
+                        "index": "apps/ucl-imdb/src/index.html",
+                        "main": "apps/ucl-imdb/src/main.ts",
+                        "polyfills": "apps/ucl-imdb/src/polyfills.ts",
+                        "tsConfig": "apps/ucl-imdb/tsconfig.app.json",
+                        "aot": true,
+                        "assets": [
+                            "apps/ucl-imdb/src/assets",
+                            {
+                                "glob": "**/*.svg",
+                                "input": "node_modules/ionicons/dist/ionicons/svg",
+                                "output": "./svg"
+                            }
+                        ],
+                        "styles": [
+                              "apps/ucl-imdb/src/global.scss",
+                            {
+                                "input": "apps/ucl-imdb/src/theme/variables.scss"
+                            }
+                        ],
+                        "scripts": []
+                    },
+                    "configurations": {
+                        "production": {
+                            "fileReplacements": [{
+                                "replace": "apps/ucl-imdb/src/environments/environment.ts",
+                                "with": "apps/ucl-imdb/src/environments/environment.prod.ts"
+                            }],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "budgets": [{
+                                    "type": "initial",
+                                    "maximumWarning": "2mb",
+                                    "maximumError": "5mb"
+                                },
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb",
+                                    "maximumError": "10kb"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "browserTarget": "ucl-imdb:build"
+                    },
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "ucl-imdb:build:production"
+                        }
+                    }
+                },
+                "ucl-imdb": {
+                    "projectType": "application",
+                    "root": "apps/ucl-imdb",
+                    "sourceRoot": "apps/ucl-imdb/src",
+                    "prefix": "group8",
+                    "architect": {
+                        "build": {
+                            "builder": "@angular-devkit/build-angular:browser",
+                            "options": {
+                                "outputPath": "dist/apps/ucl-imdb",
+                                "index": "apps/ucl-imdb/src/index.html",
+                                "main": "apps/ucl-imdb/src/main.ts",
+                                "polyfills": "apps/ucl-imdb/src/polyfills.ts",
+                                "tsConfig": "apps/ucl-imdb/tsconfig.app.json",
+                                "aot": true,
+                                "assets": [
+                                    "apps/ucl-imdb/src/assets",
+                                    {
+                                        "glob": "**/*.svg",
+                                        "input": "node_modules/ionicons/dist/ionicons/svg",
+                                        "output": "./svg"
+                                    }
+                                ],
+                                "styles": [
+
+                                    "apps/ucl-imdb/src/theme/variables.scss",
+                                    "apps/ucl-imdb/src/global.scss",
+                                    {
+                                        "input": "apps/ucl-imdb/src/theme/variables.scss"
+                                    }
+                                ],
+                                "scripts": []
+                            },
+                            "configurations": {
+                                "production": {
+                                    "fileReplacements": [{
+                                        "replace": "apps/ucl-imdb/src/environments/environment.ts",
+                                        "with": "apps/ucl-imdb/src/environments/environment.prod.ts"
+                                    }],
+                                    "optimization": true,
+                                    "outputHashing": "all",
+                                    "sourceMap": false,
+                                    "namedChunks": false,
+                                    "extractLicenses": true,
+                                    "vendorChunk": false,
+                                    "buildOptimizer": true,
+                                    "budgets": [{
+                                            "type": "initial",
+                                            "maximumWarning": "2mb",
+                                            "maximumError": "5mb"
+                                        },
+                                        {
+                                            "type": "anyComponentStyle",
+                                            "maximumWarning": "6kb",
+                                            "maximumError": "10kb"
+                                        }
+                                    ]
+                                }
+                            }
+                        },
+                        "serve": {
+                            "builder": "@angular-devkit/build-angular:dev-server",
+                            "options": {
+                                "browserTarget": "ucl-imdb:build"
+                            },
+                            "configurations": {
+                                "production": {
+                                    "browserTarget": "ucl-imdb:build:production"
+                                }
+                            }
+                        },
+                        "extract-i18n": {
+                            "builder": "@angular-devkit/build-angular:extract-i18n",
+                            "options": {
+                                "browserTarget": "ucl-imdb:build"
+                            }
+                        },
+                        "lint": {
+                            "builder": "@angular-devkit/build-angular:tslint",
+                            "options": {
+                                "tsConfig": [
+                                    "apps/ucl-imdb/tsconfig.app.json",
+                                    "apps/ucl-imdb/tsconfig.spec.json",
+                                    "apps/ucl-imdb/tsconfig.editor.json"
+                                ],
+                                "exclude": ["**/node_modules/**", "!apps/ucl-imdb/**/*"]
+                            }
+                        },
+                        "test": {
+                            "builder": "@angular-devkit/build-angular:karma",
+                            "options": {
+                                "main": "apps/ucl-imdb/src/test.ts",
+                                "tsConfig": "apps/ucl-imdb/tsconfig.spec.json",
+                                "karmaConfig": "apps/ucl-imdb/karma.conf.js",
+                                "polyfills": "apps/ucl-imdb/src/polyfills.ts",
+                                "styles": [],
+                                "scripts": [],
+                                "assets": []
+                            }
+                        },
+                        "cap": {
+                            "builder": "@nxtend/capacitor:cap",
+                            "options": {
+                                "cmd": "--help"
+                            }
+                        },
+                        "add": {
+                            "builder": "@nxtend/capacitor:cap",
+                            "options": {
+                                "cmd": "add",
+                                "packageInstall": true
+                            },
+                            "configurations": {
+                                "ios": {
+                                    "cmd": "add ios"
+                                },
+                                "android": {
+                                    "cmd": "add android"
+                                }
+                            }
+                        },
+                        "copy": {
+                            "builder": "@nxtend/capacitor:cap",
+                            "options": {
+                                "cmd": "copy",
+                                "packageInstall": false
+                            },
+                            "configurations": {
+                                "ios": {
+                                    "cmd": "copy ios"
+                                },
+                                "android": {
+                                    "cmd": "copy android"
+                                }
+                            }
+                        },
+                        "open": {
+                            "builder": "@nxtend/capacitor:cap",
+                            "options": {
+                                "cmd": "open",
+                                "packageInstall": false
+                            },
+                            "configurations": {
+                                "ios": {
+                                    "cmd": "open ios"
+                                },
+                                "android": {
+                                    "cmd": "open android"
+                                }
+                            }
+                        },
+                        "sync": {
+                            "builder": "@nxtend/capacitor:cap",
+                            "options": {
+                                "cmd": "sync",
+                                "packageInstall": true
+                            },
+                            "configurations": {
+                                "ios": {
+                                    "cmd": "sync ios"
+                                },
+                                "android": {
+                                    "cmd": "sync android"
+                                }
+                            }
+                        },
+                        "update": {
+                            "builder": "@nxtend/capacitor:cap",
+                            "options": {
+                                "cmd": "update",
+                                "packageInstall": true
+                            },
+                            "configurations": {
+                                "ios": {
+                                    "cmd": "update ios"
+                                },
+                                "android": {
+                                    "cmd": "update android"
+                                }
+                            }
+                        }
+                    }
+                }
             },
-            "android": {
-              "cmd": "add android"
-            }
-          }
-        },
-        "copy": {
-          "builder": "@nxtend/capacitor:cap",
-          "options": {
-            "cmd": "copy",
-            "packageInstall": false
-          },
-          "configurations": {
-            "ios": {
-              "cmd": "copy ios"
+            "copy": {
+                "builder": "@nxtend/capacitor:cap",
+                "options": {
+                    "cmd": "copy",
+                    "packageInstall": false
+                },
+                "configurations": {
+                    "ios": {
+                        "cmd": "copy ios"
+                    },
+                    "android": {
+                        "cmd": "copy android"
+                    }
+                }
             },
-            "android": {
-              "cmd": "copy android"
-            }
-          }
-        },
-        "open": {
-          "builder": "@nxtend/capacitor:cap",
-          "options": {
-            "cmd": "open",
-            "packageInstall": false
-          },
-          "configurations": {
-            "ios": {
-              "cmd": "open ios"
+            "open": {
+                "builder": "@nxtend/capacitor:cap",
+                "options": {
+                    "cmd": "open",
+                    "packageInstall": false
+                },
+                "configurations": {
+                    "ios": {
+                        "cmd": "open ios"
+                    },
+                    "android": {
+                        "cmd": "open android"
+                    }
+                }
             },
-            "android": {
-              "cmd": "open android"
-            }
-          }
-        },
-        "sync": {
-          "builder": "@nxtend/capacitor:cap",
-          "options": {
-            "cmd": "sync",
-            "packageInstall": true
-          },
-          "configurations": {
-            "ios": {
-              "cmd": "sync ios"
+            "sync": {
+                "builder": "@nxtend/capacitor:cap",
+                "options": {
+                    "cmd": "sync",
+                    "packageInstall": true
+                },
+                "configurations": {
+                    "ios": {
+                        "cmd": "sync ios"
+                    },
+                    "android": {
+                        "cmd": "sync android"
+                    }
+                }
             },
-            "android": {
-              "cmd": "sync android"
+            "update": {
+                "builder": "@nxtend/capacitor:cap",
+                "options": {
+                    "cmd": "update",
+                    "packageInstall": true
+                },
+                "configurations": {
+                    "ios": {
+                        "cmd": "update ios"
+                    },
+                    "android": {
+                        "cmd": "update android"
+                    }
+                }
             }
-          }
         },
-        "update": {
-          "builder": "@nxtend/capacitor:cap",
-          "options": {
-            "cmd": "update",
-            "packageInstall": true
-          },
-          "configurations": {
-            "ios": {
-              "cmd": "update ios"
-            },
-            "android": {
-              "cmd": "update android"
-            }
-          }
-        }
-      }
-    },
     "ucl-imdb-e2e": {
-      "root": "apps/ucl-imdb-e2e",
-      "sourceRoot": "apps/ucl-imdb-e2e/src",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@nrwl/cypress:cypress",
-          "options": {
-            "cypressConfig": "apps/ucl-imdb-e2e/cypress.json",
-            "tsConfig": "apps/ucl-imdb-e2e/tsconfig.e2e.json",
-            "devServerTarget": "ucl-imdb:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "ucl-imdb:serve:production"
+        "root": "apps/ucl-imdb-e2e",
+        "sourceRoot": "apps/ucl-imdb-e2e/src",
+        "projectType": "application",
+        "architect": {
+            "e2e": {
+                "builder": "@nrwl/cypress:cypress",
+                "options": {
+                    "cypressConfig": "apps/ucl-imdb-e2e/cypress.json",
+                    "tsConfig": "apps/ucl-imdb-e2e/tsconfig.e2e.json",
+                    "devServerTarget": "ucl-imdb:serve"
+                },
+                "configurations": {
+                    "production": {
+                        "devServerTarget": "ucl-imdb:serve:production"
+                    }
+                }
+            },
+            "lint": {
+                "builder": "@angular-eslint/builder:lint",
+                "options": {
+                    "lintFilePatterns": [
+                        "apps/ucl-imdb-e2e/**/*.ts",
+                        "apps/ucl-imdb-e2e/**/*.html"
+                    ]
+                }
             }
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "apps/ucl-imdb-e2e/**/*.ts",
-              "apps/ucl-imdb-e2e/**/*.html"
-            ]
-          }
         }
-      }
     }
   }
 }

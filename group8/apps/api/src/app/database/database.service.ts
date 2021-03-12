@@ -28,9 +28,11 @@ export class DatabaseService {
 
     constructor(private configService: ConfigService) {
         if (process.env.PRODUCTION != undefined) {
+            console.log("production database settings");
             this.pool = new Pool(this.postgres_config_prod);
         } else {
             this.pool = new Pool(this.postgres_config);
+            console.log("development database settings");
         }
         
     }
