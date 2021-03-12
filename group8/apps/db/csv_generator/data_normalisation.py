@@ -160,7 +160,7 @@ for mid in mids:
         if language_id not in seen_lang:
             eng_name = tran['english_name']
             # update df_language_info
-            df_language_info.append(pd.Series({'language_id':language_id, 'language_name':eng_name }), ignore_index=True)
+            df_language_info = df_language_info.append(pd.Series({'language_id':language_id, 'language_name':eng_name }), ignore_index=True)
         
         # update df_translations
         df_translations.at[i, 'mid'] = mid
