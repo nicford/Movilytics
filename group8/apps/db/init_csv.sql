@@ -76,7 +76,7 @@ DELIMITER ','
 CSV HEADER;
  
  
-COPY movies(mid,adult,budget,language_id,overview,popularity,poster_path,runtime,status,tagline,title,video,vote_average,vote_count,year,revenue)
+COPY movies(mid,title,overview,budget,adult,language_id,popularity,poster_path,video,vote_average,vote_count,runtime,status,tagline,year,revenue)
 FROM '/var/lib/postgresql/data/db_files/movies.csv' 
 DELIMITER ',' 
 CSV HEADER;
