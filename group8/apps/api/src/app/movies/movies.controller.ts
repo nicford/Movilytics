@@ -1,6 +1,8 @@
-import { Controller, Get, Param, Query, Req } from '@nestjs/common';
+import { Controller, Get, Param, Query, Req, UsePipes, ValidationPipe } from '@nestjs/common';
 import { identity } from 'rxjs';
 import { MoviesService } from './movies.service';
+import { searchDto } from '@group8/api-interfaces';
+
 
 @Controller('movies')
 export class MoviesController {
@@ -18,7 +20,8 @@ export class MoviesController {
     }
 
     @Get("search")
-    searchMovies(@Query() query) {
+    // @UsePipes(new ValidationPipe({ transform: true }))
+    search(@Query() query: searchDto) {
         console.log(query);
         return this.movieService.search(query);
     }
