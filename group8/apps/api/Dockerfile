@@ -1,14 +1,15 @@
 # # DEVELOPMENT IMAGE
-# FROM node:latest As development
+FROM node:current-alpine3.10 As development
 
+RUN mkdir -p /usr/src/app
 # RUN cd /usr/src && mkdir -p app
-# WORKDIR /usr/src/app
+WORKDIR /usr/src/app
 
-# # VOLUME [ "/data" ]
+# VOLUME [ "/data" ]
 
-# COPY package.json .
+COPY package.json .
 
-# RUN npm install -g nx
+RUN npm install -g nx
 
 
 
