@@ -1,10 +1,44 @@
-.search-criteria {
+.advanced-search {
     margin-bottom: 20px;
     display: flex;
     text-align: justify;
 }
 
-.search-criteria select {
+.search-bar {
+    align-items: left;
+    display: flex;
+    text-align: justify;
+}
+
+.bar {
+    align-items: left;
+    display: inline;
+    text-align: left;
+    width: 50%;
+    margin-right: 10px;
+}
+
+ion-searchbar {
+    border-radius: 5%;
+    background-color: none;
+    align-items: left;
+    text-align: left;
+    position: relative;
+    padding-top: 0px;
+    padding-bottom: 20px;
+    padding-left: 0px;
+    --background: #262626;
+}
+
+.advancedButton {
+    text-align: right;
+}
+
+.advancedButton ion-button {
+    margin: 0;
+}
+
+select {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -52,14 +86,14 @@ body {
 
 .tag-chips {
     position: relative;
+    color: var(--ion-text-color);
 }
 
 .sortby {
-    align-items: right;
     display: inline;
-    text-align: right;
-    margin-left: auto;
+    text-align: left;
     margin-right: 0;
+    margin-left: auto;
 }
 
 ion-badge {
@@ -68,6 +102,10 @@ ion-badge {
     margin: 7.5px;
     $badge-font-size: 2em;
     z-index: 1000;
+}
+
+.searchbar-input {
+    border-radius: 5px;
 }
 
 .top_three {
