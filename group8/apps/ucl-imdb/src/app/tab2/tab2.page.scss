@@ -80,9 +80,21 @@ body {
 
 .filters {
     align-items: left;
-    display: inline;
     text-align: left;
+    margin-left: 0;
 }
+
+.specialSelect {
+    margin-top: 10px;
+}
+
+ion-segment {
+    align-items: left;
+    text-align: left;
+    position: relative;
+}
+
+ion-segment-button {}
 
 .tag-chips {
     position: relative;
@@ -102,10 +114,6 @@ ion-badge {
     margin: 7.5px;
     $badge-font-size: 2em;
     z-index: 1000;
-}
-
-.searchbar-input {
-    border-radius: 5px;
 }
 
 .top_three {

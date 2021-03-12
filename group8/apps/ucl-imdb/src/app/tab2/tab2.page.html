@@ -27,7 +27,7 @@
                                     Search
                                 </ion-button>
                             </div>
-                            <div class="sortby ">
+                            <div class="sortby">
                                 <h2 style="color:transparent ">Search</h2>
                                 <select name="# " id="# " placeholder="Category ">
                                     <option value="# ">Popularity</option>
@@ -48,23 +48,36 @@
 
                         </div>
                         <div class="dropDownAdvanced " *ngIf="this.advanced ">
-                            <div class="advanced-search ">
-                                <div class="filter ">
+                            <div class="advanced-search">
+                                <div class="filter">
                                     <h2>Filters</h2>
-                                    <select name="# " id="# " placeholder="Year ">
-                              <option value="# ">2012</option>
-                              <option value="# ">2013</option>
-                              <option value="# ">2014</option>
-                            </select>
+                                    <select name="# " id="# " placeholder="Year " class="specialSelect">
+                                        <option value="# ">2012</option>
+                                        <option value="# ">2013</option>
+                                        <option value="# ">2014</option>
+                                    </select>
                                     <select name="# " id="# " placeholder="Rating ">
-                              <option value="# ">1+</option>
-                              <option value="# ">2+</option>
-                              <option value="# ">3+</option>
-                              <option value="# ">4+</option>
-                            </select>
+                                        <option value="# ">1+</option>
+                                        <option value="# ">2+</option>
+                                        <option value="# ">3+</option>
+                                        <option value="# ">4+</option>
+                                    </select>
                                 </div>
 
-
+                                <div style="margin-right:0;margin-left: auto;">
+                                    <h2 style="color:transparent">Filters</h2>
+                                    <ion-segment value="both">
+                                        <ion-segment-button value="released">
+                                            <ion-label>Released</ion-label>
+                                        </ion-segment-button>
+                                        <ion-segment-button value="both">
+                                            <ion-label>Both</ion-label>
+                                        </ion-segment-button>
+                                        <ion-segment-button value="upcoming">
+                                            <ion-label>Upcoming</ion-label>
+                                        </ion-segment-button>
+                                    </ion-segment>
+                                </div>
                             </div>
                             <div class="advanced-search ">
                                 <div class="tag-chips ">
@@ -74,6 +87,14 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- <div>
+                            <ion-item>
+                                <ion-range dualKnobs="true" min="1950" max="2020" pin tick-active>
+                                    <ion-label slot="start">1888</ion-label>
+                                    <ion-label slot="end">2021</ion-label>
+                                </ion-range>
+                            </ion-item>
+                        </div> -->
                         <div class="movie-list ">
                             <div class="movie ">
                                 <ion-badge color="warning " class="top-three ">1</ion-badge>
