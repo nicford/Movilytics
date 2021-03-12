@@ -7,7 +7,10 @@ export interface Message {
 
 
 export class searchDto {
-  
+
+  results_per_page: string;
+
+  page_number: number;
 
   // not required if all movies should be displayed
   query: string;
