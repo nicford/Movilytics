@@ -40,10 +40,4 @@ export class MoviesController {
         return this.movieService.getMovieReviews(movie_id);
     }
 
-    @Get('genrePopulation')
-    getGenrePopulation(@Query('mid') movie_id: number) {
-        console.log(`getting genre population for movie with id ${movie_id}`);
-        
-    }
-    
 }
