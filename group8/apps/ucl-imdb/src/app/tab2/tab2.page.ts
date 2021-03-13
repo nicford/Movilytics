@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 
+import { MoviesService } from "../services/movies.service";
+
 @Component({
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss',]
+  styleUrls: ['tab2.page.scss',],
+  providers: [MoviesService]
 })
 export class Tab2Page {
 
@@ -17,7 +20,10 @@ export class Tab2Page {
   "Action": "danger", "Crime": "warning", "Thriller": "danger", "Horror": "danger", "History": "medium", "Science Fiction": "primary", "Mystery": "War",
   "Music": "primary", "Documentary": "medium", "Western": "warning", "TV Movie": "light"};
 
-  constructor() {}
+  constructor(private movieService: MoviesService) {
+    console.log('getting movies from frontend');
+    this.movieService.searchMovies();
+  }
 
   getChipColor(chipName) {
     return this.tagColors[chipName]

@@ -43,7 +43,14 @@ export class MoviesService {
   // TODO: ignore case when searching!!
   search(search_query: searchDto) {
     const sql_query = '';
-    const response: searchResponse = this.databaseService.runQuery(sql_query);
+    // const response: searchResponse = this.databaseService.runQuery(sql_query);
+    const response: searchResponse = {
+      title: "Toy Story",
+      poster_path: '/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg',
+      rating: '4.4',
+      tagline: 'It spans a whole new world of entertainment!',
+      released: true
+    };
     // search_query = '%' + search_query + '%';
     // console.log(search_query);
     // const sql_query = 'SELECT * FROM MOVIE WHERE title like $1';

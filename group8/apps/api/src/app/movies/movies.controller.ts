@@ -1,5 +1,4 @@
-import { Controller, Get, Param, Query, Req, UsePipes, ValidationPipe } from '@nestjs/common';
-import { identity } from 'rxjs';
+import { Body, Controller, Get, Post, Query, } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { searchDto } from '@group8/api-interfaces';
 
@@ -19,9 +18,17 @@ export class MoviesController {
         return this.movieService.getMovie(movie_id);
     }
 
-    @Get("search")
+    // @Get("search")
+    // // @UsePipes(new ValidationPipe({ transform: true }))
+    // search(@Query() query: searchDto) {
+    //     console.log(query);
+    //     return this.movieService.search(query);
+    // }
+
+    @Post("search")
     // @UsePipes(new ValidationPipe({ transform: true }))
-    search(@Query() query: searchDto) {
+    search(@Body() query: searchDto) {
+        console.log('search initiated:')
         console.log(query);
         return this.movieService.search(query);
     }
