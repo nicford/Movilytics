@@ -28,34 +28,41 @@ export class MoviesService {
   tmdb_api_endpoint = 'http://api.themoviedb.org/3';
   api_key_suffix = `api_key=${process.env.TMDB_API_KEY}`;
 
-  getMovie(movie_id: number) {
+  async getMovie(movie_id: number) {
     // console.log(this.cache.store)
     // const query = "SELECT * FROM LINKS WHERE mid = $1";
     const query = 'SELECT * FROM MOVIES WHERE mid = $1';
-    return this.databaseService.runQuery(query, [movie_id]);
+    return await this.databaseService.runQuery(query, [movie_id]);
   }
 
-  getAllMovies() {
+
+  async getAllMovies() {
     const query = 'SELECT * FROM MOVIES';
-    return this.databaseService.runQuery(query, []);
+    return await this.databaseService.runQuery(query, []);
   }
+
 
   // TODO: ignore case when searching!!
-  search(search_query: searchDto) {
+  async search(search_query: searchDto) {
     // const keys = Object.keys(search_query);
     // console.log(keys);
     // console.log(search_query.genres);
     //  = [];
-    let query_prepared_parameters: string[];
-    let parameters: string[];
+    const query_prepared_parameters: string[] = [];
+    const parameters: string[] = [];
+    let index = 1;
+    let value: any;
     Object.keys(search_query).forEach((key) => {
-      const value = search_query[key];
-      if (value) {
-        query_prepared_parameters.push(`${key} := $`);
-        parameters.push(value);
+      console.log(key);
+      value = search_query[key];
+      if (typeof value !== 'undefined' && value) {
+        query_prepared_parameters.push(`${key} := $${index}`);
+        parameters.push(String(value));
+        index += 1;
       }
-      parameters.push(String(search_query[key]));
     });
+    console.log(query_prepared_parameters);
+    console.log(parameters);
     // console.log(parameters);
     // const parameters: string[] = Array.from(Object.keys(search_query), (key) => { 
     //   console.log(key);
@@ -66,8 +73,9 @@ export class MoviesService {
     //   return search_query[key];
     // }});
     // console.log(parameters);
-    const sql_query = "select * from get_movies()";
-    const response = this.databaseService.runQuery(sql_query, parameters); // convert each parameter to a string before querying the postgres database
+    const sql_query = `select * from get_movies(${query_prepared_parameters.join(', ')})`;
+    console.log(sql_query)
+    const response = await this.databaseService.runQuery(sql_query, parameters); // convert each parameter to a string before querying the postgres database
     
     // const response: searchResponse = {
     //   title: "Toy Story",
@@ -89,9 +97,9 @@ export class MoviesService {
 
   
 
-  getMovieReviews(movie_id: number) {
+  async getMovieReviews(movie_id: number) {
     const movie_review_endpoint = `${this.tmdb_api_endpoint}/movie/${movie_id}/reviews?` + this.api_key_suffix;
-    return this.httpService.get(movie_review_endpoint).pipe(
+    return await this.httpService.get(movie_review_endpoint).pipe(
       map(response => response.data),
     );
   }
