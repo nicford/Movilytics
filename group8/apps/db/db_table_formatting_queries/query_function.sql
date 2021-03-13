@@ -1,3 +1,4 @@
+-- Script to create functions used when querying for advance search
 create or replace function get_movies (
 	keyword text default null,
 	sortBy text default null,
@@ -44,3 +45,6 @@ as $$
 				CASE WHEN sortBy = 'title' AND not ascending THEN movies.title END DESC
 			) as filtered;
 end; $$
+
+-- Query from function format example, do not pass in value if value is null 
+select * from get_movies(title := 'Toy Story', sortBy := 'title', minRating := '{3,4,5}')
