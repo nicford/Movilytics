@@ -8,13 +8,14 @@ export class MovieReportController {
 
     // movie-report/id
     @Get(":id")
-    getReport(@Param('id') movie_id: number) {
-        return movie_id;
+    async getReport(@Param('id') movie_id: number) {
+        return await movie_id;
     }
     
     // movie-report/getMovieReport?mid=
     @Get('getMovieReport')
-    getMovieReport(@Query('mid') movie_id: number) {
-        return this.movieReportService.createMovieReport(movie_id);
+    async getMovieReport(@Query('mid') movie_id: number) {
+        const result = await this.movieReportService.createMovieReport(movie_id);
+        return result
     }
 }

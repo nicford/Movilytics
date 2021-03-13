@@ -9,13 +9,13 @@ export class MoviesController {
     constructor(private movieService: MoviesService) {}
 
     @Get("getAllMovies")
-    getAllMovies() {
-        return this.movieService.getAllMovies();
+    async getAllMovies() {
+        return await this.movieService.getAllMovies();
     }
 
     @Get("getMovie")
-    getMovie(@Query('id') movie_id: number) {
-        return this.movieService.getMovie(movie_id);
+    async getMovie(@Query('id') movie_id: number) {
+        return await this.movieService.getMovie(movie_id);
     }
 
     // @Get("search")
@@ -27,17 +27,17 @@ export class MoviesController {
 
     @Post("search")
     // @UsePipes(new ValidationPipe({ transform: true }))
-    search(@Body() query: searchDto) {
+    async search(@Body() query: searchDto) {
         console.log('search initiated:')
         console.log(query);
-        return this.movieService.search(query);
+        return await this.movieService.search(query);
     }
 
 
     @Get('getReviews')
-    getReviews(@Query('mid') movie_id: number) {
+    async getReviews(@Query('mid') movie_id: number) {
         console.log(`getting reviews for movie with id ${movie_id}`);
-        return this.movieService.getMovieReviews(movie_id);
+        return await this.movieService.getMovieReviews(movie_id);
     }
 
 }

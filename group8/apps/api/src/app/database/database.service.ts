@@ -37,7 +37,7 @@ export class DatabaseService {
         
     }
 
-    async runQuery(query: string, parameters = []): Promise<QueryResult | string>{
+    async runQuery(query: string, parameters = []): Promise<QueryResult>{
         const result = await this.pool.query(query, parameters);
         console.log("running run query in database service");
         return result;

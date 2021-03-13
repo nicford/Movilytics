@@ -8,6 +8,7 @@ import { GlobalCacheModule } from './global-cache/global-cache.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { MovieReportModule } from './movie-report/movie-report.module';
+import { AudienceModule } from './audience/audience.module';
 
 let staticFilesPath = process.env.STATIC_FILES_PATH;  // for production in kubernetes
 if (staticFilesPath == undefined) {
@@ -17,7 +18,7 @@ if (staticFilesPath == undefined) {
 @Module({
   imports: [DatabaseModule, MoviesModule, GlobalCacheModule, ServeStaticModule.forRoot({
     rootPath: staticFilesPath
-  }), MovieReportModule],
+  }), MovieReportModule, AudienceModule],
   controllers: [AppController],
   providers: [AppService],
 })
