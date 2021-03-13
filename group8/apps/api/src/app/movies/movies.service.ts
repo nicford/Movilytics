@@ -7,7 +7,7 @@ import { exec } from 'child_process';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as dotenv from "dotenv";
-import { searchDto } from './movies.controller';
+import { searchDto, searchResponse } from '@group8/api-interfaces';
 dotenv.config({path: './env/.env'});
 // import { format } from 'pg-format';
 
@@ -42,6 +42,8 @@ export class MoviesService {
 
   // TODO: ignore case when searching!!
   search(search_query: searchDto) {
+    const sql_query = '';
+    const response: searchResponse = this.databaseService.runQuery(sql_query);
     // search_query = '%' + search_query + '%';
     // console.log(search_query);
     // const sql_query = 'SELECT * FROM MOVIE WHERE title like $1';
@@ -50,7 +52,7 @@ export class MoviesService {
 
     // check if first n pages are in cache. get pages
     // this.cache.set() // query extra pages and add them to cache. Use hash of request parameters and page number for that request as key 
-    return search_query;
+    return response;
   }
 
   createMovieReport(movie_id: number) {
