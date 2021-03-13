@@ -1,5 +1,7 @@
 -- Script to create functions used when querying for advance search
 create or replace function get_movies (
+	result_per_page integer default 20,
+	page_number integer default 5,
 	keyword text default null,
 	sortBy text default null,
 	ascending boolean default True,
@@ -43,7 +45,8 @@ as $$
 				CASE WHEN sortBy ISNULL AND not ascending THEN movies.popularity END ASC,
 				CASE WHEN sortBy = 'title' AND not ascending THEN movies.title END DESC,
 				CASE WHEN sortBy = 'title' AND not ascending THEN movies.title END DESC
-			) as filtered;
+			) as filtered
+			limit result_per_page * page_number;
 end; $$
 
 -- Query from function format example, do not pass in value if value is null 
