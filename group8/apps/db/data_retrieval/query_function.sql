@@ -21,9 +21,9 @@ create or replace function get_movies (
 as $$
 	begin
 		return query
-			select distinct filtered.mid, filtered.title, filtered.poster_path, filtered.vote_average, filtered.tagline, filtered.status 
+			select filtered.mid, filtered.title, filtered.poster_path, filtered.vote_average, filtered.tagline, filtered.status
 			from (
-				select movies.mid, movies.title, movies.poster_path, movies.vote_average, movies.tagline, movies.popularity, movies.status, genres_table.genre_id, rating_table.avg_rating
+				select distinct on (movies.mid) movies.mid, movies.title, movies.poster_path, movies.vote_average, movies.tagline, movies.popularity, movies.status, genres_table.genre_id, rating_table.avg_rating
 				from movies
 				inner join(
 					select ratings.mid, avg(ratings.rating) as avg_rating from ratings group by ratings.mid
@@ -41,12 +41,13 @@ as $$
 				(status_arg ISNULL OR movies.status = status_arg)
 				and 
 				(genres_arg ISNULL OR genres_table.genre_id = ANY(genres_arg))
-				ORDER BY 
-				CASE WHEN sort_by ISNULL AND ascending THEN movies.popularity END DESC,
-				CASE WHEN sort_by ISNULL AND not ascending THEN movies.popularity END ASC,
-				CASE WHEN sort_by = 'title' AND not ascending THEN movies.title END DESC,
-				CASE WHEN sort_by = 'title' AND not ascending THEN movies.title END DESC
+				ORDER BY movies.mid
 			) as filtered
+			ORDER BY
+			CASE WHEN sort_by = 'popularity' AND ascending = FALSE THEN filtered.popularity END DESC,
+			CASE WHEN sort_by = 'popularity' AND ascending = TRUE THEN filtered.popularity END ASC,
+			CASE WHEN sort_by = 'title' AND ascending = FALSE THEN filtered.title END DESC,
+			CASE WHEN sort_by = 'title' AND ascending = TRUE THEN filtered.title END ASC
 			limit result_limit offset result_offset;
 end; $$
 
