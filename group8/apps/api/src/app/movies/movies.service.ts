@@ -44,51 +44,24 @@ export class MoviesService {
 
   // TODO: ignore case when searching!!
   async search(search_query: searchDto) {
-    // const keys = Object.keys(search_query);
-    // console.log(keys);
-    // console.log(search_query.genres);
-    //  = [];
     const query_prepared_parameters: string[] = [];
-    const parameters: string[] = [];
+    const parameters: (string | number | boolean | number[])[] = [];
     let index = 1;
-    let value: any;
+    let value: string | number | boolean | number[];
     Object.keys(search_query).forEach((key) => {
       console.log(key);
       value = search_query[key];
       if (typeof value !== 'undefined' && value) {
         query_prepared_parameters.push(`${key} := $${index}`);
-        parameters.push(String(value));
+        parameters.push(value);
         index += 1;
       }
     });
     console.log(query_prepared_parameters);
     console.log(parameters);
-    // console.log(parameters);
-    // const parameters: string[] = Array.from(Object.keys(search_query), (key) => { 
-    //   console.log(key);
-    //   console.log(search_query[key]);
-    //   if (search_query[key]) {
-    //   return String(search_query[key]);
-    // } else {
-    //   return search_query[key];
-    // }});
-    // console.log(parameters);
     const sql_query = `select * from get_movies(${query_prepared_parameters.join(', ')})`;
     console.log(sql_query)
     const response = await this.databaseService.runQuery(sql_query, parameters); // convert each parameter to a string before querying the postgres database
-    
-    // const response: searchResponse = {
-    //   title: "Toy Story",
-    //   poster_path: '/uXDfjJbdP4ijW5hWSBrPrlKpxab.jpg',
-    //   rating: 4.4,
-    //   tagline: 'It spans a whole new world of entertainment!',
-    //   released: true
-    // };
-    // search_query = '%' + search_query + '%';
-    // console.log(search_query);
-    // const sql_query = 'SELECT * FROM MOVIE WHERE title like $1';
-    // console.log(`running search movies on query: ${sql_query}`);
-    // return this.databaseService.runQuery(sql_query, [search_query]);
 
     // check if first n pages are in cache. get pages
     // this.cache.set() // query extra pages and add them to cache. Use hash of request parameters and page number for that request as key 
