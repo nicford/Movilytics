@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsInt, IsBoolean, IsString, IsOptional, IsArray } from 'class-validator';
+import { IsNotEmpty, IsInt, IsBooleanString, IsString, IsOptional, IsArray } from 'class-validator';
 
 
 export interface Message {
@@ -23,11 +23,11 @@ export class searchDto {
 
   @IsString()
   @IsNotEmpty()
-  sortBy: string = null;
+  sort_by: string = null;
 
-  @IsBoolean()
+  @IsBooleanString()
   @IsNotEmpty()
-  ascending: string = null;
+  ascending: boolean = null;
 
   @IsInt()
   @IsOptional()
@@ -36,15 +36,15 @@ export class searchDto {
   // @IsInt()
   @IsArray()
   @IsOptional()
-  allowedRatings: number[] = null;
+  allowed_ratings: number[] = null;
 
   @IsArray()
   @IsOptional()
-  genres: number[] = null;
+  genres_arg: number[] = null;
 
   @IsString()
   @IsOptional()
-  status: string = null;   // released, upcoming, both
+  status_arg: string = null;   // released, upcoming, both
 }
 
 
