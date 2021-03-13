@@ -33,10 +33,6 @@ export class MoviesController {
         return this.movieService.search(query);
     }
 
-    @Get('getMovieReport')
-    getMovieReport(@Query('mid') movie_id: number) {
-        return this.movieService.createMovieReport(movie_id);
-    }
 
     @Get('getReviews')
     getReviews(@Query('mid') movie_id: number) {
