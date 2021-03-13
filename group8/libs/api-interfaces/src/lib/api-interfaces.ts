@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsInt, Contains } from 'class-validator';
+import { IsNotEmpty, IsInt, Contains, IsString, IsOptional, IsArray } from 'class-validator';
 
 
 export interface Message {
@@ -8,29 +8,45 @@ export interface Message {
 
 export class searchDto {
 
-  results_per_page: string;
+  @IsInt()
+  @IsOptional()
+  results_per_page: number;
 
+  @IsInt()
+  @IsOptional()
   page_number: number;
 
-  // not required if all movies should be displayed
+  // optional if all movies should be displayed
+  @IsString()
+  @IsOptional()
   query: string;
 
+  @IsString()
   @IsNotEmpty()
   sortBy: string
 
+  @IsString()
   @IsNotEmpty()
   ascending: string
 
   @IsInt()
+  @IsOptional()
   year: number
 
-  @IsInt()
+  // @IsInt()
+  @IsArray()
+  @IsOptional()
   allowedRatings: number[]
 
+  @IsArray()
+  @IsOptional()
   genres: number[]
 
+  @IsString()
+  @IsOptional()
   status: string;   // released, upcoming, both
 }
+
 
 export class searchResponse {
   title: string;
