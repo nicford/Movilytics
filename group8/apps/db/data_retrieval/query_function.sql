@@ -5,7 +5,7 @@ create or replace function get_movies (
 	keyword text default null,
 	sort_by text default null,
 	ascending boolean default True,
-	year integer default null,
+	release_year integer default null,
 	allowed_ratings integer[] default null,
 	genres_arg integer[] default null,
 	status_arg varchar(50) default null
@@ -23,10 +23,10 @@ as $$
 		return query
 			select filtered.mid, filtered.title, filtered.poster_path, filtered.vote_average, filtered.tagline, filtered.status
 			from (
-				select distinct on (movies.mid) movies.mid, movies.title, movies.poster_path, movies.vote_average, movies.tagline, movies.popularity, movies.status, genres_table.genre_id, rating_table.avg_rating
+				select distinct on (movies.mid) movies.mid, movies.title, movies.poster_path, movies.vote_average, movies.tagline, movies.popularity, movies.released_year, movies.status, genres_table.genre_id, rating_table.avg_rating, rating_table.polarity
 				from movies
 				inner join(
-					select ratings.mid, avg(ratings.rating) as avg_rating from ratings group by ratings.mid
+					select movie_stats.mid, movie_stats.avg_rating, movie_stats.polarity from movie_stats 
 				) as rating_table
 				on movies.mid = rating_table.mid
 				inner join(
@@ -41,13 +41,21 @@ as $$
 				(status_arg ISNULL OR movies.status = status_arg)
 				and 
 				(genres_arg ISNULL OR genres_table.genre_id = ANY(genres_arg))
+				and 
+				(release_year ISNULL or movies.released_year >= release_year)
 				ORDER BY movies.mid
 			) as filtered
 			ORDER BY
 			CASE WHEN sort_by = 'popularity' AND ascending = FALSE THEN filtered.popularity END DESC,
 			CASE WHEN sort_by = 'popularity' AND ascending = TRUE THEN filtered.popularity END ASC,
 			CASE WHEN sort_by = 'title' AND ascending = FALSE THEN filtered.title END DESC,
-			CASE WHEN sort_by = 'title' AND ascending = TRUE THEN filtered.title END ASC
+			CASE WHEN sort_by = 'title' AND ascending = TRUE THEN filtered.title END ASC,
+			CASE WHEN sort_by = 'year' AND ascending = FALSE THEN filtered.released_year END DESC,
+			CASE WHEN sort_by = 'year' AND ascending = TRUE THEN filtered.released_year END ASC,
+			CASE WHEN sort_by = 'polarity' AND ascending = FALSE THEN filtered.polarity END DESC,
+			CASE WHEN sort_by = 'polarity' AND ascending = TRUE THEN filtered.polarity END ASC,
+			CASE WHEN sort_by = 'rating' AND ascending = FALSE THEN filtered.avg_rating END DESC,
+			CASE WHEN sort_by = 'rating' AND ascending = TRUE THEN filtered.avg_rating END ASC
 			limit result_limit offset result_offset;
 end; $$
 

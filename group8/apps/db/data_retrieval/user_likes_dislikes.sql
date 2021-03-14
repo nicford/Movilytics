@@ -6,4 +6,3 @@ select mid,
 from ratings 
 where mid = 862
 group by mid
-W
