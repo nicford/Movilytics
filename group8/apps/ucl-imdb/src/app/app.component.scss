@@ -36,7 +36,6 @@
  }
  
  html,
- button,
  input,
  select,
  textarea {
@@ -176,7 +175,6 @@
      white-space: normal;
  }
  
- button,
  input,
  select,
  textarea {
@@ -186,27 +184,12 @@
      vertical-align: baseline;
  }
  
- button,
  input {
      line-height: normal;
  }
  
- button,
  select {
      text-transform: none;
- }
- 
- button,
- html input[type="button"],
- input[type="reset"],
- input[type="submit"] {
-     -webkit-appearance: button;
-     cursor: pointer;
- }
- 
- button[disabled],
- input[disabled] {
-     cursor: default;
  }
  
  input[type="checkbox"],
@@ -220,17 +203,6 @@
      -webkit-appearance: textfield;
      -moz-box-sizing: content-box;
      box-sizing: content-box;
- }
- 
- input[type="search"]::-webkit-search-cancel-button,
- input[type="search"]::-webkit-search-decoration {
-     -webkit-appearance: none;
- }
- 
- button::-moz-focus-inner,
- input::-moz-focus-inner {
-     border: 0;
-     padding: 0;
  }
  
  textarea {
@@ -322,34 +294,6 @@
   * Reusable Components Style
   */
  
- .button,
- form input[type="submit"],
- form button,
- form input[type="reset"],
- .contact-form input[type="submit"] {
-     border: none;
-     background: #ffaa3c;
-     padding: 10px;
-     border-radius: 3px;
-     color: #92601e;
-     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
-     -webkit-transition: .3s ease;
-     transition: .3s ease;
- }
- 
- .button:hover,
- form input[type="submit"]:hover,
- form button:hover,
- form input[type="reset"]:hover,
- .contact-form input[type="submit"]:hover,
- .button:focus,
- form input[type="submit"]:focus,
- form button:focus,
- form input[type="reset"]:focus,
- .contact-form input[type="submit"]:focus {
-     background-color: #ffc06f;
- }
- 
  .slider {
      position: relative;
      margin-bottom: 30px;
@@ -429,111 +373,8 @@
      height: auto;
  }
  
- .team {
-     text-align: center;
-     margin: 0 0 30px;
- }
- 
- .team .team-image {
-     width: 230px;
-     height: 230px;
-     border-radius: 50%;
-     overflow: hidden;
-     margin: 0 auto 30px;
- }
- 
- .team .team-image img {
-     display: block;
-     max-width: 100%;
-     width: 100%;
- }
- 
- .team .team-name {
-     font-size: 16px;
-     font-size: 1.0666666667em;
-     margin: 0;
- }
- 
- .team .team-title {
-     font-size: 12px;
-     font-size: 0.8em;
- }
- 
- .social-links {
-     margin: 20px 0;
- }
- 
- .social-links a {
-     color: white;
-     display: inline-block;
-     width: 30px;
-     height: 30px;
-     text-align: center;
-     border-radius: 50%;
-     line-height: 1.9;
-     -webkit-transition: .3s ease;
-     transition: .3s ease;
- }
- 
- .social-links .facebook {
-     background-color: #204385;
- }
- 
- .social-links .facebook:hover {
-     background-color: #2a58ae;
- }
- 
- .social-links .twitter {
-     background-color: #2aa9e0;
- }
- 
- .social-links .twitter:hover {
-     background-color: #57bbe6;
- }
- 
- .social-links .google-plus {
-     background-color: #d3492c;
- }
- 
- .social-links .google-plus:hover {
-     background-color: #dc6d56;
- }
- 
- .social-links .pinterest {
-     background-color: #ca2128;
- }
- 
  .social-links .pinterest:hover {
      background-color: #e03e45;
- }
- 
- .breadcrumbs {
-     padding-bottom: 20px;
-     margin-bottom: 30px;
-     border-bottom: 1px solid #ebebeb;
- }
- 
- .breadcrumbs a {
-     font-weight: 400;
-     color: #9ea1a6;
- }
- 
- .breadcrumbs a:after {
-     content: " ";
-     width: 8px;
-     height: 5px;
-     display: inline-block;
-     margin-left: 10px;
-     margin-right: 10px;
-     background: url(../assets/icon/arrow-gray.png) no-repeat;
- }
- 
- .breadcrumbs a:hover {
-     color: #ffaa3c;
- }
- 
- .breadcrumbs span {
-     color: #84878d;
  }
  
  ul.arrow {
@@ -1985,25 +1826,6 @@
      visibility: visible;
      opacity: 1;
      padding: 10px;
- }
- 
- .main-navigation .search-form button {
-     background-color: transparent;
-     border: none;
-     border-left: 1px solid #eeeeef;
-     border-radius: 0;
-     border-top-right-radius: 5px;
-     border-bottom-right-radius: 5px;
-     margin-left: -5px;
-     color: inherit;
-     box-shadow: none;
-     outline: none;
-     -webkit-transition: .3s ease;
-     transition: .3s ease;
- }
- 
- .main-navigation .search-form button.active {
-     background-color: #f0f0f0;
  }
  
  .mobile-navigation {

@@ -32,7 +32,7 @@
 
                     <div class="col-md-9">
                         <div class="slider">
-                            <ion-slides class="slides">
+                            <ion-slides #slides class="slides" [options]="slideOptions" (ionSlidesDidLoad)="slidesDidLoad(slides)">
                                 <ion-slide>
                                     <a href="#"><img src="assets/pictures/slide-1.jpg" alt="Slide 1"></a>
                                 </ion-slide>

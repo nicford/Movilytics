@@ -57,7 +57,30 @@ select {
 .breadcrumbs {
     padding-bottom: 20px;
     margin-bottom: 30px;
-    border-bottom: 1px solid #ebebeb;
+    border-bottom: 1px solid #84878d;
+}
+
+.breadcrumbs a {
+    font-weight: 400;
+    color: #5c5d5f;
+}
+
+.breadcrumbs a:after {
+    content: " ";
+    width: 8px;
+    height: 5px;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+    background: url(../../assets/icon/arrow-gray.png) no-repeat;
+}
+
+.breadcrumbs a:hover {
+    color: #ffaa3c;
+}
+
+.breadcrumbs span {
+    color: #84878d;
 }
 
 .main-content .container {
@@ -94,8 +117,7 @@ ion-segment {
     position: relative;
 }
 
-ion-segment-button {}
-
+// ion-segment-button {}
 .tag-chips {
     position: relative;
     color: var(--ion-text-color);
