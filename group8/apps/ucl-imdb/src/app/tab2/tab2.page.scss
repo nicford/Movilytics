@@ -12,7 +12,6 @@
 
 .bar {
     align-items: left;
-    display: inline;
     text-align: left;
     width: 50%;
     margin-right: 10px;
@@ -28,6 +27,12 @@ ion-searchbar {
     padding-bottom: 20px;
     padding-left: 0px;
     --background: #262626;
+}
+
+ion-range {
+    width: 35vw;
+    padding-top: 0px;
+    padding-inline: 0px;
 }
 
 .advancedButton {
@@ -52,6 +57,12 @@ select {
     background-image: url(../../assets/icon/select.png);
     background-repeat: no-repeat;
     background-position: 100% center;
+}
+
+ion-select {
+    display: inline;
+    padding: 10px 50px 10px 10px;
+    margin-right: 10px;
 }
 
 .breadcrumbs {
@@ -104,7 +115,9 @@ body {
 .filters {
     align-items: left;
     text-align: left;
+    margin-left: auto;
     margin-left: 0;
+    display: flex;
 }
 
 .specialSelect {
@@ -124,7 +137,7 @@ ion-segment {
 }
 
 .sortby {
-    display: inline;
+    display: flex;
     text-align: left;
     margin-right: 0;
     margin-left: auto;

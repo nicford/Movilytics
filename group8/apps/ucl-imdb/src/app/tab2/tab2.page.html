@@ -13,33 +13,31 @@
             <main class="main-content">
                 <div class="container">
                     <div class="page">
+                        <h2>Search</h2>
                         <div class="search-bar">
                             <div class="bar">
-                                <h2>Search</h2>
-                                <ion-searchbar animated showCancelButton="never" placeholder="" type="text" id="messageInput">
+                                <ion-searchbar animated showCancelButton="never" placeholder="" type="text" #searchBar>
 
                                 </ion-searchbar>
 
                             </div>
                             <div class="advancedButton">
-                                <h2 style="color:transparent ">Search</h2>
-                                <ion-button>
+                                <ion-button (click)="search()">
                                     Search
                                 </ion-button>
                             </div>
                             <div class="sortby">
-                                <h2 style="color:transparent ">Search</h2>
-                                <select name="# " id="# " placeholder="Category ">
-                                    <option value="# ">Popularity</option>
-                                    <option value="# ">Polarity</option>
-                                    <option value="# ">Release Date</option>
-                                    <option value="# ">Name</option>
-                                    <option value="# ">Year</option>
-                                </select>
-                                <select name="# " id="# " placeholder="Order ">
-                                    <option value="# ">Ascending</option>
-                                    <option value="# ">Descending</option>
-                                </select>
+                                <ion-select interface="popover" #sortCriteria placeholder="Category">
+                                    <ion-select-option value="popularity">Popularity</ion-select-option>
+                                    <ion-select-option value="polarity">Polarity</ion-select-option>
+                                    <ion-select-option value="date">Release Date</ion-select-option>
+                                    <ion-select-option value="name">Name</ion-select-option>
+                                    <ion-select-option value="year">Year</ion-select-option>
+                                </ion-select>
+                                <ion-select interface="popover" #sortOrder placeholder="Order">
+                                    <ion-select-option value="ascending">Ascending</ion-select-option>
+                                    <ion-select-option value="descending">Descending</ion-select-option>
+                                </ion-select>
                                 <ion-button (click)="toggleAdvanced() ">
                                     <ion-icon name="options-outline"></ion-icon>
                                 </ion-button>
@@ -48,25 +46,30 @@
 
                         </div>
                         <div class="dropDownAdvanced " *ngIf="this.advanced ">
+                            <h2>Filters</h2>
+
                             <div class="advanced-search">
-                                <div class="filter">
-                                    <h2>Filters</h2>
-                                    <select name="# " id="# " placeholder="Year " class="specialSelect">
-                                        <option value="# ">2012</option>
-                                        <option value="# ">2013</option>
-                                        <option value="# ">2014</option>
-                                    </select>
-                                    <select name="# " id="# " placeholder="Rating ">
-                                        <option value="# ">1+</option>
-                                        <option value="# ">2+</option>
-                                        <option value="# ">3+</option>
-                                        <option value="# ">4+</option>
-                                    </select>
+                                <div class="filters">
+                                    <!-- <ion-select interface="popover" #filterYear placeholder="Year">
+                                        <ion-select-option value="2012">2012</ion-select-option>
+                                        <ion-select-option value="2013">2013</ion-select-option>
+                                        <ion-select-option value="2014">2014</ion-select-option>
+                                    </ion-select> -->
+                                    <ion-select interface="popover" #filterRating placeholder="Rating" style="margin-top: 5px;">
+                                        <ion-select-option value="1">1+</ion-select-option>
+                                        <ion-select-option value="2">2+</ion-select-option>
+                                        <ion-select-option value="3">3+</ion-select-option>
+                                        <ion-select-option value="4">4+</ion-select-option>
+                                    </ion-select>
+                                    <ion-label style="margin-top: 15px; margin-right: 5px;">Range:</ion-label>
+                                    <ion-range dualKnobs="true" min="1950" max="2020" pin tick-active style="margin-bottom: 5px;">
+                                        <ion-label slot="start">1950 ></ion-label>
+                                        <ion-label slot="end">2021</ion-label>
+                                    </ion-range>
                                 </div>
 
-                                <div style="margin-right:0;margin-left: auto;">
-                                    <h2 style="color:transparent">Filters</h2>
-                                    <ion-segment value="both">
+                                <div style="margin-right:0; margin-left: auto;">
+                                    <ion-segment value="both" #segmentRelease>
                                         <ion-segment-button value="released">
                                             <ion-label>Released</ion-label>
                                         </ion-segment-button>

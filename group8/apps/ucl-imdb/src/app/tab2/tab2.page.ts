@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { IonContent, IonSearchbar, IonSegment, IonSelect } from '@ionic/angular';
 
 import { MoviesService } from "../services/movies.service";
 
@@ -20,6 +21,13 @@ export class Tab2Page {
   "Action": "danger", "Crime": "warning", "Thriller": "danger", "Horror": "danger", "History": "medium", "Science Fiction": "primary", "Mystery": "War",
   "Music": "primary", "Documentary": "medium", "Western": "warning", "TV Movie": "light"};
 
+  @ViewChild("searchBar") searchBar: IonSearchbar;
+  @ViewChild("sortCriteria", { static: true }) sortCriteria: IonSelect;
+  @ViewChild("sortOrder", { static: true }) sortOrder: ElementRef;
+  @ViewChild("segmentRelease", { static: true }) segmentRelease: IonSegment;
+  @ViewChild("filterYear", { static: true }) filterYear: ElementRef;
+  @ViewChild("filterRating", { static: true }) filterRating: ElementRef;
+
   constructor(private movieService: MoviesService) {
     console.log('getting movies from frontend');
     console.log(this.movieService.getMovies());
@@ -31,6 +39,15 @@ export class Tab2Page {
 
   toggleAdvanced() {
     this.advanced = !this.advanced
+  }
+
+  search() {
+    console.log("search input: ", this.searchBar.value);
+    // console.log("sort criteria: ",this.sortCriteria.value);
+    // console.log("sort order: ",this.sortOrder.value);
+    // console.log("select release date: ", this.segmentRelease.value);
+    // console.log("filter year: ",this.filterYear.value);
+    // console.log("filter rating: ",this.filterRating.value);
   }
 
 }
