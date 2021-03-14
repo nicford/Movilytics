@@ -22,7 +22,7 @@ export class Tab2Page {
 
   constructor(private movieService: MoviesService) {
     console.log('getting movies from frontend');
-    this.movieService.searchMovies();
+    console.log(this.movieService.getMovies());
   }
 
   getChipColor(chipName) {

@@ -57,5 +57,5 @@ export class searchResponse {
 
   tagline: string;
 
-  released: boolean;   // true if released, false if upcoming
+  released: string;   // true if released, false if upcoming
 }
