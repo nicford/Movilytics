@@ -35,8 +35,8 @@
                                     <ion-select-option value="year">Year</ion-select-option>
                                 </ion-select>
                                 <ion-select interface="popover" #sortOrder placeholder="Order">
-                                    <ion-select-option value="ascending">Ascending</ion-select-option>
-                                    <ion-select-option value="descending">Descending</ion-select-option>
+                                    <ion-select-option value="true">Ascending</ion-select-option>
+                                    <ion-select-option value="false">Descending</ion-select-option>
                                 </ion-select>
                                 <ion-button (click)="toggleAdvanced() ">
                                     <ion-icon name="options-outline"></ion-icon>
@@ -62,21 +62,21 @@
                                         <ion-select-option value="4">4+</ion-select-option>
                                     </ion-select>
                                     <ion-label style="margin-top: 15px; margin-right: 5px;">Range:</ion-label>
-                                    <ion-range #rangeYear dualKnobs="true" min="1888" max="2020" pin tick-active style="margin-bottom: 5px;" [(ngModel)]="defaultRange">
+                                    <ion-range [(ngModel)]="rangeValues" #rangeYear dualKnobs="true" min="1888" max="2020" pin tick-active style="margin-bottom: 5px;">
                                         <ion-label slot="start">1888</ion-label>
                                         <ion-label slot="end">2021</ion-label>
                                     </ion-range>
                                 </div>
 
                                 <div style="margin-right:0; margin-left: auto;">
-                                    <ion-segment value="both" #segmentRelease>
-                                        <ion-segment-button value="released">
+                                    <ion-segment value="Released" #segmentRelease>
+                                        <ion-segment-button value="Released">
                                             <ion-label>Released</ion-label>
                                         </ion-segment-button>
-                                        <ion-segment-button value="both">
+                                        <ion-segment-button value="Both">
                                             <ion-label>Both</ion-label>
                                         </ion-segment-button>
-                                        <ion-segment-button value="upcoming">
+                                        <ion-segment-button value="Upcoming">
                                             <ion-label>Upcoming</ion-label>
                                         </ion-segment-button>
                                     </ion-segment>
@@ -98,30 +98,31 @@
                                 </ion-range>
                             </ion-item>
                         </div> -->
-                        <div class="movie-list ">
-                            <div class="movie ">
-                                <ion-badge color="warning " class="top-three ">1</ion-badge>
-                                <figure class="movie-poster "><img src="../../assets/pictures/thumb-3.jpg " alt="# "></figure>
-                                <div class="movie-title "><a [routerLink]="['./Maleficient']" routerLinkActive="router-link-active">Maleficient</a></div>
-                                <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
+                        <div class="movie-list">
+                            <div class="movie" *ngFor="let movie of this.movies">
+                                <!-- <ion-badge color="warning " class="top-three ">1</ion-badge> -->
+                                <figure class="movie-poster "><img src="{{getImage(movie.poster_path)}}" alt="# "></figure>
+                                <div class="movie-title ">
+                                    <a (click)="goToReview(movie.mid)">{{movie.title}}</a></div>
+                                <p>{{movie.tagline}}</p>
                             </div>
-                            <div class="movie ">
+                            <!-- <div class="movie ">
                                 <ion-badge color="warning " class="top-three ">2</ion-badge>
                                 <figure class="movie-poster "><img src="../../assets/pictures/thumb-4.jpg " alt="# "></figure>
-                                <div class="movie-title "><a [routerLink]="['./TinTin']" routerLinkActive="router-link-active">The adventure of Tintin</a></div>
+                                <div class="movie-title "><a [routerLink]="[ './TinTin'] " routerLinkActive="router-link-active ">The adventure of Tintin</a></div>
                                 <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
                             </div>
                             <div class="movie ">
                                 <ion-badge color="warning " class="top-three ">3</ion-badge>
 
                                 <figure class="movie-poster "><img src="../../assets/pictures/thumb-5.jpg " alt="# "></figure>
-                                <div class="movie-title "><a [routerLink]="['./Hobbit']" routerLinkActive="router-link-active">Hobbit</a></div>
+                                <div class="movie-title "><a [routerLink]="[ './Hobbit'] " routerLinkActive="router-link-active ">Hobbit</a></div>
                                 <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
                             </div>
                             <div class="movie ">
 
                                 <figure class="movie-poster "><img src="../../assets/pictures/thumb-6.jpg " alt="# "></figure>
-                                <div class="movie-title "><a [routerLink]="['./Exists']" routerLinkActive="router-link-active">Exists</a></div>
+                                <div class="movie-title "><a [routerLink]="[ './Exists'] " routerLinkActive="router-link-active ">Exists</a></div>
                                 <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
                             </div>
                             <div class="movie ">
@@ -166,7 +167,7 @@
                                 <figure class="movie-poster "><img src="../../assets/pictures/thumb-3.jpg " alt="# "></figure>
                                 <div class="movie-title "><a href="single.html ">Maleficient</a></div>
                                 <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
-                            </div>
+                            </div> -->
 
                         </div>
                         <!-- .movie-list -->
