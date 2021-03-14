@@ -30,6 +30,89 @@ CREATE EXTENSION IF NOT EXISTS tablefunc WITH SCHEMA public;
 COMMENT ON EXTENSION tablefunc IS 'functions that manipulate whole tables, including crosstab';
 
 
+--
+-- Name: get_genre_company_avg(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.get_genre_company_avg(movie_id integer DEFAULT NULL::integer) RETURNS TABLE(genre_avg numeric, company_avg numeric)
+    LANGUAGE plpgsql
+    AS $$
+	begin 	
+		return query 
+			with 
+				genre_table as (
+					select avg(genre_info.genre_avg_rating) as genre_avg 
+					from genre_info 
+						where genre_info.genre_id in (
+							select genres.genre_id from genres where genres.mid = movie_id
+						)
+				),
+				company_table as (
+					select avg(company_info.avg_company_rating) as company_avg 
+					from company_info 
+						where company_info.company_id  in (
+							select companies.company_id from companies where companies.mid = movie_id
+						)
+				)
+			
+			select genre_table.genre_avg, company_table.company_avg from genre_table, company_table;
+end;$$;
+
+
+ALTER FUNCTION public.get_genre_company_avg(movie_id integer) OWNER TO postgres;
+
+--
+-- Name: get_movies(integer, integer, text, text, boolean, integer, integer, integer[], integer[], character varying); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.get_movies(result_limit integer DEFAULT 100, result_offset integer DEFAULT 0, keyword text DEFAULT NULL::text, sort_by text DEFAULT NULL::text, ascending boolean DEFAULT true, start_year integer DEFAULT NULL::integer, end_year integer DEFAULT NULL::integer, allowed_ratings integer[] DEFAULT NULL::integer[], genres_arg integer[] DEFAULT NULL::integer[], status_arg character varying DEFAULT NULL::character varying) RETURNS TABLE(mid integer, title text, poster_path character varying, vote_average numeric, tagline text, status character varying)
+    LANGUAGE plpgsql
+    AS $$
+	begin
+		return query
+			select filtered.mid, filtered.title, filtered.poster_path, filtered.vote_average, filtered.tagline, filtered.status
+			from (
+				select distinct on (movies.mid) movies.mid, movies.title, movies.poster_path, movies.vote_average, movies.tagline, movies.popularity, movies.released_year, movies.status, genres_table.genre_id, rating_table.avg_rating, rating_table.polarity
+				from movies
+				inner join(
+					select movie_stats.mid, movie_stats.avg_rating, movie_stats.polarity from movie_stats 
+				) as rating_table
+				on movies.mid = rating_table.mid
+				inner join(
+					select genres.mid, genres.genre_id from genres group by genres.mid, genres.genre_id	
+				) as genres_table
+				on movies.mid = genres_table.mid
+				where 
+				(keyword ISNULL OR movies.title ilike keyword)
+				and 
+				(allowed_ratings ISNULL OR rating_table.avg_rating >= ANY(allowed_ratings))
+				and 
+				(status_arg ISNULL OR movies.status = status_arg)
+				and 
+				(genres_arg ISNULL OR genres_table.genre_id = ANY(genres_arg))
+				and 
+				(start_year ISNULL or movies.released_year >= start_year)
+				and
+				(end_year ISNULL or movies.released_year <= end_year)
+				ORDER BY movies.mid
+			) as filtered
+			ORDER BY
+			CASE WHEN sort_by = 'popularity' AND ascending = FALSE THEN filtered.popularity END DESC,
+			CASE WHEN sort_by = 'popularity' AND ascending = TRUE THEN filtered.popularity END ASC,
+			CASE WHEN sort_by = 'title' AND ascending = FALSE THEN filtered.title END DESC,
+			CASE WHEN sort_by = 'title' AND ascending = TRUE THEN filtered.title END ASC,
+			CASE WHEN sort_by = 'year' AND ascending = FALSE THEN filtered.released_year END DESC,
+			CASE WHEN sort_by = 'year' AND ascending = TRUE THEN filtered.released_year END ASC,
+			CASE WHEN sort_by = 'polarity' AND ascending = FALSE THEN filtered.polarity END DESC,
+			CASE WHEN sort_by = 'polarity' AND ascending = TRUE THEN filtered.polarity END ASC,
+			CASE WHEN sort_by = 'rating' AND ascending = FALSE THEN filtered.avg_rating END DESC,
+			CASE WHEN sort_by = 'rating' AND ascending = TRUE THEN filtered.avg_rating END ASC
+			limit result_limit offset result_offset;
+end; $$;
+
+
+ALTER FUNCTION public.get_movies(result_limit integer, result_offset integer, keyword text, sort_by text, ascending boolean, start_year integer, end_year integer, allowed_ratings integer[], genres_arg integer[], status_arg character varying) OWNER TO postgres;
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -68,7 +151,8 @@ ALTER TABLE public.companies ALTER COLUMN index ADD GENERATED ALWAYS AS IDENTITY
 CREATE TABLE public.company_info (
     company_id integer NOT NULL,
     company_name character varying(100) NOT NULL,
-    country_id character varying(2)
+    country_id character varying(2),
+    avg_company_rating numeric
 );
 
 
@@ -166,6 +250,19 @@ CREATE TABLE public.language_info (
 ALTER TABLE public.language_info OWNER TO postgres;
 
 --
+-- Name: movie_stats; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.movie_stats (
+    mid integer NOT NULL,
+    avg_rating numeric,
+    polarity numeric
+);
+
+
+ALTER TABLE public.movie_stats OWNER TO postgres;
+
+--
 -- Name: movies; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -183,7 +280,9 @@ CREATE TABLE public.movies (
     vote_count integer NOT NULL,
     runtime integer,
     status character varying(50) NOT NULL,
-    tagline text
+    tagline text,
+    released_year integer,
+    revenue bigint
 );
 
 
@@ -445,6 +544,14 @@ ALTER TABLE ONLY public.language_info
 
 
 --
+-- Name: movie_stats movie_stats_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.movie_stats
+    ADD CONSTRAINT movie_stats_pkey PRIMARY KEY (mid);
+
+
+--
 -- Name: movies movies_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -570,6 +677,14 @@ ALTER TABLE ONLY public.genres
 
 ALTER TABLE ONLY public.genres
     ADD CONSTRAINT genres_mid_fkey FOREIGN KEY (mid) REFERENCES public.movies(mid);
+
+
+--
+-- Name: movie_stats movie_stats_mid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.movie_stats
+    ADD CONSTRAINT movie_stats_mid_fkey FOREIGN KEY (mid) REFERENCES public.movies(mid);
 
 
 --
