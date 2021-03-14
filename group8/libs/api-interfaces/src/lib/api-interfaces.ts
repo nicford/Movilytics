@@ -27,11 +27,15 @@ export class searchDto {
 
   @IsBooleanString()
   @IsNotEmpty()
-  ascending: boolean = null;
+  ascending: string = null;  // string
 
   @IsInt()
   @IsOptional()
-  year: number = null;
+  start_year: number = null;
+
+  @IsInt()
+  @IsOptional()
+  end_year: number = null;
 
   // @IsInt()
   @IsArray()
