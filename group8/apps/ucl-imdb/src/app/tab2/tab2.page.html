@@ -27,7 +27,7 @@
                                 </ion-button>
                             </div>
                             <div class="sortby">
-                                <ion-select interface="popover" #sortCriteria placeholder="Category">
+                                <ion-select interface="popover" #sortCriteria placeholder="Sort by">
                                     <ion-select-option value="popularity">Popularity</ion-select-option>
                                     <ion-select-option value="polarity">Polarity</ion-select-option>
                                     <ion-select-option value="date">Release Date</ion-select-option>
@@ -62,8 +62,8 @@
                                         <ion-select-option value="4">4+</ion-select-option>
                                     </ion-select>
                                     <ion-label style="margin-top: 15px; margin-right: 5px;">Range:</ion-label>
-                                    <ion-range dualKnobs="true" min="1950" max="2020" pin tick-active style="margin-bottom: 5px;">
-                                        <ion-label slot="start">1950 ></ion-label>
+                                    <ion-range #rangeYear dualKnobs="true" min="1888" max="2020" pin tick-active style="margin-bottom: 5px;" [(ngModel)]="defaultRange">
+                                        <ion-label slot="start">1888</ion-label>
                                         <ion-label slot="end">2021</ion-label>
                                     </ion-range>
                                 </div>
@@ -84,8 +84,8 @@
                             </div>
                             <div class="advanced-search ">
                                 <div class="tag-chips ">
-                                    <ion-chip *ngFor="let tag of tags ">
-                                        <ion-label [ngStyle]="{ '--background':getChipColor(tag)} ">{{tag}}</ion-label>
+                                    <ion-chip [color]="tagDefaultColor[i]" (click)="changeTagColor(i)" *ngFor="let tag of tags; let i = index">
+                                        <ion-label>{{tag}}</ion-label>
                                     </ion-chip>
                                 </div>
                             </div>

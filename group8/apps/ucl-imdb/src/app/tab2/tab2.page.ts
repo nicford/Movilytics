@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { IonContent, IonSearchbar, IonSegment, IonSelect } from '@ionic/angular';
+import { IonContent, IonRange, IonSearchbar, IonSegment, IonSelect } from '@ionic/angular';
 
 import { MoviesService } from "../services/movies.service";
 
@@ -16,25 +16,23 @@ export class Tab2Page {
   tags = ["Animation", "Adventure", "Family", "Comedy", "Fantasy", "Romance", "Drama",
   "Action", "Crime", "Thriller", "Horror", "History", "Science Fiction", "Mystery", "War",
   "Music", "Documentary", "Western", "TV Movie"];
+  tagDefaultColor = Array(this.tags.length).fill("none");
+  searchTags: string[] = []
 
-  tagColors = {"Animation": '#FFA500', "Adventure": "warning", "Family": "light", "Comedy": "warning", "Fantasy": "tertiary", "Romance": "medium", "Drama": "dark",
-  "Action": "danger", "Crime": "warning", "Thriller": "danger", "Horror": "danger", "History": "medium", "Science Fiction": "primary", "Mystery": "War",
-  "Music": "primary", "Documentary": "medium", "Western": "warning", "TV Movie": "light"};
+  searchRange = {"lower": 1888, "upper": 2021}
+  defaultRange: any = this.searchRange;
 
+  
   @ViewChild("searchBar") searchBar: IonSearchbar;
-  @ViewChild("sortCriteria", { static: true }) sortCriteria: IonSelect;
-  @ViewChild("sortOrder", { static: true }) sortOrder: ElementRef;
-  @ViewChild("segmentRelease", { static: true }) segmentRelease: IonSegment;
-  @ViewChild("filterYear", { static: true }) filterYear: ElementRef;
-  @ViewChild("filterRating", { static: true }) filterRating: ElementRef;
+  @ViewChild("sortCriteria") sortCriteria: IonSelect;
+  @ViewChild("sortOrder") sortOrder: IonSelect;
+  @ViewChild("segmentRelease") segmentRelease: IonSegment;
+  @ViewChild("rangeYear") filterYear: IonRange;
+  @ViewChild("filterRating") filterRating: IonSelect;
 
   constructor(private movieService: MoviesService) {
     console.log('getting movies from frontend');
     console.log(this.movieService.getMovies());
-  }
-
-  getChipColor(chipName) {
-    return this.tagColors[chipName]
   }
 
   toggleAdvanced() {
@@ -43,11 +41,25 @@ export class Tab2Page {
 
   search() {
     console.log("search input: ", this.searchBar.value);
-    // console.log("sort criteria: ",this.sortCriteria.value);
-    // console.log("sort order: ",this.sortOrder.value);
-    // console.log("select release date: ", this.segmentRelease.value);
-    // console.log("filter year: ",this.filterYear.value);
-    // console.log("filter rating: ",this.filterRating.value);
+    console.log("sort criteria: ",this.sortCriteria.value);
+    console.log("sort order: ",this.sortOrder.value);
+    console.log("select release date: ", this.segmentRelease.value);
+    console.log("filter year: ",this.filterYear.value);
+    console.log("filter rating: ",this.filterRating.value);
+    console.log("tags: ",this.searchTags);
+  }
+
+  changeTagColor(i:number) {
+    let tag: string = this.tags[i]  
+    let n = this.tags.length
+    if(this.searchTags.includes(tag) && i < n && i >= 0) {
+      let tag_index = this.searchTags.indexOf(tag);
+      this.tagDefaultColor[i] = "none"
+      this.searchTags.splice(tag_index, 1)
+    } else {
+      this.searchTags.push(tag)
+      this.tagDefaultColor[i] = "primary"
+    }
   }
 
 }
