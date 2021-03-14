@@ -5,7 +5,8 @@ create or replace function get_movies (
 	keyword text default null,
 	sort_by text default null,
 	ascending boolean default True,
-	release_year integer default null,
+	start_year integer default null,
+	end_year integer default null,
 	allowed_ratings integer[] default null,
 	genres_arg integer[] default null,
 	status_arg varchar(50) default null
@@ -42,7 +43,9 @@ as $$
 				and 
 				(genres_arg ISNULL OR genres_table.genre_id = ANY(genres_arg))
 				and 
-				(release_year ISNULL or movies.released_year >= release_year)
+				(start_year ISNULL or movies.released_year >= start_year)
+				and
+				(end_year ISNULL or movies.released_year <= end_year)
 				ORDER BY movies.mid
 			) as filtered
 			ORDER BY
