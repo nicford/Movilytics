@@ -27,7 +27,7 @@ export class searchDto {
 
   @IsBooleanString()
   @IsNotEmpty()
-  ascending: boolean = null;  // string
+  ascending: string = null;  // string
 
   @IsInt()
   @IsOptional()
