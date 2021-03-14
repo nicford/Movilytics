@@ -7,15 +7,24 @@ export class MovieReportController {
     constructor(private movieReportService: MovieReportService) {}
 
     // movie-report/id
-    @Get(":id")
-    async getReport(@Param('id') movie_id: number) {
-        return await movie_id;
+    // @Get(":id")
+    // getReport(@Param('id') movie_id: number) {
+    //     return movie_id;
+    // }
+
+    // localhost:3333/api/movie-report/getTranslations?id=862
+    @Get('getTranslations')
+    async getTranslations(@Query('id') movie_id: number){
+        const result = await this.movieReportService.getTranslations(movie_id);
+        console.log(result);
+        return result.rows;
     }
+
     
-    // movie-report/getMovieReport?mid=
+    // localhost:3333/api/movie-report/getMovieReport?id=862
     @Get('getMovieReport')
-    async getMovieReport(@Query('mid') movie_id: number) {
+    async getMovieReport(@Query('id') movie_id: number) {
         const result = await this.movieReportService.createMovieReport(movie_id);
-        return result
+        return result.rows;
     }
 }
