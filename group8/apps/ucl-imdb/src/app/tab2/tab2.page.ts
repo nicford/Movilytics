@@ -1,5 +1,6 @@
 import { stringify } from '@angular/compiler/src/util';
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { searchDto } from '@group8/api-interfaces';
 import { IonContent, IonRange, IonSearchbar, IonSegment, IonSelect } from '@ionic/angular';
 import { Observable } from 'rxjs';
@@ -39,7 +40,7 @@ export class Tab2Page {
   @ViewChild("rangeYear") rangeYear: IonRange;
   @ViewChild("filterRating") filterRating: IonSelect;
 
-  constructor(private movieService: MoviesService, private imagesService: ImagesService) {
+  constructor(private movieService: MoviesService, private imagesService: ImagesService, private router: Router) {
     this.rangeValues = this.rangeValues
     // console.log('getting movies from frontend');
     // console.log(this.movieService.getMovies());
@@ -91,6 +92,10 @@ export class Tab2Page {
       this.searchTags.push(tag)
       this.tagDefaultColor[i] = "primary"
     }
+  }
+
+  goToReview(mid: String) {
+    this.router.navigate(["tabs/tab2/" + mid]);
   }
 
   getImage(posterPath: string) {
