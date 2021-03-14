@@ -15,14 +15,16 @@ as $$
 					select avg(genre_info.genre_avg_rating) as genre_avg 
 					from genre_info 
 						where genre_info.genre_id in (
-							select genres.genre_id from genres where genres.mid = movie_id
+							select genres.genre_id from genres 
+							where (movie_id ISNULL OR genres.mid = movie_id)
 						)
 				),
 				company_table as (
 					select avg(company_info.avg_company_rating) as company_avg 
 					from company_info 
 						where company_info.company_id  in (
-							select companies.company_id from companies where companies.mid = movie_id
+							select companies.company_id from companies 
+							where (movie_id ISNULL OR companies.mid = movie_id)
 						)
 				)
 			
