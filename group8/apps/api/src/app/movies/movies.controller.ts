@@ -10,12 +10,14 @@ export class MoviesController {
 
     @Get("getAllMovies")
     async getAllMovies() {
-        return await this.movieService.getAllMovies();
+        const result = await this.movieService.getAllMovies();
+        return result.rows
     }
 
     @Get("getMovie")
     async getMovie(@Query('id') movie_id: number) {
-        return await this.movieService.getMovie(movie_id);
+        const result = await this.movieService.getMovie(movie_id);
+        return result.rows
     }
 
     // @Get("search")
@@ -30,14 +32,18 @@ export class MoviesController {
     async search(@Body() query: searchDto) {
         console.log('search initiated:')
         console.log(query);
-        return await this.movieService.search(query);
+        const result = await this.movieService.search(query);
+        return result.rows
     }
 
 
+    // TODO: Return only rows for security !
+    // TODO: Not working
     @Get('getReviews')
     async getReviews(@Query('mid') movie_id: number) {
         console.log(`getting reviews for movie with id ${movie_id}`);
-        return await this.movieService.getMovieReviews(movie_id);
+        const result = await this.movieService.getMovieReviews(movie_id);
+        return result
     }
 
 }
