@@ -7,7 +7,7 @@ create or replace function get_movies (
 	ascending boolean default True,
 	start_year integer default null,
 	end_year integer default null,
-	allowed_ratings integer[] default null,
+	allowed_ratings integer default null,
 	genres_arg integer[] default null,
 	status_arg varchar(50) default null
 ) 
@@ -37,7 +37,7 @@ as $$
 				where 
 				(keyword ISNULL OR movies.title ilike keyword)
 				and 
-				(allowed_ratings ISNULL OR rating_table.avg_rating >= ANY(allowed_ratings))
+				(allowed_ratings ISNULL OR rating_table.avg_rating >= allowed_ratings)
 				and 
 				(status_arg ISNULL OR movies.status = status_arg)
 				and 
