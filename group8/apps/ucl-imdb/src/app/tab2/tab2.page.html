@@ -102,7 +102,7 @@
                                 <!-- <ion-badge color="warning " class="top-three ">1</ion-badge> -->
                                 <figure class="movie-poster "><img [src]="getImage(movie.poster_path)"></figure>
                                 <div class="movie-title ">
-                                    <a (click)="goToReview(movie.mid)">{{movie.title}}</a></div>
+                                    <a (click)="goToReview(movie.mid)" [mid]="movie.mid">{{movie.title}}</a></div>
                                 <p>{{movie.tagline}}</p>
                             </div>
                             <!-- <div class="movie ">
