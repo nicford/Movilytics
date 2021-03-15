@@ -94,7 +94,7 @@ export class MoviesService {
     // go through each page and cache them
     number_extra_pages_to_cache++; // increase by one to start at offset one
     for (let i = 1; i < number_extra_pages_to_cache; i++) {
-      search_query['result_offset'] = i;
+      search_query['result_offset'] = i*search_query['result_limit'];
       console.log(`query: ${search_query['result_offset']}`)
       const response = (await this.databaseService.runQuery(sql_query, parameters)).rows; 
       console.log(`caching ${sha1(search_query)} with value ${response}`)
