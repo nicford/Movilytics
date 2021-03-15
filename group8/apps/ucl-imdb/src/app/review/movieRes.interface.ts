@@ -1,0 +1,23 @@
+export interface movieRes {
+    mid: number,
+    title: string,
+    overview: string|null,
+    budget: number,
+    adult: boolean|null,
+    language_id: string|null,
+    popularity: string|null,
+    posterPath: string|null,
+    video: boolean|null,
+    vote_average: string|null,
+    vote_count: number|null,
+    runtime: number,
+    status: string|null,
+    tagline: string|null,
+    released_year: number,
+    revenue: string,
+    genre_list: [string],
+    language_list: [string],
+    country_list: [string],
+    avg_rating: string,
+    translation_list: [string]
+}

@@ -16,7 +16,7 @@
                         <h2>Search</h2>
                         <div class="search-bar">
                             <div class="bar">
-                                <ion-searchbar animated showCancelButton="never" placeholder="" type="text" #searchBar>
+                                <ion-searchbar animated showCancelButton="never" placeholder="" type="text" #searchBar (ionClear)="searchClear($event)" (ionBlur)="checkSearch($event)">
 
                                 </ion-searchbar>
 
@@ -27,14 +27,13 @@
                                 </ion-button>
                             </div>
                             <div class="sortby">
-                                <ion-select interface="popover" #sortCriteria placeholder="Sort by">
+                                <ion-select interface="popover" #sortCriteria placeholder="Sort by" (ionChange)="selectChange($event)">
                                     <ion-select-option value="popularity">Popularity</ion-select-option>
                                     <ion-select-option value="polarity">Polarity</ion-select-option>
-                                    <ion-select-option value="date">Release Date</ion-select-option>
-                                    <ion-select-option value="name">Name</ion-select-option>
+                                    <ion-select-option value="title">Title</ion-select-option>
                                     <ion-select-option value="year">Year</ion-select-option>
                                 </ion-select>
-                                <ion-select interface="popover" #sortOrder placeholder="Order">
+                                <ion-select interface="popover" #sortOrder placeholder="Order" (ionChange)="selectChange($event)">
                                     <ion-select-option value="true">Ascending</ion-select-option>
                                     <ion-select-option value="false">Descending</ion-select-option>
                                 </ion-select>
@@ -101,7 +100,7 @@
                         <div class="movie-list">
                             <div class="movie" *ngFor="let movie of this.movies">
                                 <!-- <ion-badge color="warning " class="top-three ">1</ion-badge> -->
-                                <figure class="movie-poster "><img src="{{getImage(movie.poster_path)}}" alt="# "></figure>
+                                <figure class="movie-poster "><img [src]="getImage(movie.poster_path)"></figure>
                                 <div class="movie-title ">
                                     <a (click)="goToReview(movie.mid)">{{movie.title}}</a></div>
                                 <p>{{movie.tagline}}</p>

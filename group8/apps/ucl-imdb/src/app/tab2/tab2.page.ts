@@ -21,6 +21,11 @@ export class Tab2Page {
   tags = ["Animation", "Adventure", "Family", "Comedy", "Fantasy", "Romance", "Drama",
   "Action", "Crime", "Thriller", "Horror", "History", "Science Fiction", "Mystery", "War",
   "Music", "Documentary", "Western", "TV Movie"];
+
+  tagsDict = {"Family":10751 , "History": 36, "Fantasy": 14, "Comedy": 35, "Documentary": 99,	"TV Movie": 10770,
+  "Science Fiction": 878, "War": 10752, "Music": 10402, "Horror": 27, "Action": 28, "Animation": 16, "Crime": 80,
+  "Western": 37, "Thriller": 53, "Mystery": 9648, "Adventure": 12, "Romance": 10749, "Drama": 18}
+  
   tagDefaultColor = Array(this.tags.length).fill("none");
   searchTags: string[] = []
 
@@ -42,6 +47,7 @@ export class Tab2Page {
 
   constructor(private movieService: MoviesService, private imagesService: ImagesService, private router: Router) {
     this.rangeValues = this.rangeValues
+    this.search()
     // console.log('getting movies from frontend');
     // console.log(this.movieService.getMovies());
   }
@@ -50,16 +56,41 @@ export class Tab2Page {
     this.advanced = !this.advanced
   }
 
+  selectChange($event) {
+    this.search()
+  }
+
+  searchClear($event) {
+    this.searchBar.value = null
+  }
+
+  checkSearch($event) {
+    if (this.searchBar.value == "") {this.searchClear($event)}
+  }
+
+
 
   search() {
-    let req_keyword = (this.searchBar.value)? this.searchBar.value as string : null;
-    let req_sort_by = (this.sortCriteria.value)? this.sortCriteria.value as string : "popularity";
-    let req_ascending = (this.sortOrder.value)? this.sortOrder.value as string : "true";
-    let req_status_arg = (this.segmentRelease.value)? this.segmentRelease.value as string : "released";
-    let req_range_upper = (this.rangeValues.upper)? (this.rangeValues.upper) : "2021";
-    let req_range_lower = (this.rangeValues.lower)? (this.rangeValues.lower) : "1888";
-    let req_rating = (this.filterRating.value)? this.filterRating.value as number : 5;
-    let req_genres_arg = this.searchTags
+    let req_ascending = "true"
+    let req_sort_by = "popularity";
+
+    if (this.sortOrder) {
+      req_ascending = (this.sortOrder.value == "true" || this.sortOrder.value == "false")? this.sortOrder.value as string : "true";
+    }
+    if (this.sortCriteria) {
+      req_sort_by= (this.sortCriteria.value)? this.sortCriteria.value as string : "true"
+    }
+    let req_keyword = (this.searchBar)? this.searchBar.value as string : null;
+    let req_status_arg = (this.segmentRelease)? this.segmentRelease.value as string : "Released";
+    if (req_status_arg == "Both") {req_status_arg = null}
+    let req_range_upper = (this.rangeValues)? (this.rangeValues.upper) : "2021";
+    let req_range_lower = (this.rangeValues)? (this.rangeValues.lower) : "1888";
+    let req_rating = (this.filterRating)? this.filterRating.value as number : 5;
+
+    let req_genres_arg = []
+    for (let tagName of this.searchTags) {
+      req_genres_arg.push(this.tagsDict[tagName])
+    }
 
     const body: searchDto = {
       sort_by: req_sort_by,
@@ -71,7 +102,7 @@ export class Tab2Page {
       end_year: req_range_upper,
       allowed_ratings: null,
       keyword: req_keyword,
-      genres_arg: null,
+      genres_arg: (req_genres_arg.length != 0)? req_genres_arg: null,
   };
     console.log(body);
     const res: Observable<Object> = this.movieService.searchMovies(body);

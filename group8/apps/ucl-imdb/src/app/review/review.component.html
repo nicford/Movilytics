@@ -21,19 +21,21 @@
                                     <figure class="movie-poster"><img src="../../assets/pictures/single-image.jpg" alt="#"></figure>
                                 </div>
                                 <div class="col-md-6">
-                                    <h2 class="movie-title">The Croods</h2>
+                                    <!-- <h2 class="movie-title">{{this.movie.title}}</h2> -->
                                     <div class="movie-summary">
-                                        <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
-                                        </p>
+                                        <!-- <p>{{this.movie.overview}}</p> -->
 
-                                        <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt porro quisquam est, qui dolorem ipsum quia dolor sit amet,
-                                            consectetur, adipisci velit sed.</p>
+
                                     </div>
                                     <ul class="movie-meta">
-                                        <li><strong>Rated:</strong> 4.6 / 5</li>
-                                        <li><strong>Length:</strong> 98 min</li>
+                                        <!-- <li><strong>Rated:</strong> {{this.movie.vote_average}}/ 5</li>
+                                        <li><strong>Length:</strong> {{this.movie.runtime}} min</li>
                                         <li><strong>Premiere:</strong> 22 March 2013 (USA)</li>
-                                        <li><strong>Category:</strong> Animation/Adventure/Comedy</li>
+                                        <li><strong>Adult:</strong> {{this.movie.adult}}</li>
+                                        <li><strong>Language:</strong> {{this.movie.language_id}}</li> -->
+
+
+                                        <!-- <li><strong>Category:</strong> <span *ngFor="let genre of this.movie.genre_list">{{genre}} </span></li> -->
                                     </ul>
 
                                     <ul class="starring">

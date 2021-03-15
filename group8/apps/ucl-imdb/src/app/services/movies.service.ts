@@ -28,4 +28,9 @@ export class MoviesService {
     // return result.subscribe(x => x);
     return result;
   }
+
+  getSingleMovie(mid: string) {
+    const result = this.http.post(this.api_domain + '/getMovie?id=' + mid, this.httpOptions);
+    return result
+  }
 }

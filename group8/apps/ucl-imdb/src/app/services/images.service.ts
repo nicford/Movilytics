@@ -17,7 +17,7 @@ export class ImagesService {
 
   getPosterPath(posterPath: string) {
     const result = this.poster_endpoint + posterPath;
-    console.log(result);
+    // console.log(result);
     // return result;
   }
 
