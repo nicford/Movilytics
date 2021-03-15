@@ -7,7 +7,7 @@
             <main class="main-content">
                 <div class="container">
                     <div class="page">
-                        <div class="content">
+                        <div class="content" *ngIf="this.poster">
                             <!-- <div class="row">
                                 <div class="col-md-6">
                 
@@ -18,24 +18,25 @@
                             </ion-buttons>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <figure class="movie-poster"><img src="../../assets/pictures/single-image.jpg" alt="#"></figure>
+                                    <figure class="movie-poster"><img [src]="this.poster"></figure>
                                 </div>
                                 <div class="col-md-6">
-                                    <h2 class="movie-title">{{this.movie?.title}}</h2>
+                                    <h2 class="movie-title">{{this.movie.title}}</h2>
                                     <div class="movie-summary">
-                                        <!-- <p>{{this.movie.overview}}</p> -->
+                                        <h3>{{this.movie.tagline}}</h3>
 
 
                                     </div>
                                     <ul class="movie-meta">
-                                        <!-- <li><strong>Rated:</strong> {{this.movie.vote_average}}/ 5</li>
+                                        <li><strong>Rated:</strong> {{this.movie.vote_average}}/10</li>
                                         <li><strong>Length:</strong> {{this.movie.runtime}} min</li>
-                                        <li><strong>Premiere:</strong> 22 March 2013 (USA)</li>
+                                        <li><strong>Premiere:</strong> {{this.movie.released_year}}</li>
+                                        <li><strong>Budget:</strong> {{this.movie.budget}}</li>
                                         <li><strong>Adult:</strong> {{this.movie.adult}}</li>
-                                        <li><strong>Language:</strong> {{this.movie.language_id}}</li> -->
+                                        <li><strong>Language:</strong> {{this.movie.language_id}}</li>
 
 
-                                        <!-- <li><strong>Category:</strong> <span *ngFor="let genre of this.movie.genre_list">{{genre}} </span></li> -->
+                                        <li><strong>Category:</strong> <span *ngFor="let genre of this.movie.genre_list">{{genre}} </span></li>
                                     </ul>
 
                                     <ul class="starring">

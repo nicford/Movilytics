@@ -71,11 +71,11 @@ export class Tab2Page {
 
 
   search() {
-    let req_ascending = "true"
+    let req_ascending = "false"
     let req_sort_by = "popularity";
 
     if (this.sortOrder) {
-      req_ascending = (this.sortOrder.value == "true" || this.sortOrder.value == "false")? this.sortOrder.value as string : "true";
+      req_ascending = (this.sortOrder.value == "true" || this.sortOrder.value == "false")? this.sortOrder.value as string : "false";
     }
     if (this.sortCriteria) {
       req_sort_by= (this.sortCriteria.value)? this.sortCriteria.value as string : "true"
@@ -131,7 +131,6 @@ export class Tab2Page {
 
   getImage(posterPath: string) {
     const res = this.imagesService.getPosterPath(posterPath)
-    console.log(res);
     return res
     // const $res = res.subscribe(resData => {
 

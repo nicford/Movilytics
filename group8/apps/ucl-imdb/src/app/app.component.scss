@@ -2018,12 +2018,11 @@
      transition: .3s ease;
  }
  
- .movie-list .movie:hover img {
-     -webkit-transform: scale(1.2);
-     -ms-transform: scale(1.2);
-     transform: scale(1.2);
- }
- 
+ //  .movie-list .movie:hover img {
+ //      -webkit-transform: scale(1.2);
+ //      -ms-transform: scale(1.2);
+ //      transform: scale(1.2);
+ //  }
  .movie-list .movie .movie-title {
      font-size: 24px;
      font-size: 1.6em;
