@@ -31,6 +31,55 @@ COMMENT ON EXTENSION tablefunc IS 'functions that manipulate whole tables, inclu
 
 
 --
+-- Name: get_activity_trend(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.get_activity_trend(movie_id integer DEFAULT NULL::integer) RETURNS TABLE(month timestamp without time zone, activity bigint, avg_rating numeric)
+    LANGUAGE plpgsql
+    AS $$
+	begin
+		return query  
+			with 
+				rating_month as (
+					select 
+						DATE_TRUNC('month',timestamp) AS  month, 
+						count(rating) as rating_activity, avg(rating) as avg_rating 
+					from ratings 
+					where mid = movie_id 
+					group by DATE_TRUNC('month',timestamp)
+				),
+				tag_month as (
+					select 
+						DATE_TRUNC('month',timestamp) AS  month,  
+						count(tag) as tag_activity 
+					from tags 
+					where mid = movie_id 
+					group by  DATE_TRUNC('month',timestamp)
+				)
+			
+			select 
+				processed.coalesce_month,
+				processed.activity,
+				coalesce(processed.avg_rating,0)
+			from (
+				select 
+					coalesce(rating_month.month, t.month) as coalesce_month, 
+					coalesce(rating_month.rating_activity, 0) + coalesce(t.tag_activity, 0) as activity, 
+					rating_month.avg_rating
+				from rating_month 
+				full outer join (
+					select tag_month.month, tag_month.tag_activity from tag_month
+				) as t 
+				on t.month = rating_month.month
+				where (rating_month.month is not null or t.month is not null)
+			) as processed;
+			
+end; $$;
+
+
+ALTER FUNCTION public.get_activity_trend(movie_id integer) OWNER TO postgres;
+
+--
 -- Name: get_genre_company_avg(integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -44,14 +93,16 @@ CREATE FUNCTION public.get_genre_company_avg(movie_id integer DEFAULT NULL::inte
 					select avg(genre_info.genre_avg_rating) as genre_avg 
 					from genre_info 
 						where genre_info.genre_id in (
-							select genres.genre_id from genres where genres.mid = movie_id
+							select genres.genre_id from genres 
+							where (movie_id ISNULL OR genres.mid = movie_id)
 						)
 				),
 				company_table as (
 					select avg(company_info.avg_company_rating) as company_avg 
 					from company_info 
 						where company_info.company_id  in (
-							select companies.company_id from companies where companies.mid = movie_id
+							select companies.company_id from companies 
+							where (movie_id ISNULL OR companies.mid = movie_id)
 						)
 				)
 			
@@ -62,10 +113,10 @@ end;$$;
 ALTER FUNCTION public.get_genre_company_avg(movie_id integer) OWNER TO postgres;
 
 --
--- Name: get_movies(integer, integer, text, text, boolean, integer, integer, integer[], integer[], character varying); Type: FUNCTION; Schema: public; Owner: postgres
+-- Name: get_movies(integer, integer, text, text, boolean, integer, integer, integer, integer[], character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.get_movies(result_limit integer DEFAULT 100, result_offset integer DEFAULT 0, keyword text DEFAULT NULL::text, sort_by text DEFAULT NULL::text, ascending boolean DEFAULT true, start_year integer DEFAULT NULL::integer, end_year integer DEFAULT NULL::integer, allowed_ratings integer[] DEFAULT NULL::integer[], genres_arg integer[] DEFAULT NULL::integer[], status_arg character varying DEFAULT NULL::character varying) RETURNS TABLE(mid integer, title text, poster_path character varying, vote_average numeric, tagline text, status character varying)
+CREATE FUNCTION public.get_movies(result_limit integer DEFAULT 100, result_offset integer DEFAULT 0, keyword text DEFAULT NULL::text, sort_by text DEFAULT NULL::text, ascending boolean DEFAULT true, start_year integer DEFAULT NULL::integer, end_year integer DEFAULT NULL::integer, allowed_ratings integer DEFAULT NULL::integer, genres_arg integer[] DEFAULT NULL::integer[], status_arg character varying DEFAULT NULL::character varying) RETURNS TABLE(mid integer, title text, poster_path character varying, vote_average numeric, tagline text, status character varying)
     LANGUAGE plpgsql
     AS $$
 	begin
@@ -85,7 +136,7 @@ CREATE FUNCTION public.get_movies(result_limit integer DEFAULT 100, result_offse
 				where 
 				(keyword ISNULL OR movies.title ilike keyword)
 				and 
-				(allowed_ratings ISNULL OR rating_table.avg_rating >= ANY(allowed_ratings))
+				(allowed_ratings ISNULL OR rating_table.avg_rating >= allowed_ratings)
 				and 
 				(status_arg ISNULL OR movies.status = status_arg)
 				and 
@@ -111,7 +162,150 @@ CREATE FUNCTION public.get_movies(result_limit integer DEFAULT 100, result_offse
 end; $$;
 
 
-ALTER FUNCTION public.get_movies(result_limit integer, result_offset integer, keyword text, sort_by text, ascending boolean, start_year integer, end_year integer, allowed_ratings integer[], genres_arg integer[], status_arg character varying) OWNER TO postgres;
+ALTER FUNCTION public.get_movies(result_limit integer, result_offset integer, keyword text, sort_by text, ascending boolean, start_year integer, end_year integer, allowed_ratings integer, genres_arg integer[], status_arg character varying) OWNER TO postgres;
+
+--
+-- Name: get_overview(integer); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.get_overview(movie_id integer DEFAULT NULL::integer) RETURNS TABLE(mid integer, title text, overview text, budget integer, adult boolean, popularity numeric, poster_path character varying, video boolean, vote_average numeric, vote_count integer, runtime integer, status character varying, tagline text, released_year integer, revenue bigint, genre_list character varying[], language_list character varying[], country_list character varying[], avg_rating numeric, translation_list character varying[], tags_list character varying[], likes bigint, dislikes bigint)
+    LANGUAGE plpgsql
+    AS $$
+	begin
+		return query
+			with movie_avg as (select movie_stats.mid, movie_stats.avg_rating from movie_stats where movie_stats.mid = movie_id)
+			
+			select 
+				movies.mid, 
+				movies.title,
+				movies.overview,
+				movies.budget,
+				movies.adult,
+				movies.popularity,
+				movies.poster_path,
+				movies.video,
+				movies.vote_average,
+				movies.vote_count,
+				movies.runtime,
+				movies.status,
+				movies.tagline,
+				movies.released_year,
+				movies.revenue,
+				genre.genre_list, 
+				lang.language_list, 
+				country.country_list, 
+				rating.avg_rating, 
+				translation_table.translation_list, 
+				tags.tags_list,
+				like_dislike.likes,
+				like_dislike.dislikes
+			from movies 
+			
+			inner join(
+				select * from movie_avg
+			) as rating 
+			on movies.mid = rating.mid
+
+			left join(
+				select ratings.mid,
+					count(*) filter(where ratings.rating >= (select movie_avg.avg_rating from movie_avg)) as likes,
+					count(*) filter(where ratings.rating < (select movie_avg.avg_rating from movie_avg)) as dislikes
+				from ratings 
+				where ratings.mid = movie_id
+				group by ratings.mid
+			) as like_dislike
+			on movies.mid = like_dislike.mid
+			
+			left join(
+				select 
+					genre_table.mid, 
+					array_agg(distinct genre_info.genre_name) as genre_list 
+				from genre_info
+				inner join(
+					select genres.mid, genres.genre_id from genres
+				) as genre_table
+				on genre_info.genre_id = genre_table.genre_id
+				where genre_table.mid = movie_id
+				group by genre_table.mid
+			) as genre 
+			on movies.mid = genre.mid
+			
+			left join (
+				select 
+					language_table.mid, 
+					array_agg(distinct language_info.language_name) as language_list
+				from language_info
+				inner join (
+					select spoken_languages.mid, spoken_languages.language_id from spoken_languages
+				) as language_table 
+				on language_info.language_id = language_table.language_id
+				where language_table.mid = movie_id
+				group by language_table.mid
+			) as lang
+			on movies.mid = lang.mid
+			
+			left join (
+				select 
+					country_table.mid, 
+					array_agg(distinct country_info.country_name) as country_list
+				from country_info
+				inner join (
+					select countries.mid, countries.country_id from countries
+				) as country_table 
+				on country_info.country_id = country_table.country_id
+				where country_table.mid = movie_id
+				group by country_table.mid
+			) as country
+			on movies.mid = country.mid
+			
+			left join(
+				select 
+					language_table.mid, 
+					array_agg( distinct language_info.language_name ) as translation_list
+				from language_info
+				inner join (
+					select translations.mid, translations.language_id from translations
+				) as language_table 
+				on language_info.language_id = language_table.language_id
+				where language_table.mid = movie_id
+				group by language_table.mid
+			) as translation_table
+			on movies.mid = translation_table.mid
+			
+			left join(
+				select 
+					tags.mid, 
+					array_agg( distinct tags.tag )as tags_list
+				from tags 
+				where tags.mid = movie_id
+				group by tags.mid
+			) as tags
+			on movies.mid = tags.mid;
+end; $$;
+
+
+ALTER FUNCTION public.get_overview(movie_id integer) OWNER TO postgres;
+
+--
+-- Name: get_tag_avg(character varying[]); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.get_tag_avg(movie_tag character varying[] DEFAULT NULL::character varying[]) RETURNS TABLE(tag character varying, tag_rating numeric)
+    LANGUAGE plpgsql
+    AS $$
+	begin 
+		return query 
+			select tag_table.tag, avg(ratings.rating) as tag_rating  from ratings 
+			inner join (
+				select tags.user_id, tags.mid, tags.tag from tags 
+				where (movie_tag ISNULL or tags.tag =  any(movie_tag))
+			) as tag_table
+			on tag_table.mid = ratings.mid and tag_table.user_id = ratings.user_id
+			group by tag_table.tag;
+end $$;
+
+
+ALTER FUNCTION public.get_tag_avg(movie_tag character varying[]) OWNER TO postgres;
 
 SET default_tablespace = '';
 
@@ -255,8 +449,8 @@ ALTER TABLE public.language_info OWNER TO postgres;
 
 CREATE TABLE public.movie_stats (
     mid integer NOT NULL,
-    avg_rating numeric,
-    polarity numeric
+    polarity numeric,
+    avg_rating numeric
 );
 
 
