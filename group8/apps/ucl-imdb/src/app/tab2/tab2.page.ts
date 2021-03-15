@@ -80,7 +80,7 @@ export class Tab2Page {
     if (this.sortCriteria) {
       req_sort_by= (this.sortCriteria.value)? this.sortCriteria.value as string : "true"
     }
-    let req_keyword = (this.searchBar)? this.searchBar.value as string : null;
+    let req_keyword = (this.searchBar)? ("%" + this.searchBar.value + "%") : null;
     let req_status_arg = (this.segmentRelease)? this.segmentRelease.value as string : "Released";
     if (req_status_arg == "Both") {req_status_arg = null}
     let req_range_upper = (this.rangeValues)? (this.rangeValues.upper) : "2021";
@@ -101,7 +101,7 @@ export class Tab2Page {
       start_year: req_range_lower,
       end_year: req_range_upper,
       allowed_ratings: null,
-      keyword: req_keyword,
+      keyword: "%" + req_keyword + "%",
       genres_arg: (req_genres_arg.length != 0)? req_genres_arg: null,
   };
     console.log(body);
