@@ -10,19 +10,10 @@ export class MovieReportService {
                 private httpService: HttpService) {}
 
     movie_report_sql_query = readFileSync('apps/api/src/app/sql_scripts/fetch_overview.sql').toString();
-    
 
     async createMovieReport(movie_id: number) {
         console.log(this.movie_report_sql_query);
         const result = await this.databaseService.runQuery(this.movie_report_sql_query, [movie_id]);
-        return result;
-    }
-
-    async getTranslations(movie_id: number) {
-        console.log('here1')
-        const query = 'SELECT * FROM TRANSLATIONS WHERE mid = $1';
-        const result = await this.databaseService.runQuery(query, [movie_id]);
-        console.log('here2')
         return result;
     }
 

@@ -12,19 +12,12 @@ export class MovieReportController {
     //     return movie_id;
     // }
 
-    // localhost:3333/api/movie-report/getTranslations?id=862
-    @Get('getTranslations')
-    async getTranslations(@Query('id') movie_id: number){
-        const result = await this.movieReportService.getTranslations(movie_id);
-        console.log(result);
-        return result.rows;
-    }
-
-    
-    // localhost:3333/api/movie-report/getMovieReport?id=862
-    @Get('getMovieReport')
-    async getMovieReport(@Query('id') movie_id: number) {
-        const result = await this.movieReportService.createMovieReport(movie_id);
-        return result.rows;
-    }
+     // localhost:3333/api/movie-report/862
+     @Get(':id')
+     async getMovieReport(@Param('id') movie_id: number) {
+         const result = await this.movieReportService.createMovieReport(movie_id);
+         return result.rows;
+     }
+ 
+   
 }

@@ -46,4 +46,12 @@ export class MoviesController {
         return result
     }
 
+    // localhost:3333/api/movie-report/getTranslations?id=862
+    @Get('getTranslations')
+    async getTranslations(@Query('id') movie_id: number){
+        const result = await this.movieService.getTranslations(movie_id);
+        console.log(result);
+        return result.rows;
+    }
+
 }

@@ -78,6 +78,13 @@ export class MoviesService {
   }
 
 
+  async getTranslations(movie_id: number) {
+    console.log('here1')
+    const query = 'SELECT * FROM TRANSLATIONS WHERE mid = $1';
+    const result = await this.databaseService.runQuery(query, [movie_id]);
+    console.log('here2')
+    return result;
+}
 
 
 }
