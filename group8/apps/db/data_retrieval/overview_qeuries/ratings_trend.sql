@@ -1,1 +1,0 @@
-select DATE_TRUNC('month',timestamp) as month, avg(rating) as avg_rating from ratings where mid = 862 group by DATE_TRUNC('month',timestamp)
