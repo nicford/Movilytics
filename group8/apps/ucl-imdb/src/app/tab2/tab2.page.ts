@@ -125,12 +125,13 @@ export class Tab2Page {
     }
   }
 
-  goToReview(mid: String) {
+  goToReview(mid: string) {
     this.router.navigate(["tabs/tab2/" + mid]);
   }
 
   getImage(posterPath: string) {
     const res = this.imagesService.getPosterPath(posterPath)
+    console.log(res);
     return res
     // const $res = res.subscribe(resData => {
 

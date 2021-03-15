@@ -30,7 +30,7 @@ export class MoviesService {
   }
 
   getSingleMovie(mid: string) {
-    const result = this.http.post(this.api_domain + '/getMovie?id=' + mid, this.httpOptions);
+    const result = this.http.get(this.api_domain + '/getMovie?id=' + mid, this.httpOptions);
     return result
   }
 }
