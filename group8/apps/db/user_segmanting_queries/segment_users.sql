@@ -13,8 +13,8 @@ with tag_list as (
 )
 
 select 
-	tag,
-	count(*) filter(where tag_list.rating >= (select tag_data.avg from tag_data)) as likes,
-	count(*) filter(where tag_list.rating < (select tag_data.avg from tag_data)) as dislikes
+	tag_list.tag,
+	count(*) filter(where tag_list.rating >= (select tag_data.avg from tag_data where tag_data.tag = tag_list.tag)) as likes,
+	count(*) filter(where tag_list.rating < (select tag_data.avg from tag_data where tag_data.tag = tag_list.tag)) as dislikes
 from tag_list
 group by tag
