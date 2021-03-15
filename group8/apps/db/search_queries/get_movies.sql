@@ -35,7 +35,7 @@ as $$
 				) as genres_table
 				on movies.mid = genres_table.mid
 				where 
-				(keyword ISNULL OR movies.title ilike keyword)
+				(keyword ISNULL OR movies.title ilike concat('%',keyword,'%'))
 				and 
 				(allowed_ratings ISNULL OR rating_table.avg_rating >= allowed_ratings)
 				and 
