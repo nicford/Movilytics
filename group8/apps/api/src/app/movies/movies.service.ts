@@ -1,4 +1,4 @@
-import { CACHE_MANAGER, HttpService, Inject, Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Get, HttpService, Inject, Injectable } from '@nestjs/common';
 // import { QueryResult } from 'pg';
 import { DatabaseService } from '../database/database.service';
 import { Cache } from 'cache-manager';
@@ -8,6 +8,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as dotenv from "dotenv";
 import { searchDto, searchResponse } from '@group8/api-interfaces';
+import { sha1 } from 'object-hash';
+
+
 dotenv.config({path: './env/.env'});
 
 
@@ -44,6 +47,16 @@ export class MoviesService {
 
   // TODO: ignore case when searching!!
   async search(search_query: searchDto) {
+    const search_query_hash = sha1(search_query)
+    console.log(search_query_hash)
+
+    if (await this.cache.get(search_query_hash)) {
+      console.log('found in cache');
+      const cache_hit = await this.cache.get(search_query_hash);
+      console.log(`cache hit: ${cache_hit}`);
+      return cache_hit;
+    }
+    
     const query_prepared_parameters: string[] = [];
     const parameters: (string | number | boolean | number[])[] = [];
     let index = 1;
@@ -61,12 +74,36 @@ export class MoviesService {
     console.log(parameters);
     const sql_query = `select * from get_movies(${query_prepared_parameters.join(', ')})`;
     console.log(sql_query)
-    const response = await this.databaseService.runQuery(sql_query, parameters); // convert each parameter to a string before querying the postgres database
+    const response = (await this.databaseService.runQuery(sql_query, parameters)).rows; // convert each parameter to a string before querying the postgres database
+
+    console.log(`adding to cache with key (hash): ${search_query_hash}`)
+    this.cache.set(search_query_hash, response);
+
+    // cache extra page incase of more requests
+    this.cache_extra_pages(search_query, sql_query, parameters, 4);
 
     // check if first n pages are in cache. get pages
     // this.cache.set() // query extra pages and add them to cache. Use hash of request parameters and page number for that request as key 
     return response;
   }
+
+
+  // cache extra pages. when calling this function, don't call await so that this can be done in the background without blocking execution
+  async cache_extra_pages(search_query: searchDto, sql_query: string, parameters: any[], number_extra_pages_to_cache: number) {
+    console.log('cache extra pages')
+    // go through each page and cache them
+    number_extra_pages_to_cache++; // increase by one to start at offset one
+    for (let i = 1; i < number_extra_pages_to_cache; i++) {
+      search_query['result_offset'] = i;
+      console.log(`query: ${search_query['result_offset']}`)
+      const response = (await this.databaseService.runQuery(sql_query, parameters)).rows; 
+      console.log(`caching ${sha1(search_query)} with value ${response}`)
+      this.cache.set(sha1(search_query), response);
+    }
+    
+  }
+
+  
 
   
 

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, } from '@nestjs/common';
+import { Body, CACHE_MANAGER, Controller, Get, Inject, Post, Query, } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { searchDto } from '@group8/api-interfaces';
 
@@ -6,7 +6,7 @@ import { searchDto } from '@group8/api-interfaces';
 @Controller('movies')
 export class MoviesController {
 
-    constructor(private movieService: MoviesService) {}
+    constructor(private movieService: MoviesService, @Inject(CACHE_MANAGER) private cache: Cache) {}
 
     @Get("getAllMovies")
     async getAllMovies() {
@@ -33,7 +33,13 @@ export class MoviesController {
         console.log('search initiated:')
         console.log(query);
         const result = await this.movieService.search(query);
-        return result.rows
+        return result
+    }
+
+    @Get('cacheTest')
+    async cacheTest() {
+        console.log(await this.cache.keys());
+        return await this.cache.keys();
     }
 
 
