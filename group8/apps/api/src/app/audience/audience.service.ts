@@ -11,7 +11,7 @@ export class AudienceService {
 
     // movie_report_sql_query = readFileSync('apps/api/src/app/sql_scripts/fetch_overview.sql').toString();
 
-    async getUserGenreMappingTable() {
+    async getSegmentationByGenre() {
         // select statement is written like below to ensure the order of columns (don't change)
         const user_genre_query = 'select family, history, fantasy, comedy, documentary, tv_movie, science_fiction, war \
                                          music, horror, action, animation, crime, western, thriller, mystery, adventure, romance, drama \
@@ -89,7 +89,7 @@ export class AudienceService {
         /////////////////////////////////////////////////////////
         // <Run CF for all users and segment users by Recommended Genre>
         /////////////////////////////////////////////////////////
-        // TODO: can be initialised with for loop
+        // TODO: can be initialised with for loop, but computatinaly better this way?
         // Order of this segmentation dict is important
         const segmentation = {
             'family': [],

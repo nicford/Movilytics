@@ -8,10 +8,10 @@ export class AudienceController {
 
     constructor(private audienceService: AudienceService) {}
 
-    // localhost:3333/api/audience/segmentUsers
-    @Get('segmentUsers')
-    async segmentUsers(){
-        const result = await this.audienceService.getUserGenreMappingTable()
+    // localhost:3333/api/audience/segmentUsersByGenre
+    @Get('segmentUsersByGenre')
+    async segmentUsersByGenre(){
+        const result = await this.audienceService.getSegmentationByGenre();
         
         return result;
     }
