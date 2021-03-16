@@ -68,12 +68,12 @@ as $$
 					   avg(western) as western_glob_avg,
 					   avg(tv_movie) as tv_movie_glob_avg
 					from user_genre_mapping
-					where user_id in (select user_id from ratings where mid = 862)
+					where user_id in (select user_id from ratings where mid = movie_id)
 				),
 				curr_avg as (
 					select 
 						avg(rating) as local_avg 
-					from ratings where mid = 862
+					from ratings where mid = movie_id
 				),
 				population_table as (
 					select 
@@ -97,7 +97,7 @@ as $$
 						count(*) filter (where adventure > (select genre_avg_rating from genre_info where genre_name = 'Adventure')) as adventure_count,
 						count(*) filter (where romance > (select genre_avg_rating from genre_info where genre_name = 'Romance')) as romance_count
 					from user_genre_mapping 
-					where user_id in (select user_id from ratings where mid = 862) 
+					where user_id in (select user_id from ratings where mid = movie_id) 
 				)
 
 				select 

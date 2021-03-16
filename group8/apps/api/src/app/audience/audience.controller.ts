@@ -8,12 +8,20 @@ export class AudienceController {
 
     constructor(private audienceService: AudienceService) {}
 
-    // localhost:3333/api/audience/
-    @Get()
+    // localhost:3333/api/audience/segmentUsers
+    @Get('segmentUsers')
     async segmentUsers(){
         const result = await this.audienceService.getUserGenreMappingTable()
         
-        return result.rows
+        return result;
+    }
+    
+    // localhost:3333/api/audience/genrePopulation?id=
+    @Get('genrePopulation')
+    async segmantGenre(@Query('id') movie_id: number){
+        const result = await this.audienceService.getGenrePopulationAndPercentileDiff(movie_id);
+
+        return result;
     }
 
 }
