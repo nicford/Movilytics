@@ -46,7 +46,7 @@ export class Tab2Page {
   @ViewChild("filterRating") filterRating: IonSelect;
 
   constructor(private movieService: MoviesService, private imagesService: ImagesService, private router: Router) {
-    this.rangeValues = this.rangeValues
+    // this.rangeValues = this.rangeValues
     this.search()
     // console.log('getting movies from frontend');
     // console.log(this.movieService.getMovies());
@@ -80,15 +80,15 @@ export class Tab2Page {
     if (this.sortCriteria) {
       req_sort_by= (this.sortCriteria.value)? this.sortCriteria.value as string : "true"
     }
-    let req_keyword = (this.searchBar)? ("%" + this.searchBar.value + "%") : null;
+    const req_keyword = (this.searchBar)? (this.searchBar.value) : null;
     let req_status_arg = (this.segmentRelease)? this.segmentRelease.value as string : "Released";
     if (req_status_arg == "Both") {req_status_arg = null}
-    let req_range_upper = (this.rangeValues)? (this.rangeValues.upper) : "2021";
-    let req_range_lower = (this.rangeValues)? (this.rangeValues.lower) : "1888";
-    let req_rating = (this.filterRating)? this.filterRating.value as number : 5;
+    const req_range_upper = (this.rangeValues)? (this.rangeValues.upper) : "2021";
+    const req_range_lower = (this.rangeValues)? (this.rangeValues.lower) : "1888";
+    const req_rating = (this.filterRating)? this.filterRating.value as number : 5;
 
-    let req_genres_arg = []
-    for (let tagName of this.searchTags) {
+    const req_genres_arg = []
+    for (const tagName of this.searchTags) {
       req_genres_arg.push(this.tagsDict[tagName])
     }
 
@@ -101,7 +101,7 @@ export class Tab2Page {
       start_year: req_range_lower,
       end_year: req_range_upper,
       allowed_ratings: null,
-      keyword: "%" + req_keyword + "%",
+      keyword: req_keyword,
       genres_arg: (req_genres_arg.length != 0)? req_genres_arg: null,
   };
     console.log(body);
@@ -113,10 +113,10 @@ export class Tab2Page {
   }
 
   changeTagColor(i:number) {
-    let tag: string = this.tags[i]  
-    let n = this.tags.length
+    const tag: string = this.tags[i]  
+    const n = this.tags.length
     if(this.searchTags.includes(tag) && i < n && i >= 0) {
-      let tag_index = this.searchTags.indexOf(tag);
+      const tag_index = this.searchTags.indexOf(tag);
       this.tagDefaultColor[i] = "none"
       this.searchTags.splice(tag_index, 1)
     } else {
