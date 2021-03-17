@@ -63,3 +63,22 @@ export class searchResponse {
 
   released: string;   // true if released, false if upcoming
 }
+
+
+export class CSV_ROW {
+  rating: number
+  tags: string
+}
+
+export class PREDICTED_RATINGS {
+  provided_ratings_avg: number;
+
+  tag_rating_avg: number;
+
+  company_rating_avg: number;
+
+  genre_rating_avg: number;
+
+  overall_avg: number;    // average of the four values above
+
+}

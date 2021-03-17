@@ -5,14 +5,9 @@ import { Express } from 'express';
 import { Multer } from 'multer';
 import { Stream } from 'stream';
 import * as csv from 'fast-csv';
+import { CSV_ROW } from '@group8/api-interfaces'
 
 
-
-
-class Entity {
-    rating: number
-    tags: string[]
-}
 
 @Controller('movie-report')
 export class MovieReportController {
@@ -34,23 +29,23 @@ export class MovieReportController {
 
     
 
-    @Post('predict-ratings')
+    @Post('predict-ratings/:id')
     @UseInterceptors(FileInterceptor('file'))
-    async predictRatings(@UploadedFile() file: Express.Multer.File) {
+    async predictRatings(@UploadedFile() file: Express.Multer.File, @Param('id') movie_id: number) {
         if (typeof file === 'undefined' || !file) {
             throw new HttpException('File missing. Please provide a csv file in the reqiured format.', HttpStatus.NO_CONTENT)
         } else if (file.mimetype != 'text/csv') {
             throw new HttpException('Wrong file type: file must be of type text/csv.', HttpStatus.NOT_ACCEPTABLE) 
         }
 
-        const csv_data: any[] = [];
+        const csv_data: CSV_ROW[] = [];
         const stream = new Stream.PassThrough();
         stream.end(file.buffer);
 
         try {
             await (new Promise( (resolve, reject) => {
-                        stream.pipe(csv.parse({headers: true}))
-                            .on('data', (data) => {
+                        stream.pipe(csv.parse({headers: true, trim: true}))
+                            .on('data', (data: CSV_ROW) => {
                                 csv_data.push(data)
                             })
                             .on('error', reject)
@@ -60,9 +55,7 @@ export class MovieReportController {
             throw new HttpException(`invalid csv: ${error}`, HttpStatus.NOT_ACCEPTABLE);
         }
         
-        console.log(csv_data)
-
-        return 'got query predict-rating';
+        return this.movieReportService.predictRatings(movie_id, csv_data);
     }
 
     
