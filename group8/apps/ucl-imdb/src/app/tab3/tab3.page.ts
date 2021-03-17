@@ -9,4 +9,9 @@ export class Tab3Page {
 
   constructor() {}
 
+  myfunction() {
+    let myvariae = 5;
+  }
+
+
 }
