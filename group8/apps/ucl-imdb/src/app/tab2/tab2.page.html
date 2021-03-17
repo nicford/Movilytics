@@ -1,4 +1,4 @@
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" #content>
     <ion-header collapse="condense">
         <ion-toolbar>
             <ion-title size="large">Tab 2</ion-title>
@@ -27,13 +27,13 @@
                                 </ion-button>
                             </div>
                             <div class="sortby">
-                                <ion-select interface="popover" #sortCriteria placeholder="Sort by" (ionChange)="selectChange($event)">
+                                <ion-select interface="popover" #sortCriteria placeholder="Popularity" (ionChange)="selectChange($event)">
                                     <ion-select-option value="popularity">Popularity</ion-select-option>
                                     <ion-select-option value="polarity">Polarity</ion-select-option>
                                     <ion-select-option value="title">Title</ion-select-option>
                                     <ion-select-option value="year">Year</ion-select-option>
                                 </ion-select>
-                                <ion-select interface="popover" #sortOrder placeholder="Order" (ionChange)="selectChange($event)">
+                                <ion-select interface="popover" #sortOrder placeholder="Descending" (ionChange)="selectChange($event)">
                                     <ion-select-option value="true">Ascending</ion-select-option>
                                     <ion-select-option value="false">Descending</ion-select-option>
                                 </ion-select>
@@ -45,7 +45,6 @@
 
                         </div>
                         <div class="dropDownAdvanced " *ngIf="this.advanced ">
-                            <h2>Filters</h2>
 
                             <div class="advanced-search">
                                 <div class="filters">
@@ -55,6 +54,7 @@
                                         <ion-select-option value="2014">2014</ion-select-option>
                                     </ion-select> -->
                                     <ion-select interface="popover" #filterRating placeholder="Rating" style="margin-top: 5px;">
+                                        <ion-select-option value="0">0+</ion-select-option>
                                         <ion-select-option value="1">1+</ion-select-option>
                                         <ion-select-option value="2">2+</ion-select-option>
                                         <ion-select-option value="3">3+</ion-select-option>
@@ -99,78 +99,21 @@
                         </div> -->
                         <div class="movie-list">
                             <div class="movie" *ngFor="let movie of this.movies">
-                                <!-- <ion-badge color="warning " class="top-three ">1</ion-badge> -->
-                                <figure class="movie-poster "><img [src]="getImage(movie.poster_path)"></figure>
+                                <ion-badge color="warning ">{{movie.vote_average}}</ion-badge>
+                                <figure class="movie-poster"><img [src]="getImage(movie.poster_path)"></figure>
                                 <div class="movie-title ">
                                     <a (click)="goToReview(movie.mid)" [mid]="movie.mid">{{movie.title}}</a></div>
                                 <p>{{movie.tagline}}</p>
                             </div>
-                            <!-- <div class="movie ">
-                                <ion-badge color="warning " class="top-three ">2</ion-badge>
-                                <figure class="movie-poster "><img src="../../assets/pictures/thumb-4.jpg " alt="# "></figure>
-                                <div class="movie-title "><a [routerLink]="[ './TinTin'] " routerLinkActive="router-link-active ">The adventure of Tintin</a></div>
-                                <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
-                            </div>
-                            <div class="movie ">
-                                <ion-badge color="warning " class="top-three ">3</ion-badge>
-
-                                <figure class="movie-poster "><img src="../../assets/pictures/thumb-5.jpg " alt="# "></figure>
-                                <div class="movie-title "><a [routerLink]="[ './Hobbit'] " routerLinkActive="router-link-active ">Hobbit</a></div>
-                                <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
-                            </div>
-                            <div class="movie ">
-
-                                <figure class="movie-poster "><img src="../../assets/pictures/thumb-6.jpg " alt="# "></figure>
-                                <div class="movie-title "><a [routerLink]="[ './Exists'] " routerLinkActive="router-link-active ">Exists</a></div>
-                                <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
-                            </div>
-                            <div class="movie ">
-                                <figure class="movie-poster "><img src="../../assets/pictures/thumb-1.jpg " alt="# "></figure>
-                                <div class="movie-title "><a href="single.html ">Drive hard</a></div>
-                                <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
-                            </div>
-                            <div class="movie ">
-                                <figure class="movie-poster "><img src="../../assets/pictures/thumb-2.jpg " alt="# "></figure>
-                                <div class="movie-title "><a href="single.html ">Robocop</a></div>
-                                <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
-                            </div>
-                            <div class="movie ">
-                                <figure class="movie-poster "><img src="../../assets/pictures/thumb-7.jpg " alt="# "></figure>
-                                <div class="movie-title "><a href="single.html ">Life of Pi</a></div>
-                                <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
-                            </div>
-                            <div class="movie ">
-                                <figure class="movie-poster "><img src="../../assets/pictures/thumb-4.jpg " alt="# "></figure>
-                                <div class="movie-title "><a href="single.html ">The adventure of Tintin</a></div>
-                                <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
-                            </div>
-                            <div class="movie ">
-                                <figure class="movie-poster "><img src="../../assets/pictures/thumb-8.jpg " alt="# "></figure>
-                                <div class="movie-title "><a href="single.html ">The Colony</a></div>
-                                <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
-                            </div>
-
-                            <div class="movie ">
-                                <figure class="movie-poster "><img src="../../assets/pictures/thumb-6.jpg " alt="# "></figure>
-                                <div class="movie-title "><a href="single.html ">Exists</a></div>
-                                <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
-                            </div>
-
-                            <div class="movie ">
-                                <figure class="movie-poster "><img src="../../assets/pictures/thumb-5.jpg " alt="# "></figure>
-                                <div class="movie-title "><a href="single.html ">Hobbit</a></div>
-                                <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
-                            </div>
-
-                            <div class="movie ">
-                                <figure class="movie-poster "><img src="../../assets/pictures/thumb-3.jpg " alt="# "></figure>
-                                <div class="movie-title "><a href="single.html ">Maleficient</a></div>
-                                <p>Sed ut perspiciatis unde omnis iste natus error voluptatem doloremque.</p>
-                            </div> -->
-
                         </div>
                         <!-- .movie-list -->
                     </div>
+                </div>
+                <div class="bottom-buttons">
+                    <ion-button>Load More</ion-button>
+                    <ion-button (click)="bottomButton()">
+                        <ion-icon slot="icon-only" name="arrow-up-outline"></ion-icon>
+                    </ion-button>
                 </div>
                 <!-- .container -->
             </main>

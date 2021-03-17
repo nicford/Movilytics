@@ -1,3 +1,4 @@
+import { Content } from '@angular/compiler/src/render3/r3_ast';
 import { stringify } from '@angular/compiler/src/util';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
@@ -38,6 +39,7 @@ export class Tab2Page {
 
   movies
   
+  @ViewChild('content') scrollContent: IonContent;
   @ViewChild("searchBar") searchBar: IonSearchbar;
   @ViewChild("sortCriteria") sortCriteria: IonSelect;
   @ViewChild("sortOrder") sortOrder: IonSelect;
@@ -52,6 +54,9 @@ export class Tab2Page {
     // console.log(this.movieService.getMovies());
   }
 
+  ngOnInit() {
+  }
+
   toggleAdvanced() {
     this.advanced = !this.advanced
   }
@@ -61,7 +66,7 @@ export class Tab2Page {
   }
 
   searchClear($event) {
-    this.searchBar.value = null
+    this.searchBar.value = null // change this to ""
   }
 
   checkSearch($event) {
@@ -73,14 +78,17 @@ export class Tab2Page {
   search() {
     let req_ascending = "false"
     let req_sort_by = "popularity";
+    let req_keyword = null;
 
     if (this.sortOrder) {
       req_ascending = (this.sortOrder.value == "true" || this.sortOrder.value == "false")? this.sortOrder.value as string : "false";
     }
     if (this.sortCriteria) {
-      req_sort_by= (this.sortCriteria.value)? this.sortCriteria.value as string : "true"
+      req_sort_by= (this.sortCriteria.value)? this.sortCriteria.value as string : "popularity"
     }
-    const req_keyword = (this.searchBar)? (this.searchBar.value) : null;
+    if (this.searchBar) {
+      req_keyword = (this.searchBar.value != "")? (this.searchBar.value) : null;
+    }
     let req_status_arg = (this.segmentRelease)? this.segmentRelease.value as string : "Released";
     if (req_status_arg == "Both") {req_status_arg = null}
     const req_range_upper = (this.rangeValues)? (this.rangeValues.upper) : "2021";
@@ -137,6 +145,10 @@ export class Tab2Page {
     //   return resData? resData : "test"
     // })
 
+  }
+
+  bottomButton() {
+    this.scrollContent.scrollToTop()
   }
 
 }
