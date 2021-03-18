@@ -51,11 +51,7 @@ export class Tab2Page {
 
   constructor(private movieService: MoviesService, private imagesService: ImagesService, private router: Router) {
     // this.rangeValues = this.rangeValues
-    let obs = this.search()
-    const $res = obs.subscribe(resData => {
-      let temp: movieRes[] = JSON.parse(JSON.stringify(resData))
-      this.movies = temp
-    }).unsubscribe
+    this.templateSearch()
     // console.log('getting movies from frontend');
     // console.log(this.movieService.getMovies());
   }
@@ -76,12 +72,22 @@ export class Tab2Page {
     }).unsubscribe
   }
 
+  
+
   searchClear($event) {
     this.searchBar.value = null
   }
 
   checkSearch($event) {
     if (this.searchBar.value == "") {this.searchClear($event)}
+  }
+
+  templateSearch() {
+    let obs = this.search()
+    const $res = obs.subscribe(resData => {
+      let temp: movieRes[] = JSON.parse(JSON.stringify(resData))
+      this.movies = temp
+    }).unsubscribe
   }
 
   search(reset:boolean=true) {
