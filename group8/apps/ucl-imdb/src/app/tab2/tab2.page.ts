@@ -6,6 +6,7 @@ import { searchDto } from '@group8/api-interfaces';
 import { IonContent, IonRange, IonSearchbar, IonSegment, IonSelect } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { ImagesService } from '../services/images.service';
+import { movieRes } from '../tab2/resData.interface'
 
 import { MoviesService } from "../services/movies.service";
 
@@ -37,7 +38,8 @@ export class Tab2Page {
     lower: 1888
   }
 
-  movies
+  movies: movieRes[]
+  offset = 0
   
   @ViewChild('content') scrollContent: IonContent;
   @ViewChild("searchBar") searchBar: IonSearchbar;
@@ -49,7 +51,11 @@ export class Tab2Page {
 
   constructor(private movieService: MoviesService, private imagesService: ImagesService, private router: Router) {
     // this.rangeValues = this.rangeValues
-    this.search()
+    let obs = this.search()
+    const $res = obs.subscribe(resData => {
+      let temp: movieRes[] = JSON.parse(JSON.stringify(resData))
+      this.movies = temp
+    }).unsubscribe
     // console.log('getting movies from frontend');
     // console.log(this.movieService.getMovies());
   }
@@ -62,20 +68,26 @@ export class Tab2Page {
   }
 
   selectChange($event) {
-    this.search()
+    let obs = this.search()
+    const $res = obs.subscribe(resData => {
+      console.log(resData)
+      let temp: movieRes[] = JSON.parse(JSON.stringify(resData))
+      this.movies = temp
+    }).unsubscribe
   }
 
   searchClear($event) {
-    this.searchBar.value = null // change this to ""
+    this.searchBar.value = null
   }
 
   checkSearch($event) {
     if (this.searchBar.value == "") {this.searchClear($event)}
   }
 
-
-
-  search() {
+  search(reset:boolean=true) {
+    if (reset) {
+      this.offset = 0
+    }
     let req_ascending = "false"
     let req_sort_by = "popularity";
     let req_keyword = null;
@@ -104,8 +116,8 @@ export class Tab2Page {
       sort_by: req_sort_by,
       ascending: req_ascending,
       status_arg: req_status_arg,
-      result_limit: 20,
-      result_offset: 0,
+      result_limit: 40,
+      result_offset: this.offset,
       start_year: req_range_lower,
       end_year: req_range_upper,
       allowed_ratings: null,
@@ -114,10 +126,7 @@ export class Tab2Page {
   };
     console.log(body);
     const res: Observable<Object> = this.movieService.searchMovies(body);
-    const $res = res.subscribe(resData => {
-      console.log(resData)
-      this.movies = resData
-    }).unsubscribe
+    return res
   }
 
   changeTagColor(i:number) {
@@ -147,6 +156,18 @@ export class Tab2Page {
   }
 
   reset() {
+  }
+
+  loadData($event) {
+    this.offset = this.offset + 40
+    let obs = this.search(false)
+    const $res = obs.subscribe(resData => {
+      let incoming: movieRes[] = JSON.parse(JSON.stringify(resData))
+      let old: movieRes[] = this.movies
+      let temp: movieRes[] = old.concat(incoming)
+      this.movies = temp
+    }).unsubscribe
+    console.log("To infinity and beyond")
   }
 
 }

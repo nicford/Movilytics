@@ -1,100 +1,97 @@
-<ion-content [fullscreen]="true" #content>
-    <ion-header collapse="condense">
-        <ion-toolbar>
-            <ion-title size="large">Tab 2</ion-title>
-        </ion-toolbar>
-    </ion-header>
+<ion-header collapse="condense">
+    <ion-toolbar>
+        <ion-title size="large">Tab 2</ion-title>
+    </ion-toolbar>
+</ion-header>
 
+<ion-content>
 
-    <body>
+    <div id="site-content">
+        <main class="main-content">
+            <div class="container">
+                <div class="page">
+                    <h2>Search</h2>
+                    <div class="search-bar">
+                        <div class="bar">
+                            <ion-searchbar animated showCancelButton="never" placeholder="" type="text" #searchBar (ionClear)="searchClear($event)" (ionBlur)="checkSearch($event)">
 
-
-        <div id="site-content">
-            <main class="main-content">
-                <div class="container">
-                    <div class="page">
-                        <h2>Search</h2>
-                        <div class="search-bar">
-                            <div class="bar">
-                                <ion-searchbar animated showCancelButton="never" placeholder="" type="text" #searchBar (ionClear)="searchClear($event)" (ionBlur)="checkSearch($event)">
-
-                                </ion-searchbar>
-
-                            </div>
-                            <div class="advancedButton">
-                                <ion-button (click)="search()">
-                                    Search
-                                </ion-button>
-
-                                <ion-button (click)="reset()">
-                                    <ion-icon name="refresh-outline"></ion-icon>
-                                </ion-button>
-
-                            </div>
-                            <div class="sortby">
-                                <ion-select interface="popover" #sortCriteria placeholder="Popularity" (ionChange)="selectChange($event)">
-                                    <ion-select-option value="popularity">Popularity</ion-select-option>
-                                    <ion-select-option value="polarity">Polarity</ion-select-option>
-                                    <ion-select-option value="title">Title</ion-select-option>
-                                    <ion-select-option value="year">Year</ion-select-option>
-                                </ion-select>
-                                <ion-select interface="popover" #sortOrder placeholder="Descending" (ionChange)="selectChange($event)">
-                                    <ion-select-option value="true">Ascending</ion-select-option>
-                                    <ion-select-option value="false">Descending</ion-select-option>
-                                </ion-select>
-                                <ion-button (click)="toggleAdvanced() ">
-                                    <ion-icon name="options-outline"></ion-icon>
-                                </ion-button>
-
-                            </div>
+                            </ion-searchbar>
 
                         </div>
-                        <div class="dropDownAdvanced " *ngIf="this.advanced ">
+                        <div class="advancedButton">
+                            <ion-button (click)="search()">
+                                Search
+                            </ion-button>
 
-                            <div class="advanced-search">
-                                <div class="filters">
-                                    <!-- <ion-select interface="popover" #filterYear placeholder="Year">
+                            <!-- <ion-button (click)="reset()">
+                                        <ion-icon name="refresh-outline"></ion-icon>
+                                    </ion-button> -->
+
+                        </div>
+                        <div class="sortby">
+                            <ion-select interface="popover" #sortCriteria placeholder="Popularity" (ionChange)="selectChange($event)">
+                                <ion-select-option value="popularity">Popularity</ion-select-option>
+                                <ion-select-option value="polarity">Polarity</ion-select-option>
+                                <ion-select-option value="title">Title</ion-select-option>
+                                <ion-select-option value="year">Year</ion-select-option>
+                            </ion-select>
+                            <ion-select interface="popover" #sortOrder placeholder="Descending" (ionChange)="selectChange($event)">
+                                <ion-select-option value="true">Ascending</ion-select-option>
+                                <ion-select-option value="false">Descending</ion-select-option>
+                            </ion-select>
+                            <ion-button (click)="toggleAdvanced() ">
+                                <ion-icon name="options-outline"></ion-icon>
+                            </ion-button>
+
+                        </div>
+
+                    </div>
+                    <div class="dropDownAdvanced " *ngIf="this.advanced ">
+
+                        <div class="advanced-search">
+                            <div class="filters">
+                                <!-- <ion-select interface="popover" #filterYear placeholder="Year">
                                         <ion-select-option value="2012">2012</ion-select-option>
                                         <ion-select-option value="2013">2013</ion-select-option>
                                         <ion-select-option value="2014">2014</ion-select-option>
                                     </ion-select> -->
-                                    <ion-select interface="popover" #filterRating placeholder="Rating" style="margin-top: 5px;">
-                                        <ion-select-option value="0">0+</ion-select-option>
-                                        <ion-select-option value="1">1+</ion-select-option>
-                                        <ion-select-option value="2">2+</ion-select-option>
-                                        <ion-select-option value="3">3+</ion-select-option>
-                                        <ion-select-option value="4">4+</ion-select-option>
-                                    </ion-select>
-                                    <ion-label style="margin-top: 15px; margin-right: 5px;">Range:</ion-label>
-                                    <ion-range [(ngModel)]="rangeValues" #rangeYear dualKnobs="true" min="1888" max="2020" pin tick-active style="margin-bottom: 5px;">
-                                        <ion-label slot="start">1888</ion-label>
-                                        <ion-label slot="end">2021</ion-label>
-                                    </ion-range>
-                                </div>
-
-                                <div style="margin-right:0; margin-left: auto;">
-                                    <ion-segment value="Released" #segmentRelease>
-                                        <ion-segment-button value="Released">
-                                            <ion-label>Released</ion-label>
-                                        </ion-segment-button>
-                                        <ion-segment-button value="Both">
-                                            <ion-label>Both</ion-label>
-                                        </ion-segment-button>
-                                        <ion-segment-button value="Upcoming">
-                                            <ion-label>Upcoming</ion-label>
-                                        </ion-segment-button>
-                                    </ion-segment>
-                                </div>
+                                <ion-select interface="popover" #filterRating placeholder="Rating" style="margin-top: 5px;">
+                                    <ion-select-option value="0">0+</ion-select-option>
+                                    <ion-select-option value="1">1+</ion-select-option>
+                                    <ion-select-option value="2">2+</ion-select-option>
+                                    <ion-select-option value="3">3+</ion-select-option>
+                                    <ion-select-option value="4">4+</ion-select-option>
+                                </ion-select>
+                                <ion-label style="margin-top: 15px; margin-right: 5px;">Range:</ion-label>
+                                <ion-range [(ngModel)]="rangeValues" #rangeYear dualKnobs="true" min="1888" max="2020" pin tick-active style="margin-bottom: 5px;">
+                                    <ion-label slot="start">1888</ion-label>
+                                    <ion-label slot="end">2021</ion-label>
+                                </ion-range>
                             </div>
-                            <div class="advanced-search ">
-                                <div class="tag-chips ">
-                                    <ion-chip [color]="tagDefaultColor[i]" (click)="changeTagColor(i)" *ngFor="let tag of tags; let i = index">
-                                        <ion-label>{{tag}}</ion-label>
-                                    </ion-chip>
-                                </div>
+
+                            <div style="margin-right:0; margin-left: auto;">
+                                <ion-segment value="Released" #segmentRelease>
+                                    <ion-segment-button value="Released">
+                                        <ion-label>Released</ion-label>
+                                    </ion-segment-button>
+                                    <ion-segment-button value="Both">
+                                        <ion-label>Both</ion-label>
+                                    </ion-segment-button>
+                                    <ion-segment-button value="Upcoming">
+                                        <ion-label>Upcoming</ion-label>
+                                    </ion-segment-button>
+                                </ion-segment>
                             </div>
                         </div>
-                        <!-- <div>
+                        <div class="advanced-search ">
+                            <div class="tag-chips ">
+                                <ion-chip [color]="tagDefaultColor[i]" (click)="changeTagColor(i)" *ngFor="let tag of tags; let i = index">
+                                    <ion-label>{{tag}}</ion-label>
+                                </ion-chip>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div>
                             <ion-item>
                                 <ion-range dualKnobs="true" min="1950" max="2020" pin tick-active>
                                     <ion-label slot="start">1888</ion-label>
@@ -102,6 +99,8 @@
                                 </ion-range>
                             </ion-item>
                         </div> -->
+
+                    <div class="movies-container">
                         <div class="movie-list">
                             <div class="movie" *ngFor="let movie of this.movies">
                                 <ion-badge color="warning ">{{movie.vote_average}}</ion-badge>
@@ -111,52 +110,60 @@
                                 <p>{{movie.tagline}}</p>
                             </div>
                         </div>
-                        <!-- .movie-list -->
                     </div>
+                    <ion-infinite-scroll (ionInfinite)="loadData($event)">
+                        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading movies...">
+                        </ion-infinite-scroll-content>
+                    </ion-infinite-scroll>
+                    <!-- .movie-list -->
                 </div>
-                <div class="bottom-buttons" *ngIf="this.movies">
-                    <ion-button>Load More</ion-button>
-                    <ion-button (click)="bottomButton()">
-                        <ion-icon slot="icon-only" name="arrow-up-outline"></ion-icon>
-                    </ion-button>
-                </div>
-                <!-- .container -->
-            </main>
-            <footer class="site-footer ">
-                <div class="container ">
-                    <div class="row ">
-                        <div class="col-md-3 ">
-                            <div class="widget ">
-                                <h3 class="widget-title ">About Us</h3>
-                                <p>We are a group of multidisciplinary engineering student at UCL with a passion for film and product development. </p>
-                            </div>
-                        </div>
-                        <div class="col-md-3 ">
-                            <div class="widget ">
-                                <h3 class="widget-title ">Contact</h3>
-                                <ul class="no-bullet ">
-                                    <li>Email: zcabktu@ucl.ac.uk</li>
-                                    <li>Call: +44 7444474060</li>
-                                    <li> <br> University College London, <br> Gower Street, <br> London, WC1E 6BT </li>
-                                </ul>
-                            </div>
+            </div>
+
+            <!-- <div class="bottom-buttons" *ngIf="this.movies">
+                        <ion-button>Load More</ion-button>
+                        <ion-button (click)="bottomButton()">
+                            <ion-icon slot="icon-only" name="arrow-up-outline"></ion-icon>
+                        </ion-button>
+                    </div> -->
+            <!-- .container -->
+
+        </main>
+
+        <footer class="site-footer ">
+            <div class="container ">
+                <div class="row ">
+                    <div class="col-md-3 ">
+                        <div class="widget ">
+                            <h3 class="widget-title ">About Us</h3>
+                            <p>We are a group of multidisciplinary engineering student at UCL with a passion for film and product development. </p>
                         </div>
                     </div>
-                    <!-- .row -->
-
-                    <div class="colophon ">Copyright 2021 IMDB, No rights reserved</div>
+                    <div class="col-md-3 ">
+                        <div class="widget ">
+                            <h3 class="widget-title ">Contact</h3>
+                            <ul class="no-bullet ">
+                                <li>Email: zcabktu@ucl.ac.uk</li>
+                                <li>Call: +44 7444474060</li>
+                                <li> <br> University College London, <br> Gower Street, <br> London, WC1E 6BT </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <!-- .container -->
+                <!-- .row -->
 
-            </footer>
-        </div>
-        <!-- Default snippet for navigation -->
+                <div class="colophon ">Copyright 2021 IMDB, No rights reserved</div>
+            </div>
+            <!-- .container -->
+
+        </footer>
+    </div>
+    <!-- Default snippet for navigation -->
 
 
 
-        <script src="js/jquery-1.11.1.min.js "></script>
-        <script src="js/plugins.js "></script>
-        <script src="js/app.js "></script>
+    <script src="js/jquery-1.11.1.min.js "></script>
+    <script src="js/plugins.js "></script>
+    <script src="js/app.js "></script>
 
-    </body>
+
 </ion-content>

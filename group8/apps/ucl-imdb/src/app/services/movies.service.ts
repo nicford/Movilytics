@@ -7,7 +7,7 @@ import { searchDto } from '@group8/api-interfaces';
 export class MoviesService {
   constructor(private http:HttpClient) {}
 
-  api_domain = "http://acfa4154ac1e.ngrok.io/api/movies";
+  api_domain = "http://c57a903b920f.ngrok.io/api/movies";
   // api_domain = "http://localhost:3333/api/movies";
 
   httpOptions = {
