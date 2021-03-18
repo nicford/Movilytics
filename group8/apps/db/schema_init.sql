@@ -143,12 +143,12 @@ CREATE FUNCTION public.get_genre_population_avg_diff(movie_id integer DEFAULT NU
 					   avg(western) as western_glob_avg,
 					   avg(tv_movie) as tv_movie_glob_avg
 					from user_genre_mapping
-					where user_id in (select user_id from ratings where mid = movie_id)
+					where user_id in (select user_id from ratings where mid = 862)
 				),
 				curr_avg as (
 					select 
 						avg(rating) as local_avg 
-					from ratings where mid = movie_id
+					from ratings where mid = 862
 				),
 				population_table as (
 					select 
@@ -172,7 +172,7 @@ CREATE FUNCTION public.get_genre_population_avg_diff(movie_id integer DEFAULT NU
 						count(*) filter (where adventure > (select genre_avg_rating from genre_info where genre_name = 'Adventure')) as adventure_count,
 						count(*) filter (where romance > (select genre_avg_rating from genre_info where genre_name = 'Romance')) as romance_count
 					from user_genre_mapping 
-					where user_id in (select user_id from ratings where mid = movie_id) 
+					where user_id in (select user_id from ratings where mid = 862) 
 				)
 
 				select 
@@ -828,6 +828,50 @@ CREATE TABLE public.user_names (
 ALTER TABLE public.user_names OWNER TO postgres;
 
 --
+-- Name: user_predictive_rate; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.user_predictive_rate (
+    index integer NOT NULL,
+    user_id character varying(50) NOT NULL,
+    prediction numeric NOT NULL,
+    mid integer NOT NULL
+);
+
+
+ALTER TABLE public.user_predictive_rate OWNER TO postgres;
+
+--
+-- Name: user_predictive_rate_index_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.user_predictive_rate ALTER COLUMN index ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.user_predictive_rate_index_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: user_traits; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.user_traits (
+    user_id character varying(50) NOT NULL,
+    openness numeric NOT NULL,
+    agreeableness numeric NOT NULL,
+    emotional_stability numeric NOT NULL,
+    conscientiousness numeric NOT NULL,
+    extraversion numeric NOT NULL
+);
+
+
+ALTER TABLE public.user_traits OWNER TO postgres;
+
+--
 -- Name: companies companies_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -961,6 +1005,22 @@ ALTER TABLE ONLY public.user_genre_mapping
 
 ALTER TABLE ONLY public.user_names
     ADD CONSTRAINT user_names_pkey PRIMARY KEY (user_id);
+
+
+--
+-- Name: user_predictive_rate user_predictive_rate_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_predictive_rate
+    ADD CONSTRAINT user_predictive_rate_pkey PRIMARY KEY (index);
+
+
+--
+-- Name: user_traits user_traits_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_traits
+    ADD CONSTRAINT user_traits_pkey PRIMARY KEY (user_id);
 
 
 --
@@ -1113,6 +1173,22 @@ ALTER TABLE ONLY public.translations
 
 ALTER TABLE ONLY public.user_genre_mapping
     ADD CONSTRAINT user_genre_mapping_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.user_names(user_id);
+
+
+--
+-- Name: user_predictive_rate user_predictive_rate_mid_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_predictive_rate
+    ADD CONSTRAINT user_predictive_rate_mid_fkey FOREIGN KEY (mid) REFERENCES public.movies(mid);
+
+
+--
+-- Name: user_predictive_rate user_predictive_rate_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.user_predictive_rate
+    ADD CONSTRAINT user_predictive_rate_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.user_traits(user_id);
 
 
 --
