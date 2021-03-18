@@ -166,6 +166,7 @@ export class Tab2Page {
       let old: movieRes[] = this.movies
       let temp: movieRes[] = old.concat(incoming)
       this.movies = temp
+      $event.target.complete();
     }).unsubscribe
     console.log("To infinity and beyond")
   }

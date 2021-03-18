@@ -109,12 +109,14 @@
                                     <a (click)="goToReview(movie.mid)" [mid]="movie.mid">{{movie.title}}</a></div>
                                 <p>{{movie.tagline}}</p>
                             </div>
+
                         </div>
+                        <ion-infinite-scroll (ionInfinite)="loadData($event)">
+                            <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading movies...">
+                            </ion-infinite-scroll-content>
+                        </ion-infinite-scroll>
                     </div>
-                    <ion-infinite-scroll (ionInfinite)="loadData($event)">
-                        <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading movies...">
-                        </ion-infinite-scroll-content>
-                    </ion-infinite-scroll>
+
                     <!-- .movie-list -->
                 </div>
             </div>
