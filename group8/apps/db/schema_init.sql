@@ -396,6 +396,59 @@ end; $$;
 ALTER FUNCTION public.get_overview(movie_id integer) OWNER TO postgres;
 
 --
+-- Name: get_personality(character varying[]); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.get_personality(tag_inputs character varying[] DEFAULT NULL::character varying[]) RETURNS TABLE(openness numeric, agreeableness numeric, emotional_stability numeric, conscientiousness numeric, extraversion numeric)
+    LANGUAGE plpgsql
+    AS $$
+	begin 
+		return query
+			with avg_movie_ratings as (
+				select 
+					mid, 
+					avg_rating 
+				from movie_stats 
+				where mid in 
+				(
+					select 
+				 		distinct on (mid) mid 
+				 	from tags 
+				 	where tag = any(tag_inputs)
+				)
+			), 
+			user_rating_map as (
+				select 
+					user_id, 
+					prediction, 
+					mov_ratings.mid, 
+					mov_ratings.avg_rating 
+				from user_predictive_rate 
+				inner join (
+					select * from avg_movie_ratings
+				) as mov_ratings
+				on user_predictive_rate.mid = mov_ratings.mid
+			)
+	
+		select 
+			COALESCE(avg(traits.openness), 0) as openness,
+			COALESCE(avg(traits.agreeableness), 0) as agreeableness,
+			COALESCE(avg(traits.emotional_stability), 0) as emotional_stability,
+			COALESCE(avg(traits.conscientiousness), 0) as conscientiousness,
+			COALESCE(avg(traits.extraversion), 0) as extraversion
+		from user_rating_map 
+		inner join(
+			select * from user_traits
+		) as traits
+		on user_rating_map.user_id = traits.user_id
+		where user_rating_map.prediction > user_rating_map.avg_rating;
+		
+end; $$;
+
+
+ALTER FUNCTION public.get_personality(tag_inputs character varying[]) OWNER TO postgres;
+
+--
 -- Name: get_tag_avg(character varying[]); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
@@ -595,8 +648,8 @@ ALTER TABLE public.language_info OWNER TO postgres;
 
 CREATE TABLE public.movie_stats (
     mid integer NOT NULL,
-    polarity numeric,
-    avg_rating numeric
+    avg_rating numeric,
+    polarity numeric
 );
 
 
