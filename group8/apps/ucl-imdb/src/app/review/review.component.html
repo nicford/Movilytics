@@ -64,6 +64,42 @@
                                 ullamcorper tortor. Phasellus aliquam condimentum elit. Nulla facilisi. Donec magna libero, bibendum eu faucibus et, mattis at felis. Integer turpis nibh, blandit nec elit vel, euismod laoreet quam. Donec vel ante nisi.
                                 Nunc luctus a tellus non.</p>
                         </div>
+
+                        <!-- Charts -->
+                        <div>
+                            <div style="display: block">
+                              <canvas baseChart
+                                      [datasets]="barChartData"
+                                      [labels]="barChartLabels"
+                                      [options]="barChartOptions"
+                                      [legend]="barChartLegend"
+                                      [chartType]="barChartType">
+                              </canvas>
+                            </div>
+                        </div>
+
+                        <div style="display: block">
+                            <canvas baseChart
+                                    [data]="pieChartData"
+                                    [labels]="pieChartLabels"
+                                    [chartType]="pieChartType"></canvas>
+                        </div>
+
+                        <div style="display: block">
+                            <canvas baseChart
+                                    [datasets]="radarChartData"
+                                    [labels]="radarChartLabels"
+                                    [chartType]="radarChartType"></canvas>
+                        </div>
+
+                        <div style="display: block">
+                            <canvas baseChart
+                                        [data]="doughnutChartData"
+                                        [labels]="doughnutChartLabels"
+                                        [chartType]="doughnutChartType"></canvas>
+                        </div>
+
+
                     </div>
                 </div>
             </div>
