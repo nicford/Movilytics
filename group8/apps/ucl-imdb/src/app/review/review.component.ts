@@ -14,6 +14,7 @@ export class ReviewComponent implements OnInit {
 
   movie
   poster
+  tag_data
   @Input() mid: string
 
   constructor(private movieService: MoviesService, private activatedRouter: ActivatedRoute, private imageService: ImagesService) {
@@ -24,8 +25,12 @@ export class ReviewComponent implements OnInit {
       console.log(resData)
       this.movie = resData[0]
       this.poster = this.getImage(this.movie.poster_path)
+      this.tag_data = resData[0].tag_trend // for time-series plotting
     }).unsubscribe
   }
+
+  // Time series tags
+  
 
   // Bart Chart
   public barChartOptions = {
