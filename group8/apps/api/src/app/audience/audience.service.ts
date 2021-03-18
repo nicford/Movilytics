@@ -192,4 +192,8 @@ export class AudienceService {
     }
 
 
+    async getPersonality(tags){
+        const query = `"SELECT * FROM get_personality(${tags})"`;
+    }
+
 }

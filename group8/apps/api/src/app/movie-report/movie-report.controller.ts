@@ -24,7 +24,9 @@ export class MovieReportController {
     @Get(':id')
     async getMovieReport(@Param('id') movie_id: number) {
         const result = await this.movieReportService.createMovieReport(movie_id);
-        return result.rows;
+        console.log(result);
+        console.log("RETURNING IN GET MOVIE REPORT")
+        return result;
     }
 
     
