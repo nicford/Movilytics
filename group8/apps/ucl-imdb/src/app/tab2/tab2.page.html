@@ -25,6 +25,11 @@
                                 <ion-button (click)="search()">
                                     Search
                                 </ion-button>
+
+                                <ion-button (click)="reset()">
+                                    <ion-icon name="refresh-outline"></ion-icon>
+                                </ion-button>
+
                             </div>
                             <div class="sortby">
                                 <ion-select interface="popover" #sortCriteria placeholder="Popularity" (ionChange)="selectChange($event)">
@@ -109,7 +114,7 @@
                         <!-- .movie-list -->
                     </div>
                 </div>
-                <div class="bottom-buttons">
+                <div class="bottom-buttons" *ngIf="this.movies">
                     <ion-button>Load More</ion-button>
                     <ion-button (click)="bottomButton()">
                         <ion-icon slot="icon-only" name="arrow-up-outline"></ion-icon>

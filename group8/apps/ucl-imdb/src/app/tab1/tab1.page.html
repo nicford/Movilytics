@@ -47,39 +47,20 @@
                     </div>
                     <div class="col-md-3">
                         <div class="row">
-                            <div class="col-sm-6 col-md-12">
+                            <div class="col-sm-6 col-md-12" *ngFor="let movie of this.popularMovies?.slice(0,2)">
                                 <div class="latest-movie">
-                                    <a href="#"><img src="assets/pictures/thumb-1.jpg" alt="Movie 1"></a>
+                                    <a href="#"><img [src]="getImage(movie.poster_path)" alt="Movie 3"></a>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-md-12">
-                                <div class="latest-movie">
-                                    <a href="#"><img src="assets/pictures/thumb-2.jpg" alt="Movie 2"></a>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
                 <!-- .row -->
                 <div class="row">
-                    <div class="col-sm-6 col-md-3">
+                    <div class="col-sm-6 col-md-3" *ngFor="let movie of this.popularMovies?.slice(2,6)">
                         <div class="latest-movie">
-                            <a href="#"><img src="assets/pictures/thumb-3.jpg" alt="Movie 3"></a>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="latest-movie">
-                            <a href="#"><img src="assets/pictures/thumb-4.jpg" alt="Movie 4"></a>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="latest-movie">
-                            <a href="#"><img src="assets/pictures/thumb-5.jpg" alt="Movie 5"></a>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="latest-movie">
-                            <a href="#"><img src="assets/pictures/thumb-6.jpg" alt="Movie 6"></a>
+                            <a href="#"><img [src]="getImage(movie.poster_path)" alt="Movie 3"></a>
                         </div>
                     </div>
                 </div>
@@ -90,24 +71,9 @@
                 <!-- .row -->
                 <div class="row">
                     <h1 class="main-label">Heated Movies</h1>
-                    <div class="col-sm-6 col-md-3">
+                    <div class="col-sm-6 col-md-3" *ngFor="let movie of this.polarizingMovies">
                         <div class="latest-movie">
-                            <a href="#"><img src="assets/pictures/thumb-3.jpg" alt="Movie 3"></a>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="latest-movie">
-                            <a href="#"><img src="assets/pictures/thumb-4.jpg" alt="Movie 4"></a>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="latest-movie">
-                            <a href="#"><img src="assets/pictures/thumb-5.jpg" alt="Movie 5"></a>
-                        </div>
-                    </div>
-                    <div class="col-sm-6 col-md-3">
-                        <div class="latest-movie">
-                            <a href="#"><img src="assets/pictures/thumb-6.jpg" alt="Movie 6"></a>
+                            <a href="#"><img [src]="getImage(movie.poster_path)" alt="Movie 3"></a>
                         </div>
                     </div>
                 </div>

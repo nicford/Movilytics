@@ -140,15 +140,13 @@ export class Tab2Page {
   getImage(posterPath: string) {
     const res = this.imagesService.getPosterPath(posterPath)
     return res
-    // const $res = res.subscribe(resData => {
-
-    //   return resData? resData : "test"
-    // })
-
   }
 
   bottomButton() {
-    this.scrollContent.scrollToTop()
+    this.scrollContent.scrollToTop
+  }
+
+  reset() {
   }
 
 }

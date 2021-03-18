@@ -7,7 +7,7 @@ import { searchDto } from '@group8/api-interfaces';
 export class MoviesService {
   constructor(private http:HttpClient) {}
 
-  api_domain = "http://a4412888b116.ngrok.io/api/movies";
+  api_domain = "http://acfa4154ac1e.ngrok.io/api/movies";
   // api_domain = "http://localhost:3333/api/movies";
 
   httpOptions = {
@@ -24,8 +24,6 @@ export class MoviesService {
 
    searchMovies(body: searchDto) {
     const result = this.http.post(this.api_domain + '/search', body, this.httpOptions);
-    // console.log(result.subscribe());
-    // return result.subscribe(x => x);
     return result;
   }
 
