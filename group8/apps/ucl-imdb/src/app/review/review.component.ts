@@ -16,18 +16,37 @@ export class ReviewComponent implements OnInit {
   movie
   poster
   tag_data
+  lineChartType
+  lineChartData
+  lineChartLabels
+  lineChartOptions
+  lineChartColors
   @Input() mid: string
 
   constructor(private movieService: MoviesService, private activatedRouter: ActivatedRoute, private imageService: ImagesService) {
     this.mid=this.activatedRouter.snapshot.paramMap.get("reviewID");
     console.log(this.mid)
-    const res = this.movieService.getSingleMovie(this.mid)
+    const res = this.movieService.getMovieReview(this.mid)
     const $res = res.subscribe(resData => {
-      console.log(resData)
-      this.movie = resData[0]
+      this.movie = resData
       this.poster = this.getImage(this.movie.poster_path)
-      this.tag_data = resData[0].tag_trend // for time-series plotting
+      this.lineChartType = 'line';
+
+      this.lineChartData = [
+        {data: this.movie.trend_activty, label: "Activity"}, 
+        {data: this.movie.trend_ratings, label: "Ratings"}
+      ];
+
+      this.lineChartLabels = this.movie.trend_months
+      this.lineChartOptions = {
+        scaleShowVerticalLines: false,
+        responsive: true
+      };
+
+     
     }).unsubscribe
+
+    
   }
 
   // Multi-axis
@@ -37,12 +56,7 @@ export class ReviewComponent implements OnInit {
 
 
   
-  // Line Chart 
-  public lineChartType = 'line';
-  public lineChartOptions = {
-    scaleShowVerticalLines: false,
-    responsive: true
-  };
+  // Line Chart   
 
   
 

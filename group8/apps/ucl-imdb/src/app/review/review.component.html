@@ -31,11 +31,19 @@
                                     <li><strong>Length:</strong> {{this.movie.runtime}} min</li>
                                     <li><strong>Premiere:</strong> {{this.movie.released_year}}</li>
                                     <li><strong>Budget:</strong> {{this.movie.budget}}</li>
+                                    <li><strong>Revenue:</strong> {{this.movie.revenue}}</li>
+                                    <li><strong>Popularity:</strong> {{this.movie.popularity}}</li>
+                                    <li><strong>Average Rating:</strong> {{this.movie.avg_rating}}</li>
                                     <li><strong>Adult:</strong> {{this.movie.adult}}</li>
-                                    <li><strong>Language:</strong> {{this.movie.language_id}}</li>
-
-
-                                    <li><strong>Category:</strong> <span *ngFor="let genre of this.movie.genre_list">{{genre}} </span></li>
+                                    <li><strong>Language:</strong> <span *ngFor="let language of this.movie.language_list">{{language}} </span></li>
+                                    <li><strong>Countries:</strong> <span *ngFor="let country of this.movie.country_list">{{country}} </span></li>
+                                    <li><strong>Genres:</strong> <span *ngFor="let genre of this.movie.genre_list">{{genre}} </span></li>
+                                    <li>
+                                        <strong>Summary:</strong>
+                                        <div class="entry-content">
+                                        <p>{{this.movie.overview}}</p>
+                                        </div>
+                                    </li>
                                 </ul>
 
                                 <ul class="starring">
@@ -46,32 +54,24 @@
                             </div>
                         </div>
                         <!-- .row -->
-                        <div class="entry-content">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum ac pharetra libero. Integer in suscipit diam, sit amet eleifend nunc. Curabitur egestas nunc nulla, in aliquet risus efficitur quis. Vivamus facilisis est
-                                libero, vitae iaculis nulla cursus in. Suspendisse potenti. In et fringilla ipsum, quis varius quam. Morbi eleifend venenatis diam finibus vehicula. Suspendisse eu blandit metus. Sed feugiat pellentesque turpis, in lacinia
-                                ipsum. Vivamus nec luctus orci.</p>
-                            <p>Aenean vehicula eget risus sit amet posuere. Maecenas id risus maximus, malesuada leo eget, pellentesque arcu. Phasellus vitae leo rhoncus, consectetur mauris vitae, lacinia quam. Nunc turpis erat, accumsan eget justo quis,
-                                auctor ultricies magna. Mauris sodales, risus sit amet hendrerit tincidunt, erat ante facilisis sapien, sit amet maximus neque massa a felis. Nullam consectetur justo massa, vel commodo metus gravida in. Aliquam erat volutpat.
-                                Nullam a lorem sed lorem euismod gravida a eu velit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec venenatis ac ligula vel pharetra. Aenean vitae nulla sed dui volutpat euismod. Nam ex quam, consequat id
-                                rutrum sed, porttitor id lectus. Vestibulum venenatis consectetur justo ut sagittis. Duis dignissim tincidunt quam, nec pulvinar libero luctus nec. Morbi blandit nec lorem in ullamcorper.</p>
-                            <p>Vestibulum et odio massa. Integer at odio ipsum. Proin vitae tristique nibh. Aenean semper ante sit amet ante ultricies tincidunt. Curabitur cursus, urna non ultricies posuere, dolor lacus cursus lorem, a dapibus nibh ex eget
-                                sem. Aliquam semper sagittis sapien a fermentum. Nullam sed iaculis lacus, et imperdiet risus. Praesent quis turpis ac nunc sodales tincidunt. Aliquam at leo odio. Sed a tempor nisl, et mattis felis. Nam mauris nunc, commodo
-                                ac orci ut, auctor viverra mauris.</p>
-                            <p>Quisque nec justo vitae metus consectetur ultrices. Duis venenatis lorem massa, eu pulvinar quam faucibus sed. Nulla fringilla lorem sit amet sagittis mattis. Nunc in leo a odio mollis consectetur. Etiam ac nisl eget diam ullamcorper
-                                porta. Aliquam consectetur neque eget metus egestas sollicitudin. Curabitur ultrices urna et feugiat malesuada.</p>
-                            <p>Nulla facilisi. Fusce sed dapibus leo, eu lobortis ante. Duis luctus mauris in ante semper, ut feugiat nisi condimentum. Nullam a odio et justo suscipit tempus. Vestibulum placerat dapibus quam, a egestas turpis efficitur id.
-                                Integer suscipit placerat placerat. Phasellus in lorem quis leo egestas accumsan. Nam et euismod ligula. Duis nec erat aliquam, sollicitudin diam non, ornare leo. Pellentesque augue leo, faucibus in nunc nec, tincidunt
-                                ullamcorper tortor. Phasellus aliquam condimentum elit. Nulla facilisi. Donec magna libero, bibendum eu faucibus et, mattis at felis. Integer turpis nibh, blandit nec elit vel, euismod laoreet quam. Donec vel ante nisi.
-                                Nunc luctus a tellus non.</p>
-                        </div>
+                        
 
                         <!-- Charts -->
-                        <!-- <div style="display: block">
-                            <canvas baseChart
-                                    [data]={{this.movie.trend_activty}}
-                                    [labels]={{this.movie.trend_months}}
-                                    [chartType]="lineChartType"></canvas>
-                        </div> -->
+                        <div>
+                            <h4 class="movie-title">Like Dislike Ratio</h4>
+                            
+                        </div>
+
+                        <div>
+                            <h4 class="movie-title">Activity and Rating Trend</h4>
+                            <div style="display: block" class="chart_colors">
+                                <canvas baseChart
+                                        [datasets]="lineChartData"
+                                        [labels]="lineChartLabels"
+                                        [options]="lineChartOptions"
+                                        [chartType]="lineChartType"></canvas>
+                            </div>
+                        </div>
 
                         <div>
                             <div style="display: block">
