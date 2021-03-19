@@ -11,15 +11,18 @@ export class MovieReportService {
 
 
     async createMovieReport(movie_id: number) {
-        const sql_query_overview = "SELECT * FROM get_overview($1)"
-        const sql_query_trend = "SELECT * FROM get_activity_trend($1)"
+        const sql_query_overview = "SELECT * FROM get_overview($1)";
+        const sql_query_trend = "SELECT * FROM get_activity_trend($1)";
+        const sql_query_tag_like_dislikes = "SELECT * FROM get_tag_likes_dislike($1)";
         const result_overview_promise = this.databaseService.runQuery(sql_query_overview, [movie_id]);
         const result_trend_promise = this.databaseService.runQuery(sql_query_trend, [movie_id]);
+        const tag_like_dislikes_promise = this.databaseService.runQuery(sql_query_tag_like_dislikes, [movie_id])
 
         const database_results = await Promise.all([result_overview_promise, result_trend_promise]);
         console.log(database_results)
         const overview_result = database_results[0]["rows"][0]
         overview_result["tag_trend"] = database_results[1]["rows"]
+        overview_result["tage"]
         // console.log(overview_result)
         return overview_result; 
     }

@@ -162,6 +162,8 @@ export class Tab2Page {
   }
 
   reset() {
+    // this.sortCriteria.selectedText
+    // this.segmentRelease.select
   }
 
   loadData($event) {
