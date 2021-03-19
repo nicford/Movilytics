@@ -23,6 +23,11 @@ create or replace function get_overview(
 		avg_rating decimal,
 		translation_list varchar(30)[],
 		tags_list varchar(100)[], 
+		one_star bigint,
+		two_star bigint,
+		three_star bigint,
+		four_star bigint,
+		five_star bigint,
 		likes bigint,
 		dislikes bigint
 	)
@@ -54,6 +59,11 @@ as $$
 				rating.avg_rating, 
 				translation_table.translation_list, 
 				tags.tags_list,
+				like_dislike.one_star,
+				like_dislike.two_star,
+				like_dislike.three_star,
+				like_dislike.four_star,
+				like_dislike.five_star,
 				like_dislike.likes,
 				like_dislike.dislikes
 			from movies 
@@ -65,6 +75,11 @@ as $$
 
 			left join(
 				select ratings.mid,
+					count(*) filter(where ratings.rating >= 1 and ratings.rating < 2) as one_star,
+					count(*) filter(where ratings.rating >= 2 and ratings.rating < 3) as two_star,
+					count(*) filter(where ratings.rating >= 3 and ratings.rating < 4) as three_star,
+					count(*) filter(where ratings.rating >= 4 and ratings.rating < 5) as four_star,
+					count(*) filter(where ratings.rating >= 5) as five_star,
 					count(*) filter(where ratings.rating >= (select movie_avg.avg_rating from movie_avg)) as likes,
 					count(*) filter(where ratings.rating < (select movie_avg.avg_rating from movie_avg)) as dislikes
 				from ratings 

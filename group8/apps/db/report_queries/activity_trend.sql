@@ -2,7 +2,7 @@ create or replace function get_activity_trend(
 	movie_id integer default null
 ) 
 	returns table (
-		month timestamp, 
+		month text, 
 		activity bigint, 
 		avg_rating decimal
 	)
@@ -29,9 +29,9 @@ as $$
 				)
 			
 			select 
-				processed.coalesce_month,
-				processed.activity,
-				coalesce(processed.avg_rating,0)
+				to_char(processed.coalesce_month, 'YYYY-MM'),
+				coalesce(processed.activity,0) as activity,
+				coalesce(processed.avg_rating,0) as avg_rating
 			from (
 				select 
 					coalesce(rating_month.month, t.month) as coalesce_month, 
