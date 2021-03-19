@@ -13,7 +13,7 @@ export class MovieReportService {
     async createMovieReport(movie_id: number) {
         const sql_query_overview = "SELECT * FROM get_overview($1)";
         const sql_query_trend = "SELECT * FROM get_activity_trend($1)";
-        const sql_query_tag_like_dislikes = "SELECT * FROM get_tag_likes_dislike($1)";
+        const sql_query_tag_like_dislikes = "SELECT * FROM get_tag_likes_dislikes($1)";
         const result_overview_promise = this.databaseService.runQuery(sql_query_overview, [movie_id]);
         const result_trend_promise = this.databaseService.runQuery(sql_query_trend, [movie_id]);
         const tag_like_dislikes_promise = this.databaseService.runQuery(sql_query_tag_like_dislikes, [movie_id])
@@ -21,7 +21,24 @@ export class MovieReportService {
         const database_results = await Promise.all([result_overview_promise, result_trend_promise, tag_like_dislikes_promise]);
         console.log(database_results)
         const overview_result = database_results[0]["rows"][0]
-        overview_result["tag_trend"] = database_results[1]["rows"]
+        const trend_dicts = database_results[1]["rows"];
+        const trend_months = [];
+        const trend_ratings = [];
+        const trend_activity = [];
+
+        trend_dicts.forEach((item) => {
+            const month = item.month;
+            const activity = item.activity;
+            const avg_rating = item.avg_rating;
+
+            trend_months.push(month);
+            trend_ratings.push(avg_rating);
+            trend_activity.push(activity);
+        })
+
+        overview_result["trend_months"] = trend_months;
+        overview_result["trend_activty"] = trend_activity;
+        overview_result["trend_ratings"] = trend_ratings;
         overview_result["tags_likes_dislikes"] = database_results[2]["rows"]
         // console.log(overview_result)
         return overview_result; 
