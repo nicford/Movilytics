@@ -17,7 +17,12 @@ export class AudienceService {
                                         where mid=${movie_id}) as temp\
                                     where temp.genre_id = gi.genre_id`;
         const genre_rating_response = await this.databaseService.runQuery(genre_info_query, []);
-    
+        
+        if (genre_rating_response.rows.length === 1){
+            let seg_data = fs.readFileSync('apps/api/src/app/audience_json_dump/segmentation.json');
+            let parsed = JSON.parse(seg_data);
+            return parsed;
+        }
         ///////////////////////
         // <Get Genre Average>
         // Average was precalucated in sql script
