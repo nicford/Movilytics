@@ -17,9 +17,27 @@ export class MovieReportService {
         const result_trend_promise = this.databaseService.runQuery(sql_query_trend, [movie_id]);
 
         const database_results = await Promise.all([result_overview_promise, result_trend_promise]);
-        console.log(database_results)
-        const overview_result = database_results[0]["rows"][0]
-        overview_result["tag_trend"] = database_results[1]["rows"]
+        // console.log(database_results)
+        const overview_result = database_results[0]["rows"][0];
+        // overview_result["tag_trend"] = database_results[1]["rows"]
+        const trend_dicts = database_results[1]["rows"];
+        let trend_months = [];
+        let trend_ratings = [];
+        let trend_activity = [];
+
+        trend_dicts.forEach((item) => {
+            const month = item.month;
+            const activity = item.activity;
+            const avg_rating = item.avg_rating;
+
+            trend_months.push(month);
+            trend_ratings.push(avg_rating);
+            trend_activity.push(activity);
+        })
+
+        overview_result["trend_months"] = trend_months;
+        overview_result["trend_activty"] = trend_activity;
+        overview_result["trend_ratings"] = trend_ratings;
         // console.log(overview_result)
         return overview_result; 
     }

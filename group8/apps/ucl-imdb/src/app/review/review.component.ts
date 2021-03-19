@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import * as Chart from 'chart.js';
 import { ImagesService } from '../services/images.service';
 import { MoviesService } from '../services/movies.service';
 import { movieRes } from './movieRes.interface';
@@ -29,7 +30,20 @@ export class ReviewComponent implements OnInit {
     }).unsubscribe
   }
 
-  // Time series tags
+  // Multi-axis
+  
+
+
+
+
+  
+  // Line Chart 
+  public lineChartType = 'line';
+  public lineChartOptions = {
+    scaleShowVerticalLines: false,
+    responsive: true
+  };
+
   
 
   // Bart Chart
