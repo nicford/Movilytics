@@ -106,7 +106,10 @@ export class MoviesService {
 
   async pre_cache_searches(search_query: searchDto, sql_query: string, parameters: any[], number_extra_pages_to_cache: number) {
       await this.cache_extra_pages(search_query, sql_query, parameters, 4);
-      await this.cache_sortBy_and_order(search_query, sql_query, parameters);
+      if (search_query['result_offset'] < search_query['result_limit']) { // only pre-cache the first 20 results
+        await this.cache_sortBy_and_order(search_query, sql_query, parameters);
+      }
+      
   }
 
 
