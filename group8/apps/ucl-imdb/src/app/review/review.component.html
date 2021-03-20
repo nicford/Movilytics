@@ -62,37 +62,28 @@
                             
                         </div>
 
-                        <div>
-                            <h5 class="movie-title">Tag Data</h5>
-                            <ul><li><strong>Tags:</strong><span *ngFor="let tag of this.movie.tag_labels">{{tag}} </span></li></ul>
-                            <div style="display: block">
-                              <canvas baseChart
-                                      [datasets]="scatterChartData"
-                                      [labels]="scatterChartLabels"
-                                      [options]="scatterChartOptions"
-                                      [chartType]="scatterChartType">
-                              </canvas>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h5 class="movie-title">Activity and Rating Trend</h5>
-                            <div style="display: block" class="chart_colors">
+                        <div class = "row">
+                            <div class = "col-md-6">
+                                <h5 class="movie-title">Tag Data</h5>
+                                <ul><li><strong>Tags:</strong><span *ngFor="let tag of this.movie.tag_labels">{{tag}} </span></li></ul>
+                                <div style="display: block">
                                 <canvas baseChart
-                                        [datasets]="lineChartData"
-                                        [labels]="lineChartLabels"
-                                        [options]="lineChartOptions"
-                                        [chartType]="lineChartType"></canvas>
+                                        [datasets]="scatterChartData"
+                                        [labels]="scatterChartLabels"
+                                        [options]="scatterChartOptions"
+                                        [chartType]="scatterChartType">
+                                </canvas>
+                                </div>
                             </div>
-                        </div>
-
-                        <div>
-                            <h5 class="movie-title">Viewer's Genre Distribution</h5>
-                            <div style="display: block">
-                                <canvas baseChart
-                                        [data]="pieChartData"
-                                        [labels]="pieChartLabels"
-                                        [chartType]="pieChartType"></canvas>
+                            <div class = "col-md-6">
+                                <h5 class="movie-title">Activity and Rating Trend</h5>
+                                <div style="display: block" class="chart_colors">
+                                    <canvas baseChart
+                                            [datasets]="lineChartData"
+                                            [labels]="lineChartLabels"
+                                            [options]="lineChartOptions"
+                                            [chartType]="lineChartType"></canvas>
+                                </div>
                             </div>
                         </div>
 
@@ -109,15 +100,13 @@
                             </div>
                         </div>
 
-                        <div>
-                            <h5 class="movie-title">Tag Data Net Like and Polarity</h5>
+                        <div class>
+                            <h5 class="movie-title">Viewer's Genre Distribution</h5>
                             <div style="display: block">
-                              <canvas baseChart
-                                      [datasets]="scatterChartData"
-                                      [labels]="scatterChartLabels"
-                                      [options]="scatterChartOptions"
-                                      [chartType]="scatterChartType">
-                              </canvas>
+                                <canvas baseChart
+                                        [data]="pieChartData"
+                                        [labels]="pieChartLabels"
+                                        [chartType]="pieChartType"></canvas>
                             </div>
                         </div>
 
@@ -144,7 +133,6 @@
                                         [labels]="doughnutChartLabels"
                                         [chartType]="doughnutChartType"></canvas>
                         </div> -->
-
 
                     </div>
                 </div>
