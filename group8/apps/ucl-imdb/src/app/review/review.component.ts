@@ -21,6 +21,10 @@ export class ReviewComponent implements OnInit {
   lineChartLabels
   lineChartOptions
   lineChartColors
+  pieChartLabels
+  pieChartData
+  barChartLabels
+  barChartData
   @Input() mid: string
 
   constructor(private movieService: MoviesService, private activatedRouter: ActivatedRoute, private imageService: ImagesService) {
@@ -42,23 +46,57 @@ export class ReviewComponent implements OnInit {
         scaleShowVerticalLines: false,
         responsive: true
       };
-
-     
+      
+      const genre_details_dict = this.movie.genre_pop_and_perc_diff[0];
+      this.pieChartLabels = ['Animation', 'Adventure', 'Family', 'Comedy', 'Fantasy', 'Romance', 'Drama', 'Action','Crime','Thriller','Horror','History','Science Fiction', 'Mystery','War','Music','Documentary','Western','TV Movie'];
+      this.pieChartData = [
+                            genre_details_dict.animation_count, 
+                            genre_details_dict.adventure_count, 
+                            genre_details_dict.family_count, 
+                            genre_details_dict.comedy_count, 
+                            genre_details_dict.fantasy_count, 
+                            genre_details_dict.romance_count, 
+                            genre_details_dict.drama_count,
+                            genre_details_dict.action_count,
+                            genre_details_dict.crime_count,
+                            genre_details_dict.thriller_count,
+                            genre_details_dict.horror_count,
+                            genre_details_dict.history_count,
+                            genre_details_dict.science_fiction_count,
+                            genre_details_dict.mystery_count,
+                            genre_details_dict.war_count,
+                            genre_details_dict.music_count,
+                            genre_details_dict.documentary_count,
+                            genre_details_dict.western_count,
+                            genre_details_dict.tv_movie_count
+                          ];
+      this.barChartData = [
+        {data: [
+                genre_details_dict.animation_glob_avg, 
+                genre_details_dict.adventure_glob_avg, 
+                genre_details_dict.family_glob_avg, 
+                genre_details_dict.comedy_glob_avg, 
+                genre_details_dict.fantasy_glob_avg, 
+                genre_details_dict.romance_glob_avg, 
+                genre_details_dict.drama_glob_avg,
+                genre_details_dict.action_glob_avg,
+                genre_details_dict.crime_glob_avg,
+                genre_details_dict.thriller_glob_avg,
+                genre_details_dict.horror_glob_avg,
+                genre_details_dict.history_glob_avg,
+                genre_details_dict.science_fiction_glob_avg,
+                genre_details_dict.mystery_glob_avg,
+                genre_details_dict.war_glob_avg,
+                genre_details_dict.music_glob_avg,
+                genre_details_dict.documentary_glob_avg,
+                genre_details_dict.western_glob_avg,
+                genre_details_dict.tv_movie_glob_avg
+        ], label: 'Percentile Difference'},
+      ];
     }).unsubscribe
 
     
   }
-
-  // Multi-axis
-  
-
-
-
-
-  
-  // Line Chart   
-
-  
 
   // Bart Chart
   public barChartOptions = {
@@ -66,17 +104,10 @@ export class ReviewComponent implements OnInit {
     responsive: true
   };
 
-  public barChartLabels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
   public barChartType = 'bar';
   public barChartLegend = true;
-  public barChartData = [
-    {data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A'},
-    {data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B'}
-  ];
 
-  // Pie Chart
-  public pieChartLabels = ['Sales Q1', 'Sales Q2', 'Sales Q3', 'Sales Q4'];
-  public pieChartData = [120, 150, 180, 90];
+  // Pie Chart 
   public pieChartType = 'pie';
   
   // Doughnut Chart

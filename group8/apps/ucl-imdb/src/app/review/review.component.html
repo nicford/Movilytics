@@ -63,7 +63,7 @@
                         </div>
 
                         <div>
-                            <h4 class="movie-title">Activity and Rating Trend</h4>
+                            <h5 class="movie-title">Activity and Rating Trend</h5>
                             <div style="display: block" class="chart_colors">
                                 <canvas baseChart
                                         [datasets]="lineChartData"
@@ -74,24 +74,28 @@
                         </div>
 
                         <div>
+                            <h5 class="movie-title">Viewer's Genre Distribution</h5>
+                            <div style="display: block">
+                                <canvas baseChart
+                                        [data]="pieChartData"
+                                        [labels]="pieChartLabels"
+                                        [chartType]="pieChartType"></canvas>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h5 class="movie-title">Viewer's Genre Average Percentile Difference</h5>
                             <div style="display: block">
                               <canvas baseChart
                                       [datasets]="barChartData"
-                                      [labels]="barChartLabels"
+                                      [labels]="pieChartLabels"
                                       [options]="barChartOptions"
                                       [legend]="barChartLegend"
                                       [chartType]="barChartType">
                               </canvas>
                             </div>
                         </div>
-
-                        <div style="display: block">
-                            <canvas baseChart
-                                    [data]="pieChartData"
-                                    [labels]="pieChartLabels"
-                                    [chartType]="pieChartType"></canvas>
-                        </div>
-
+<!-- 
                         <div style="display: block">
                             <canvas baseChart
                                     [datasets]="radarChartData"
@@ -104,7 +108,7 @@
                                         [data]="doughnutChartData"
                                         [labels]="doughnutChartLabels"
                                         [chartType]="doughnutChartType"></canvas>
-                        </div>
+                        </div> -->
 
 
                     </div>

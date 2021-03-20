@@ -7,8 +7,8 @@ import { searchDto } from '@group8/api-interfaces';
 export class MoviesService {
   constructor(private http:HttpClient) {}
 
-  api_domain = "http://d5b3a4702c51.ngrok.io/api/movies";
-  // api_domain = "http://localhost:3333/api/movies";
+  // api_domain = "http://d5b3a4702c51.ngrok.io/api/movies";
+  api_domain = "http://localhost:3333/api/movies";
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
