@@ -63,6 +63,19 @@
                         </div>
 
                         <div>
+                            <h5 class="movie-title">Tag Data</h5>
+                            <ul><li><strong>Tags:</strong><span *ngFor="let tag of this.movie.tag_labels">{{tag}} </span></li></ul>
+                            <div style="display: block">
+                              <canvas baseChart
+                                      [datasets]="scatterChartData"
+                                      [labels]="scatterChartLabels"
+                                      [options]="scatterChartOptions"
+                                      [chartType]="scatterChartType">
+                              </canvas>
+                            </div>
+                        </div>
+
+                        <div>
                             <h5 class="movie-title">Activity and Rating Trend</h5>
                             <div style="display: block" class="chart_colors">
                                 <canvas baseChart
@@ -92,18 +105,6 @@
                                       [options]="barChartOptions"
                                       [legend]="barChartLegend"
                                       [chartType]="barChartType">
-                              </canvas>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h5 class="movie-title">Tag Data Net Like and Polarity</h5>
-                            <div style="display: block">
-                              <canvas baseChart
-                                      [datasets]="scatterChartData"
-                                      [labels]="scatterChartLabels"
-                                      [options]="scatterChartOptions"
-                                      [chartType]="scatterChartType">
                               </canvas>
                             </div>
                         </div>
