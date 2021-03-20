@@ -8,34 +8,36 @@ export class MoviesService {
   constructor(private http:HttpClient) {}
 
   // api_domain = "http://d5b3a4702c51.ngrok.io/api/movies";
-  api_domain = "http://localhost:3333/api/movies";
-  audience_api_domain = "http://localhost:3333/api/audience"
+  
+  api_domain = "http://ef6ece8a82bc.ngrok.io/api";
+  audience_api_domain = this.api_domain + "/audience"
+  review_api_domain = this.api_domain + "/movie-report"
+  movies_api_domain = this.api_domain + "/movies"
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
   getMovies() {
-    return this.http.get(this.api_domain + '/movies');
+    return this.http.get(this.movies_api_domain);
   }
 
   getReviews() {
-    return this.http.get(this.api_domain + '/movies');
+    return this.http.get(this.movies_api_domain);
   }
 
   searchMovies(body: searchDto) {
-    const result = this.http.post(this.api_domain + '/search', body, this.httpOptions);
+    const result = this.http.post(this.movies_api_domain + '/search', body, this.httpOptions);
     return result;
   }
 
   getSingleMovie(mid: string) {
-    const result = this.http.get(this.api_domain + '/getMovie?id=' + mid, this.httpOptions);
+    const result = this.http.get(this.movies_api_domain + '/getMovie?id=' + mid, this.httpOptions);
     return result
   }
 
   getMovieReview(mid: string) {
-    const movie_path = "http://localhost:3333/api/movie-report/"
-    const result = this.http.get(movie_path + mid, this.httpOptions);
+    const result = this.http.get(this.review_api_domain + "/" + mid, this.httpOptions);
     return result
   }
 
