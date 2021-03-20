@@ -151,7 +151,7 @@
 
                             <!-- Table -->
 
-                            <div>
+                            <!-- <div>
                                 <p-table>
                                     <ng-template pTemplate="header">
                                         <tr>
@@ -170,18 +170,18 @@
                                         </tr>
                                     </ng-template>
                                 </p-table>
-                            </div>
+                            </div> -->
 
-                            <!-- <table style="width:100%">
+                            <table style="display: block" class="styled-table">
                                 <tr>
                                     <th>Genre Name</th>
                                     <th>User ID</th>
                                 </tr>
-                                <tr *ngFor="let genre of this.cf_piechart_labels">
+                                <tr *ngFor="let genre of this.cf_piechart_labels" class="active-row">
                                     <td> {{genre}} </td>
-                                    <td> {{this.cf_res[genre]}} </td>
+                                    <td class="fitToCell"> {{this.cf_res[genre]}} </td>
                                 </tr>
-                            </table> -->
+                            </table>
 
                         </div>
 
