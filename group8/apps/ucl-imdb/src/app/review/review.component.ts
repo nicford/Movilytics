@@ -13,6 +13,30 @@ import { movieRes } from './movieRes.interface';
 })
 export class ReviewComponent implements OnInit {
 
+
+  tagdataToggle = false
+  activityToggle = false
+  genredistToggle = false
+  genreavgToggle = false
+  polarityToggle = false
+  usersegmentToggle = false
+
+  toggleDict = {
+    'tagdataToggle': false,
+    'activityToggle': false,
+    'genredistToggle': false,
+    'genreavgToggle': false,
+    'polarityToggle': false,
+    'usersegmentToggle': false,
+  }
+
+
+  collapseToggle(elemID: string) {
+    this.toggleDict[elemID] = !this.toggleDict[elemID]
+  }
+
+
+
   movie
   poster
   tag_data
