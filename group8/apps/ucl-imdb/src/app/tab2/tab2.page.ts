@@ -18,28 +18,36 @@ import { MoviesService } from "../services/movies.service";
 })
 export class Tab2Page {
 
-  advanced = false;
+  advanced = false; // determines whether the advancedSearch bar is active
 
+  // tags logic
   tags = ["Animation", "Adventure", "Family", "Comedy", "Fantasy", "Romance", "Drama",
   "Action", "Crime", "Thriller", "Horror", "History", "Science Fiction", "Mystery", "War",
   "Music", "Documentary", "Western", "TV Movie"];
-
   tagsDict = {"Family":10751 , "History": 36, "Fantasy": 14, "Comedy": 35, "Documentary": 99,	"TV Movie": 10770,
   "Science Fiction": 878, "War": 10752, "Music": 10402, "Horror": 27, "Action": 28, "Animation": 16, "Crime": 80,
   "Western": 37, "Thriller": 53, "Mystery": 9648, "Adventure": 12, "Romance": 10749, "Drama": 18}
-  
   tagDefaultColor = Array(this.tags.length).fill("none");
   searchTags: string[] = []
 
-  searchRange = {"lower": 1888, "upper": 2021}
-  defaultRange: any = this.searchRange;
+  // default values for range
+  // searchRange = {"lower": 1888, "upper": 2021}
+  // defaultRange: any = this.searchRange;
   private rangeValues: any = {
     upper: 2021,
     lower: 1888
   }
+  private defaultRange: any = {
+    upper: 2021,
+    lower: 1888
+  }
 
-  movies: movieRes[]
-  offset = 0
+  // default values for sorting and ordering
+  selected_order: string = 'false'
+  selected_sort: string = 'popularity'
+
+  movies: movieRes[] // hold the movies currently on screen
+  offset = 0 // counter for infinite scroll and database  
   
   @ViewChild('content') scrollContent: IonContent;
   @ViewChild("searchBar") searchBar: IonSearchbar;
@@ -50,19 +58,18 @@ export class Tab2Page {
   @ViewChild("filterRating") filterRating: IonSelect;
 
   constructor(private movieService: MoviesService, private imagesService: ImagesService, private router: Router) {
-    // this.rangeValues = this.rangeValues
     this.templateSearch()
-    // console.log('getting movies from frontend');
-    // console.log(this.movieService.getMovies());
   }
 
   ngOnInit() {
   }
 
+  // for the advanced bar to be visible and interactable
   toggleAdvanced() {
     this.advanced = !this.advanced
   }
 
+  // auto search on change of sort/order selects
   selectChange($event) {
     let obs = this.search()
     const $res = obs.subscribe(resData => {
@@ -72,8 +79,6 @@ export class Tab2Page {
     }).unsubscribe
   }
 
-  
-
   searchClear($event) {
     this.searchBar.value = null
   }
@@ -82,6 +87,7 @@ export class Tab2Page {
     if (this.searchBar.value == "") {this.searchClear($event)}
   }
 
+  // the function to be called for searching on the template
   templateSearch() {
     let obs = this.search()
     const $res = obs.subscribe(resData => {
@@ -90,6 +96,7 @@ export class Tab2Page {
     }).unsubscribe
   }
 
+  // the search logi to be called in the component
   search(reset:boolean=true) {
     if (reset) {
       this.offset = 0
@@ -135,6 +142,7 @@ export class Tab2Page {
     return res
   }
 
+  // frontend logic to change the color of selected tags
   changeTagColor(i:number) {
     const tag: string = this.tags[i]  
     const n = this.tags.length
@@ -148,6 +156,15 @@ export class Tab2Page {
     }
   }
 
+  // frontend logic to reset the color of selected tags
+  resetTagColors() {
+    let n = this.tagDefaultColor.length
+    for (let i = 0; i < n; i++) {
+      this.tagDefaultColor[i] = "none"
+    }
+  }
+
+  // routing to review page
   goToReview(mid: string) {
     this.router.navigate(["tabs/tab2/" + mid]);
   }
@@ -162,10 +179,19 @@ export class Tab2Page {
   }
 
   reset() {
-    // this.sortCriteria.selectedText
-    // this.segmentRelease.select
+    this.searchBar.value = undefined
+    this.sortOrder.value = undefined
+    this.sortCriteria.value = undefined
+    this.segmentRelease.value = "Released"
+    this.filterRating.value = undefined
+    this.rangeYear = this.rangeValues
+    this.rangeValues = this.defaultRange
+    this.resetTagColors()
+    this.searchTags = []
+    console.log("RESETTED")
   }
 
+  // infinite scroll 
   loadData($event) {
     this.offset = this.offset + 40
     let obs = this.search(false)
