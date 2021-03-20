@@ -24,6 +24,7 @@ export class MovieReportService {
         const database_results = await Promise.all([result_overview_promise, result_trend_promise, tag_like_dislikes_promise, genre_pop_and_perc_diff_promise]);
         console.log(database_results)
         const overview_result = database_results[0]["rows"][0]
+
         const trend_dicts = database_results[1]["rows"];
         const trend_months = [];
         const trend_ratings = [];
@@ -39,12 +40,36 @@ export class MovieReportService {
             trend_activity.push(activity);
         })
 
+        const tag_dicts = database_results[2]["rows"];
+        const tag_labels = [];
+        const tag_likes = [];
+        const tag_dislikes = [];
+        const tag_scatter = [];
+
+        tag_dicts.forEach((item) => {
+            const label = item.tag;
+            const likes = item.likes;
+            const dislikes = item.dislikes;
+            const polarity = item.polarity;
+            const net_likes = likes - dislikes;
+
+            tag_labels.push(label);
+            tag_dislikes.push(dislikes);
+            tag_likes.push(likes);
+            tag_scatter.push({
+                'x' : net_likes,
+                'y' : polarity
+            });
+        })
+
         overview_result["trend_months"] = trend_months;
         overview_result["trend_activty"] = trend_activity;
         overview_result["trend_ratings"] = trend_ratings;
-        overview_result["tags_likes_dislikes"] = database_results[2]["rows"]
+        overview_result["tag_labels"] = tag_labels;
+        overview_result["tag_likes"] = tag_likes;
+        overview_result["tag_dislikes"] = tag_dislikes;
+        overview_result["tag_scatter"] = tag_scatter;
         overview_result["genre_pop_and_perc_diff"] = database_results[3]["rows"]
-        // console.log(overview_result)
         return overview_result; 
     }
 

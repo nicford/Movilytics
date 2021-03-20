@@ -25,6 +25,8 @@ export class ReviewComponent implements OnInit {
   pieChartData
   barChartLabels
   barChartData
+  scatterChartData
+  scatterChartLabels
   @Input() mid: string
 
   constructor(private movieService: MoviesService, private activatedRouter: ActivatedRoute, private imageService: ImagesService) {
@@ -70,6 +72,7 @@ export class ReviewComponent implements OnInit {
                             genre_details_dict.western_count,
                             genre_details_dict.tv_movie_count
                           ];
+
       this.barChartData = [
         {data: [
                 genre_details_dict.animation_glob_avg, 
@@ -93,9 +96,59 @@ export class ReviewComponent implements OnInit {
                 genre_details_dict.tv_movie_glob_avg
         ], label: 'Percentile Difference'},
       ];
-    }).unsubscribe
 
-    
+      this.scatterChartData = [{data: this.movie.tag_scatter, label: "Tags"}];
+      this.scatterChartLabels = this.movie.tag_labels;
+
+    }).unsubscribe 
+  }
+
+  // Scatter Chart 
+  public scatterChartType = 'scatter';
+  public scatterChartOptions = {
+    type: 'linear',
+    position: 'bottom',
+    responsive: 'true',
+    tooltips: {
+      callbacks: {
+         label: function(tooltipItem, data) {
+            const label = data.labels[tooltipItem.index];
+            return label + ': (' + tooltipItem.xLabel + ', ' + tooltipItem.yLabel + ')';
+         }
+      }
+   },
+   scales: {
+      xAxes: [{
+        gridLines: {
+            zeroLineColor: 'white'
+        },
+        display: true,
+        scaleLabel: {
+            display: true,
+            labelString: 'Net Likes',
+            fontColor: 'white',
+            fontSize:12
+        },
+        ticks: {
+          fontColor: "white"
+        }
+      }],
+      yAxes: [{
+        gridLines: {
+            zeroLineColor: 'white'
+        },
+        display: true,
+        scaleLabel: {
+            display: true,
+            labelString: 'Polarity',
+            fontColor: 'white',
+            fontSize:12
+        },
+        ticks: {
+          fontColor: "white"
+        }
+      }]
+   }
   }
 
   // Bart Chart

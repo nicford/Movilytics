@@ -96,6 +96,18 @@
                             </div>
                         </div>
 
+                        <div>
+                            <h5 class="movie-title">Tag Data Net Like and Polarity</h5>
+                            <div style="display: block">
+                              <canvas baseChart
+                                      [datasets]="scatterChartData"
+                                      [labels]="scatterChartLabels"
+                                      [options]="scatterChartOptions"
+                                      [chartType]="scatterChartType">
+                              </canvas>
+                            </div>
+                        </div>
+
                         <!-- <div style="display: block">
                             <canvas baseChart
                                     [datasets]="radarChartData"
