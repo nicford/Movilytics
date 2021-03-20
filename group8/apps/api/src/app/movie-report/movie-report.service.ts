@@ -1,13 +1,15 @@
 import { CACHE_MANAGER, HttpService, Inject, Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import { CSV_ROW, PREDICTED_RATINGS } from '@group8/api-interfaces'
+import { AudienceService } from '../audience/audience.service';
 
 @Injectable()
 export class MovieReportService {
 
     constructor(private databaseService: DatabaseService,
                 @Inject(CACHE_MANAGER) private cache: Cache,
-                private httpService: HttpService) {}
+                private httpService: HttpService,
+                private audienceService: AudienceService) {}
 
 
     async createMovieReport(movie_id: number) {
@@ -16,9 +18,10 @@ export class MovieReportService {
         const sql_query_tag_like_dislikes = "SELECT * FROM get_tag_likes_dislikes($1)";
         const result_overview_promise = this.databaseService.runQuery(sql_query_overview, [movie_id]);
         const result_trend_promise = this.databaseService.runQuery(sql_query_trend, [movie_id]);
-        const tag_like_dislikes_promise = this.databaseService.runQuery(sql_query_tag_like_dislikes, [movie_id])
+        const tag_like_dislikes_promise = this.databaseService.runQuery(sql_query_tag_like_dislikes, [movie_id]);
+        const genre_pop_and_perc_diff_promise = this.audienceService.getGenrePopulationAndPercentileDiff(movie_id);
 
-        const database_results = await Promise.all([result_overview_promise, result_trend_promise, tag_like_dislikes_promise]);
+        const database_results = await Promise.all([result_overview_promise, result_trend_promise, tag_like_dislikes_promise, genre_pop_and_perc_diff_promise]);
         console.log(database_results)
         const overview_result = database_results[0]["rows"][0]
         const trend_dicts = database_results[1]["rows"];
@@ -40,6 +43,7 @@ export class MovieReportService {
         overview_result["trend_activty"] = trend_activity;
         overview_result["trend_ratings"] = trend_ratings;
         overview_result["tags_likes_dislikes"] = database_results[2]["rows"]
+        overview_result["genre_pop_and_perc_diff"] = database_results[3]["rows"]
         // console.log(overview_result)
         return overview_result; 
     }

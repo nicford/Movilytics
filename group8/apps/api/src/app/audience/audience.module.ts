@@ -7,6 +7,7 @@ import { DatabaseModule } from '../database/database.module';
 @Module({
   imports: [DatabaseModule],
   providers: [AudienceService],
-  controllers: [AudienceController]
+  controllers: [AudienceController],
+  exports: [AudienceService]
 })
 export class AudienceModule {}
