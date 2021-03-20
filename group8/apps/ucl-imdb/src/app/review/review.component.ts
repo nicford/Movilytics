@@ -4,7 +4,7 @@ import * as Chart from 'chart.js';
 import { ImagesService } from '../services/images.service';
 import { MoviesService } from '../services/movies.service';
 import { movieRes } from './movieRes.interface';
-
+import {TableModule} from 'primeng/table';
 
 @Component({
   selector: 'group8-review',

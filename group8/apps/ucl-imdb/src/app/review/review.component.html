@@ -35,9 +35,12 @@
                                     <li><strong>Popularity:</strong> {{this.movie.popularity}}</li>
                                     <li><strong>Average Rating:</strong> {{this.movie.avg_rating}}</li>
                                     <li><strong>Adult:</strong> {{this.movie.adult}}</li>
-                                    <li><strong>Language:</strong> <span *ngFor="let language of this.movie.language_list">{{language}} </span></li>
-                                    <li><strong>Countries:</strong> <span *ngFor="let country of this.movie.country_list">{{country}} </span></li>
-                                    <li><strong>Genres:</strong> <span *ngFor="let genre of this.movie.genre_list">{{genre}} </span></li>
+                                    <li><strong>Language:</strong> <span
+                                            *ngFor="let language of this.movie.language_list">{{language}} </span></li>
+                                    <li><strong>Countries:</strong> <span
+                                            *ngFor="let country of this.movie.country_list">{{country}} </span></li>
+                                    <li><strong>Genres:</strong> <span
+                                            *ngFor="let genre of this.movie.genre_list">{{genre}} </span></li>
                                     <li>
                                         <strong>Summary:</strong>
                                         <div class="entry-content">
@@ -48,7 +51,8 @@
 
                                 <ul class="starring">
                                     <li><strong>Directors:</strong> Kirk de Mico (as Kirk DeMico). Chris Sanders</li>
-                                    <li><strong>Writers:</strong> Chris Sanders (screenplay), Kirk De Micco (screenplay)</li>
+                                    <li><strong>Writers:</strong> Chris Sanders (screenplay), Kirk De Micco (screenplay)
+                                    </li>
                                     <li><strong>Stars:</strong> Nicolas Cage, Ryan Reynolds, Emma Stone</li>
                                 </ul>
                             </div>
@@ -64,7 +68,8 @@
                             </div>
                             <div class="graph-title">
                                 <h5 class="movie-title">Tag Data and Activity/ Rating Trend</h5>
-                                <ion-button #tagdataToggle style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('tagdataToggle')">
+                                <ion-button #tagdataToggle style="margin-right: 0; margin-left: auto;"
+                                    (click)="collapseToggle('tagdataToggle')">
                                     <ion-icon name="chevron-down-outline" icon-only></ion-icon>
                                 </ion-button>
                             </div>
@@ -72,16 +77,20 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <ul>
-                                            <li><strong>Tags:</strong><span *ngFor="let tag of this.movie.tag_labels">{{tag}} </span></li>
+                                            <li><strong>Tags:</strong><span
+                                                    *ngFor="let tag of this.movie.tag_labels">{{tag}} </span></li>
                                         </ul>
                                         <div style="display: block">
-                                            <canvas baseChart [datasets]="scatterChartData" [labels]="scatterChartLabels" [options]="scatterChartOptions" [chartType]="scatterChartType">
-                                        </canvas>
+                                            <canvas baseChart [datasets]="scatterChartData"
+                                                [labels]="scatterChartLabels" [options]="scatterChartOptions"
+                                                [chartType]="scatterChartType">
+                                            </canvas>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div style="display: block" class="chart_colors">
-                                            <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [chartType]="lineChartType"></canvas>
+                                            <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels"
+                                                [options]="lineChartOptions" [chartType]="lineChartType"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -89,28 +98,33 @@
 
                             <div class="graph-title">
                                 <h5 class="movie-title">Viewer's Genre Average Percentile Difference</h5>
-                                <ion-button #genreavgToggle style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('genreavgToggle')">
+                                <ion-button #genreavgToggle style="margin-right: 0; margin-left: auto;"
+                                    (click)="collapseToggle('genreavgToggle')">
                                     <ion-icon name="chevron-down-outline" icon-only></ion-icon>
                                 </ion-button>
                             </div>
                             <div class="graph-container" *ngIf="this.toggleDict['genreavgToggle']">
-                                
+
                                 <div style="display: block">
-                                    <canvas baseChart [datasets]="barChartData" [labels]="pieChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType">
-                                </canvas>
+                                    <canvas baseChart [datasets]="barChartData" [labels]="pieChartLabels"
+                                        [options]="barChartOptions" [legend]="barChartLegend"
+                                        [chartType]="barChartType">
+                                    </canvas>
                                 </div>
                             </div>
 
                             <div class="graph-title">
                                 <h5 class="movie-title">Viewer's Genre Distribution</h5>
-                                <ion-button #genredistToggle style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('genredistToggle')">
+                                <ion-button #genredistToggle style="margin-right: 0; margin-left: auto;"
+                                    (click)="collapseToggle('genredistToggle')">
                                     <ion-icon name="chevron-down-outline" icon-only></ion-icon>
                                 </ion-button>
                             </div>
                             <div class="graph-container" *ngIf="this.toggleDict['genredistToggle']">
 
                                 <div style="display: block">
-                                    <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType"></canvas>
+                                    <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels"
+                                        [chartType]="pieChartType"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -121,15 +135,54 @@
 
                         <div class="graph-title">
                             <h5 class="movie-title">User Segmentation by Collaborative Filtering</h5>
-                            <ion-button #usersegmentButton style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('usersegmentButton')">
+                            <ion-button #usersegmentButton style="margin-right: 0; margin-left: auto;"
+                                (click)="collapseToggle('usersegmentButton')">
                                 <ion-icon name="chevron-down-outline" icon-only></ion-icon>
                             </ion-button>
                         </div>
                         <div class="graph-container" *ngIf="this.toggleDict['usersegmentButton']">
 
                             <div style="display: block">
-                                <canvas baseChart [data]="cf_piechart_data" [labels]="cf_piechart_labels" [chartType]="pieChartType"></canvas>
+                                <canvas baseChart [data]="cf_piechart_data" [labels]="cf_piechart_labels"
+                                    [chartType]="pieChartType"></canvas>
                             </div>
+
+                            <br>
+
+                            <!-- Table -->
+
+                            <div>
+                                <p-table>
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th>Genre_name</th>
+                                            <th>User ID</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body">
+                                        <tr *ngFor="let genre of this.cf_piechart_labels">
+                                            <td>
+                                                {{genre}}
+                                            </td>
+                                            <td>
+                                                {{this.cf_res[genre]}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+
+                            <!-- <table style="width:100%">
+                                <tr>
+                                    <th>Genre Name</th>
+                                    <th>User ID</th>
+                                </tr>
+                                <tr *ngFor="let genre of this.cf_piechart_labels">
+                                    <td> {{genre}} </td>
+                                    <td> {{this.cf_res[genre]}} </td>
+                                </tr>
+                            </table> -->
+
                         </div>
 
                         <!-- <div style="display: block">
