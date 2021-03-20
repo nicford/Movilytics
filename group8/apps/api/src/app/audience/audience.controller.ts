@@ -8,7 +8,7 @@ export class AudienceController {
 
     constructor(private audienceService: AudienceService) {}
 
-    // localhost:3333/api/audience/segmentUsersByGenre?id=
+    // localhost:3333/api/audience/segmentUsersByGenre?id=862
     @Get('segmentUsersByGenre')
     async segmentUsersByGenre(@Query('id') movie_id: number){
         const result = await this.audienceService.getSegmentationByGenre(movie_id);

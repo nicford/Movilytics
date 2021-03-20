@@ -27,13 +27,18 @@ export class ReviewComponent implements OnInit {
   barChartData
   scatterChartData
   scatterChartLabels
+  cf_res
+  cf_piechart_labels
+  cf_piechart_data
   @Input() mid: string
 
   constructor(private movieService: MoviesService, private activatedRouter: ActivatedRoute, private imageService: ImagesService) {
     this.mid=this.activatedRouter.snapshot.paramMap.get("reviewID");
     console.log(this.mid)
-    const res = this.movieService.getMovieReview(this.mid)
-    const $res = res.subscribe(resData => {
+
+    // REVIEW
+    const review_res = this.movieService.getMovieReview(this.mid)
+    const $res = review_res.subscribe(resData => {
       this.movie = resData
       this.poster = this.getImage(this.movie.poster_path)
       this.lineChartType = 'line';
@@ -100,7 +105,16 @@ export class ReviewComponent implements OnInit {
       this.scatterChartData = [{data: this.movie.tag_scatter, label: "Tags"}];
       this.scatterChartLabels = this.movie.tag_labels;
 
-    }).unsubscribe 
+    }).unsubscribe;
+
+    // AUDIENCE
+    const audience_seg_res = this.movieService.getAudienceSeg(this.mid)
+    const $cf_result = audience_seg_res.subscribe(cf_resData => {
+      this.cf_res = cf_resData;
+      this.cf_piechart_labels = this.cf_res.metadata.genres_array;
+      this.cf_piechart_data = this.cf_res.metadata.length_of_each_genre;
+
+    }).unsubscribe;
   }
 
   // Scatter Chart 
@@ -151,7 +165,7 @@ export class ReviewComponent implements OnInit {
    }
   }
 
-  // Bart Chart
+  // Bar Chart
   public barChartOptions = {
     scaleShowVerticalLines: false,
     responsive: true

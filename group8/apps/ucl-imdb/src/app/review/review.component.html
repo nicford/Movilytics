@@ -108,6 +108,16 @@
                             </div>
                         </div>
 
+                        <div>
+                            <h5 class="movie-title">User Segmentation by Collaborative Filtering</h5>
+                            <div style="display: block">
+                                <canvas baseChart
+                                        [data]="cf_piechart_data"
+                                        [labels]="cf_piechart_labels"
+                                        [chartType]="pieChartType"></canvas>
+                            </div>
+                        </div>
+
                         <!-- <div style="display: block">
                             <canvas baseChart
                                     [datasets]="radarChartData"

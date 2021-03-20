@@ -9,6 +9,7 @@ export class MoviesService {
 
   // api_domain = "http://d5b3a4702c51.ngrok.io/api/movies";
   api_domain = "http://localhost:3333/api/movies";
+  audience_api_domain = "http://localhost:3333/api/audience"
 
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -37,4 +38,11 @@ export class MoviesService {
     const result = this.http.get(movie_path + mid, this.httpOptions);
     return result
   }
+
+  // TODO: incorporate audience either in movies or movie-report and remove audience controller
+  getAudienceSeg(mid: string){
+    const result = this.http.get(this.audience_api_domain + '/segmentUsersByGenre?id=' + mid, this.httpOptions);
+    return result;
+  }
+
 }

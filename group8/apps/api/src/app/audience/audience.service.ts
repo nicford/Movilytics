@@ -9,7 +9,12 @@ const fs = require('fs');
 export class AudienceService {
 
     constructor(private databaseService: DatabaseService) {}
-
+    
+    /**
+     * 
+     * @param movie_id 
+     * @returns segmented user_ids by genre
+     */
     async getSegmentationByGenre(movie_id: number) {
         
         const genre_info_query = `select genre_name, genre_avg_rating from genre_info as gi, \
@@ -17,10 +22,25 @@ export class AudienceService {
                                         where mid=${movie_id}) as temp\
                                     where temp.genre_id = gi.genre_id`;
         const genre_rating_response = await this.databaseService.runQuery(genre_info_query, []);
+        const howmany_genre = genre_rating_response.rows.length;
         
-        if (genre_rating_response.rows.length === 1){
+        // if a movie has less than 2 genres, segment users considering all genres
+        if (howmany_genre < 2) {
+            console.log(`Movie has ${howmany_genre} genre`);
             let seg_data = fs.readFileSync('apps/api/src/app/audience_json_dump/segmentation.json');
             let parsed = JSON.parse(seg_data);
+            // const temp_genre_array = Object.keys(parsed);
+            // const length_of_each_genre = []
+            // temp_genre_array.forEach((genre)=>{
+            //     length_of_each_genre.push(parsed[genre].length);
+            // })
+
+            // // add metadata: number of genre a movie has
+            // parsed['metadata'] = {
+            //     'howmany_genre': howmany_genre,
+            //     'genres_array': temp_genre_array,
+            //     'length_of_each_genre': length_of_each_genre
+            // }
             return parsed;
         }
         ///////////////////////
@@ -51,8 +71,8 @@ export class AudienceService {
         })
 
         // Get columns to select from user_genre_mapping
-        const columns_array = Object.keys(genre_avg_rating_dict);
-        const columns_for_query = columns_array.join(','); // animation,family
+        const genres_array = Object.keys(genre_avg_rating_dict);
+        const columns_for_query = genres_array.join(','); // animation,family
         console.log(columns_for_query);
         
         const user_genre_query = 'SELECT ' + columns_for_query + ' FROM user_genre_mapping'
@@ -101,7 +121,7 @@ export class AudienceService {
         /////////////////////////////////////////////////////////
         // Order of this segmentation dict is important
         const segmentation = {}
-        columns_array.forEach((item) => {
+        genres_array.forEach((item) => {
             segmentation[item] = []
         })
         console.log(segmentation) // { animation: [], family: [] }
@@ -139,12 +159,28 @@ export class AudienceService {
                 }
             }
         }
+
+        const length_of_each_genre = []
+        genres_array.forEach((genre)=>{
+            length_of_each_genre.push(segmentation[genre].length)
+        })
+
+        // add metadata: number of genre a movie has
+        segmentation['metadata'] = {
+            'howmany_genre': howmany_genre,
+            'genres_array': genres_array,
+            'length_of_each_genre': length_of_each_genre
+        }
         console.log(segmentation)
 
         return segmentation;
     }
 
-
+    /**
+     * 
+     * @param movie_id 
+     * @returns 
+     */
     async getGenrePopulationAndPercentileDiff(movie_id: number) {
         const genre_population_query = `SELECT * FROM get_genre_population_avg_diff(${movie_id})`;
 
