@@ -57,60 +57,66 @@
 
 
                         <!-- Charts -->
-                        <div>
-                            <h4 class="movie-title">Like Dislike Ratio</h4>
+                        <div *ngIf="this.movie.status == 'Released'">
+                            <div>
+                                <h4 class="movie-title">Like Dislike Ratio</h4>
 
-                        </div>
-                        <div class="graph-title">
-                            <h5 class="movie-title">Tag Data and Activity/ Rating Trend</h5>
-                            <ion-button #tagdataToggle style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('tagdataToggle')">
-                                <ion-icon name="chevron-down-outline" icon-only></ion-icon>
-                            </ion-button>
-                        </div>
-                        <div class="graph-container" *ngIf="this.toggleDict['tagdataToggle']">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <ul>
-                                        <li><strong>Tags:</strong><span *ngFor="let tag of this.movie.tag_labels">{{tag}} </span></li>
-                                    </ul>
-                                    <div style="display: block">
-                                        <canvas baseChart [datasets]="scatterChartData" [labels]="scatterChartLabels" [options]="scatterChartOptions" [chartType]="scatterChartType">
-                                    </canvas>
+                            </div>
+                            <div class="graph-title">
+                                <h5 class="movie-title">Tag Data and Activity/ Rating Trend</h5>
+                                <ion-button #tagdataToggle style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('tagdataToggle')">
+                                    <ion-icon name="chevron-down-outline" icon-only></ion-icon>
+                                </ion-button>
+                            </div>
+                            <div class="graph-container" *ngIf="this.toggleDict['tagdataToggle']">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul>
+                                            <li><strong>Tags:</strong><span *ngFor="let tag of this.movie.tag_labels">{{tag}} </span></li>
+                                        </ul>
+                                        <div style="display: block">
+                                            <canvas baseChart [datasets]="scatterChartData" [labels]="scatterChartLabels" [options]="scatterChartOptions" [chartType]="scatterChartType">
+                                        </canvas>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div style="display: block" class="chart_colors">
+                                            <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [chartType]="lineChartType"></canvas>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div style="display: block" class="chart_colors">
-                                        <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [chartType]="lineChartType"></canvas>
-                                    </div>
+                            </div>
+
+                            <div class="graph-title">
+                                <h5 class="movie-title">Viewer's Genre Average Percentile Difference</h5>
+                                <ion-button #genreavgToggle style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('genreavgToggle')">
+                                    <ion-icon name="chevron-down-outline" icon-only></ion-icon>
+                                </ion-button>
+                            </div>
+                            <div class="graph-container" *ngIf="this.toggleDict['genreavgToggle']">
+                                
+                                <div style="display: block">
+                                    <canvas baseChart [datasets]="barChartData" [labels]="pieChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType">
+                                </canvas>
+                                </div>
+                            </div>
+
+                            <div class="graph-title">
+                                <h5 class="movie-title">Viewer's Genre Distribution</h5>
+                                <ion-button #genredistToggle style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('genredistToggle')">
+                                    <ion-icon name="chevron-down-outline" icon-only></ion-icon>
+                                </ion-button>
+                            </div>
+                            <div class="graph-container" *ngIf="this.toggleDict['genredistToggle']">
+
+                                <div style="display: block">
+                                    <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType"></canvas>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="graph-title">
-                            <h5 class="movie-title">Viewer's Genre Average Percentile Difference</h5>
-                            <ion-button #genreavgToggle style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('genreavgToggle')">
-                                <ion-icon name="chevron-down-outline" icon-only></ion-icon>
-                            </ion-button>
-                        </div>
-                        <div class="graph-container" *ngIf="this.toggleDict['genreavgToggle']">
-                            
-                            <div style="display: block">
-                                <canvas baseChart [datasets]="barChartData" [labels]="pieChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType">
-                              </canvas>
-                            </div>
-                        </div>
-
-                        <div class="graph-title">
-                            <h5 class="movie-title">Viewer's Genre Distribution</h5>
-                            <ion-button #genredistToggle style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('genredistToggle')">
-                                <ion-icon name="chevron-down-outline" icon-only></ion-icon>
-                            </ion-button>
-                        </div>
-                        <div class="graph-container" *ngIf="this.toggleDict['genredistToggle']">
-
-                            <div style="display: block">
-                                <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType"></canvas>
-                            </div>
+                        <div *ngIf="this.movie.status == 'Upcoming'">
+                            <group8-file-upload requiredFileType="text/csv"></group8-file-upload>
                         </div>
 
                         <div class="graph-title">

@@ -65,13 +65,14 @@ export class ReviewComponent implements OnInit {
     const $res = review_res.subscribe(resData => {
       this.movie = resData
       this.poster = this.getImage(this.movie.poster_path)
+      
       this.lineChartType = 'line';
 
       this.lineChartData = [
         {data: this.movie.trend_activty, label: "Activity"}, 
         {data: this.movie.trend_ratings, label: "Ratings"}
       ];
-
+      
       this.lineChartLabels = this.movie.trend_months
       this.lineChartOptions = {
         scaleShowVerticalLines: false,
