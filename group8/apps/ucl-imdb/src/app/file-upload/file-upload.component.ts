@@ -18,7 +18,7 @@ export class FileUploadComponent {
     endpoint:string;
 
     fileName = '';
-    uploadProgress:number;
+    uploadProgress: number;
     uploadSub: Subscription;
     resData
 
@@ -41,7 +41,7 @@ export class FileUploadComponent {
             .pipe(
                 finalize(() => this.reset())
             );
-          try {
+
             this.uploadSub = upload$.subscribe(event => {
               if (event.type == HttpEventType.UploadProgress) {
                 this.uploadProgress = Math.round(100 * (event.loaded / event.total));
@@ -51,16 +51,17 @@ export class FileUploadComponent {
                 // if (typeof event !== 'undefined' && event) {
                 //   console.log(event["headers"].status);
                 // }
-                // this.presentAlert()
+                // 
                 
                 this.resData = event
                 console.log(this.resData)
               }
               
+            },
+            (error) => {
+              this.presentAlert();
+              console.log("eeeeerrrrooorrrr");
             })
-          } catch (error) {
-            console.log("eeeeerrrrooorrrr")
-          }
         }
     }
 
@@ -70,6 +71,7 @@ export class FileUploadComponent {
   }
 
   reset() {
+    console.log("reset");
     this.uploadProgress = null;
     this.uploadSub = null;
   }
