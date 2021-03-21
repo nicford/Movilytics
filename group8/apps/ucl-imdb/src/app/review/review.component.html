@@ -7,11 +7,6 @@
             <div class="container">
                 <div class="page">
                     <div class="content" *ngIf="this.poster">
-                        <!-- <div class="row">
-                                <div class="col-md-6">
-                
-                                </div>
-                            </div> -->
                         <ion-buttons slot="start">
                             <ion-back-button animated text="Back" defaultHref="/tabs/tab2"></ion-back-button>
                         </ion-buttons>
@@ -21,22 +16,29 @@
                             </div>
                             <div class="col-md-6">
                                 <h2 class="movie-title">{{this.movie.title}}</h2>
+                                <div class="like-bar">
+                                    <div id="all">
+                                        <div id="bar tooltip">
+                                            <div class="likes" [style.width]="this.getBarWidth(this.movie.likes, this.totalLikes) + '%'">
+                                            </div>
+                                            <div class="dislikes" [style.width]="this.getBarWidth(this.movie.dislikes, this.totalLikes) + '%'">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="movie-summary">
                                     <h3>{{this.movie.tagline}}</h3>
-
-
                                 </div>
+
                                 <ul class="movie-meta">
                                     <li><strong>Length:</strong> {{this.movie.runtime}} min</li>
                                     <li><strong>Premiere:</strong> {{this.movie.released_year}}</li>
                                     <li><strong>Adult:</strong> {{this.movie.adult}}</li>
-                                    <li><strong>Language:</strong> <span
-                                            *ngFor="let language of this.movie.language_list">{{language}} </span></li>
-                                    <li><strong>Countries:</strong> <span
-                                            *ngFor="let country of this.movie.country_list">{{country}} </span></li>
-                                    <li><strong>Genres:</strong> <span
-                                            *ngFor="let genre of this.movie.genre_list">{{genre}} </span></li>
-                                    <li><strong>Translation:</strong> 
+                                    <li><strong>Language:</strong> <span *ngFor="let language of this.movie.language_list">{{language}} </span></li>
+                                    <li><strong>Countries:</strong> <span *ngFor="let country of this.movie.country_list">{{country}} </span></li>
+                                    <li><strong>Genres:</strong> <span *ngFor="let genre of this.movie.genre_list">{{genre}} </span></li>
+                                    <li><strong>Translation:</strong>
                                         <div class="entry-content">
                                             <span *ngFor="let translation of this.movie.translation_list">{{translation}} </span>
                                         </div>
@@ -61,44 +63,103 @@
 
 
                         <!-- Charts -->
+
                         <div *ngIf="this.movie.status == 'Released'">
-                            <div class = "row">
-                                <div style="display: block" class ="col-md-4">
-                                    <canvas baseChart
-                                                [datasets]="revChartData"
-                                                [labels]="revChartLabels"
-                                                [chartType]="doughnutChartType"
-                                                [plugins]="doughnutChartPlugins"
-                                                [options]="revChartOptions">
+                            <div class="row">
+                                <div style="display: block" class="col-md-4">
+                                    <canvas baseChart [datasets]="revChartData" [labels]="revChartLabels" [chartType]="doughnutChartType" [plugins]="doughnutChartPlugins" [options]="revChartOptions">
                                     </canvas>
                                 </div>
-                                <div style="display: block" class ="col-md-4">
-                                    <canvas baseChart
-                                                [datasets]="popularityChartData"
-                                                [labels]="popularityChartLabel"
-                                                [chartType]="doughnutChartType"
-                                                [plugins]="popularityAverageChart"
-                                                [options]="popularityChartOptions">
+                                <div style="display: block" class="col-md-4">
+                                    <canvas baseChart [datasets]="popularityChartData" [labels]="popularityChartLabel" [chartType]="doughnutChartType" [plugins]="popularityAverageChart" [options]="popularityChartOptions">
                                     </canvas>
                                 </div>
-                                <div style="display: block" class ="col-md-4">
-                                    <canvas baseChart
-                                                [datasets]="voteChartData"
-                                                [labels]="voteChartLabel"
-                                                [chartType]="doughnutChartType"
-                                                [plugins]="voteAverageChart"
-                                                [options]="voteChartOptions"></canvas>
+                                <div style="display: block" class="col-md-4">
+                                    <canvas baseChart [datasets]="voteChartData" [labels]="voteChartLabel" [chartType]="doughnutChartType" [plugins]="voteAverageChart" [options]="voteChartOptions"></canvas>
                                 </div>
                             </div>
 
-                            <div>
-                                <h4 class="movie-title">Like Dislike Ratio</h4>
-
+                            <div class="graph-title">
+                                <h5 class="movie-title">Ratings and Likes Ratio</h5>
                             </div>
+
+                            <div class="rating-bars">
+                                <div style="display: flex;">
+                                    <div class="side">
+                                        <div>5 star</div>
+                                    </div>
+                                    <div class="middle">
+                                        <div class="bar-container ">
+                                            <div class="bar-5" [style.width]="this.getBarWidth(this.movie.five_star, this.totalStars) + '%'"></div>
+                                        </div>
+                                    </div>
+                                    <span class="rating-text">{{this.movie.five_star}} votes</span>
+
+                                </div>
+                                <div style="display: flex;">
+                                    <div class="side">
+                                        <div>4 star</div>
+                                    </div>
+                                    <div class="middle">
+                                        <div class="bar-container ">
+                                            <div class="bar-4" [style.width]="this.getBarWidth(this.movie.four_star, this.totalStars) + '%'"></div>
+                                        </div>
+                                    </div>
+                                    <span class="rating-text">{{this.movie.four_star}} votes</span>
+
+                                </div>
+                                <div style="display: flex;">
+                                    <div class="side">
+                                        <div>3 star</div>
+                                    </div>
+                                    <div class="middle">
+                                        <div class="bar-container ">
+                                            <div class="bar-3" [style.width]="this.getBarWidth(this.movie.three_star, this.totalStars) + '%'"></div>
+                                        </div>
+                                    </div>
+                                    <span class="rating-text">{{this.movie.three_star}} votes</span>
+
+                                </div>
+                                <div style="display: flex;">
+                                    <div class="side">
+                                        <div>2 star</div>
+                                    </div>
+                                    <div class="middle">
+                                        <div class="bar-container ">
+                                            <div class="bar-2" [style.width]="this.getBarWidth(this.movie.two_star, this.totalStars) + '%'"></div>
+                                        </div>
+                                    </div>
+                                    <span class="rating-text">{{this.movie.two_star}} votes</span>
+
+                                </div>
+                                <div style="display: flex;">
+                                    <div class="side">
+                                        <div>1 star</div>
+                                    </div>
+                                    <div class="middle">
+                                        <div class="bar-container ">
+                                            <div class="bar-1" [style.width]="this.getBarWidth(this.movie.one_star, this.totalStars) + '%'"></div>
+                                        </div>
+                                    </div>
+                                    <span class="rating-text">{{this.movie.one_star}} votes</span>
+                                </div>
+                                <div style="display: flex;">
+                                    <div class="side">
+                                        <div>Avg.</div>
+                                    </div>
+                                    <div class="middle">
+                                        <div class="bar-container ">
+                                            <div class="bar-avg" [style.width]="this.convertString(this.movie.avg_rating)*10 + '%'"></div>
+                                        </div>
+                                    </div>
+                                    <span class="rating-text">{{this.movie.avg_rating}}</span>
+                                </div>
+                            </div>
+                            <div class="seperator"></div>
+
                             <div class="graph-title">
                                 <h5 class="movie-title">Tag Data and Activity/ Rating Trend</h5>
-                                <ion-button #tagdataToggle style="margin-right: 0; margin-left: auto;"
-                                    (click)="collapseToggle('tagdataToggle')">
+                                <ion-button #tagdataToggle style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('tagdataToggle')">
                                     <ion-icon name="chevron-down-outline" icon-only></ion-icon>
                                 </ion-button>
                             </div>
@@ -106,104 +167,77 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <ul>
-                                            <li><strong>Tags:</strong><span
-                                                    *ngFor="let tag of this.movie.tag_labels">{{tag}} </span></li>
+                                            <li><strong>Tags:</strong><span *ngFor="let tag of this.movie.tag_labels">{{tag}} </span></li>
                                         </ul>
                                         <div style="display: block">
-                                            <canvas baseChart [datasets]="scatterChartData"
-                                                [labels]="scatterChartLabels" [options]="scatterChartOptions"
-                                                [chartType]="scatterChartType">
+                                            <canvas baseChart [datasets]="scatterChartData" [labels]="scatterChartLabels" [options]="scatterChartOptions" [chartType]="scatterChartType">
                                             </canvas>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div style="display: block" class="chart_colors">
-                                            <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels"
-                                                [options]="lineChartOptions" [chartType]="lineChartType"></canvas>
+                                            <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [chartType]="lineChartType"></canvas>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
+                            <div class="seperator"></div>
                             <div class="graph-title">
                                 <h5 class="movie-title">Viewer's Genre Average Percentile Difference</h5>
-                                <ion-button #genreavgToggle style="margin-right: 0; margin-left: auto;"
-                                    (click)="collapseToggle('genreavgToggle')">
+                                <ion-button #genreavgToggle style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('genreavgToggle')">
                                     <ion-icon name="chevron-down-outline" icon-only></ion-icon>
                                 </ion-button>
                             </div>
                             <div class="graph-container" *ngIf="this.toggleDict['genreavgToggle']">
 
                                 <div style="display: block">
-                                    <canvas baseChart [datasets]="barChartData" [labels]="pieChartLabels"
-                                        [options]="barChartOptions" [legend]="barChartLegend"
-                                        [chartType]="barChartType">
+                                    <canvas baseChart [datasets]="barChartData" [labels]="pieChartLabels" [options]="barChartOptions" [legend]="barChartLegend" [chartType]="barChartType">
                                     </canvas>
                                 </div>
                             </div>
+                            <div class="seperator"></div>
 
                             <div class="graph-title">
                                 <h5 class="movie-title">Viewer's Genre Distribution</h5>
-                                <ion-button #genredistToggle style="margin-right: 0; margin-left: auto;"
-                                    (click)="collapseToggle('genredistToggle')">
+                                <ion-button #genredistToggle style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('genredistToggle')">
                                     <ion-icon name="chevron-down-outline" icon-only></ion-icon>
                                 </ion-button>
                             </div>
-                            <div class="graph-container" *ngIf="this.toggleDict['genredistToggle']">
-
-                                <div style="display: block">
-                                    <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels"
-                                        [chartType]="pieChartType"></canvas>
-                                </div>
-                            </div>
                         </div>
-
-                        <div *ngIf="this.movie.status == 'Upcoming'">
-                            <group8-file-upload requiredFileType="text/csv"></group8-file-upload>
-                        </div>
-
-                        <div class="graph-title">
-                            <h5 class="movie-title">User Segmentation by Collaborative Filtering</h5>
-                            <ion-button #usersegmentButton style="margin-right: 0; margin-left: auto;"
-                                (click)="collapseToggle('usersegmentButton'); this.getCF()">
-                                <ion-icon name="chevron-down-outline" icon-only></ion-icon>
-                            </ion-button>
-                        </div>
-                        <div class="graph-container" *ngIf="this.toggleDict['usersegmentButton']">
+                        <div class="graph-container" *ngIf="this.toggleDict['genredistToggle']">
 
                             <div style="display: block">
-                                <canvas baseChart [data]="cf_piechart_data" [labels]="cf_piechart_labels"
-                                    [chartType]="pieChartType" [options]="pieChartOptions"></canvas>
+                                <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType" [options]="genreDistributionChartOptions"></canvas>
                             </div>
-                            <br>
                         </div>
-
-                        <!-- <div style="display: block">
-                            <canvas baseChart
-                                    [datasets]="radarChartData"
-                                    [labels]="radarChartLabels"
-                                    [chartType]="radarChartType"></canvas>
-                        </div>
-
-                        <div style="display: block">
-                            <canvas baseChart
-                                        [data]="doughnutChartData"
-                                        [labels]="doughnutChartLabels"
-                                        [chartType]="doughnutChartType"></canvas>
-                        </div> -->
 
                     </div>
                 </div>
+
+                <div *ngIf="this.movie?.status == 'Upcoming'">
+                    <group8-file-upload requiredFileType="text/csv"></group8-file-upload>
+                </div>
+
+                <div class="seperator"></div>
+
+                <div class="graph-title">
+                    <h5 class="movie-title">User Segmentation by Collaborative Filtering</h5>
+                    <ion-button #usersegmentButton style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('genreavgToggle')">
+                        <ion-icon name="chevron-down-outline" icon-only></ion-icon>
+                    </ion-button>
+                </div>
+                <div class="graph-container" *ngIf="this.toggleDict['usersegmentButton']">
+
+                    <div style="display: block">
+                        <canvas baseChart [data]="cf_piechart_data" [labels]="cf_piechart_labels" [chartType]="pieChartType" [options]="cfChartOptions"></canvas>
+                    </div>
+                    <br>
+                </div>
+
+
             </div>
-            <!-- .container -->
         </main>
     </div>
-    <!-- Default snippet for navigation -->
 
-
-
-    <!-- <script src="js/jquery-1.11.1.min.js"></script>
-        <script src="js/plugins.js"></script>
-        <script src="js/app.js"></script> -->
 
 </ion-content>
