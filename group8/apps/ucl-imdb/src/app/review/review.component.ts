@@ -57,7 +57,7 @@ export class ReviewComponent implements OnInit {
   cf_res
   cf_piechart_labels
   cf_piechart_data
-  pieChartOptions
+  cfChartOptions
   @Input() mid: string
 
   constructor(private movieService: MoviesService, private activatedRouter: ActivatedRoute, private imageService: ImagesService) {
@@ -92,7 +92,12 @@ export class ReviewComponent implements OnInit {
       this.lineChartLabels = this.movie.trend_months
       this.lineChartOptions = {
         scaleShowVerticalLines: false,
-        responsive: true
+        responsive: true,
+        title: {
+          display: true,
+          text: 'Activity and Rating Trend',
+          position: 'bottom'
+        }
       };
       
       const genre_details_dict = this.movie.genre_pop_and_perc_diff[0];
@@ -154,8 +159,13 @@ export class ReviewComponent implements OnInit {
       this.cf_res = cf_resData;
       this.cf_piechart_labels = this.cf_res.metadata.genres_array;
       this.cf_piechart_data = this.cf_res.metadata.length_of_each_genre;
-      this.pieChartOptions = {
+      this.cfChartOptions = {
         responsive: 'true',
+        title: {
+          display: true,
+          text: 'Collaborative Filtering',
+          position: 'bottom'
+        },
         tooltips: {
           callbacks: {
             label: function(tooltipItem, data) {
@@ -185,12 +195,44 @@ export class ReviewComponent implements OnInit {
     }).unsubscribe;
   }
 
-  // Scatter Chart 
   public scatterChartType = 'scatter';
+  
+  public barChartLegend = true;
+
+  public revChartLabels: Label = ['Revenue', 'Budget'];
+  public voteChartLabel: Label = ['Vote Average', ""]
+  public popularityChartLabel : Label = ["Popularity"]
+
+  public doughnutChartType: ChartType = 'doughnut';
+  public pieChartType: ChartType = 'pie';
+  public barChartType: ChartType = 'bar';
+
+  public voteChartOptions = {
+    legend: {
+      display: false
+    },
+    tooltips: {
+    	filter: function(item, data) {
+        const label = data.labels[item.index];
+        if (label) return item;
+      }
+    },
+    title: {
+      display: true,
+      text: 'Vote Average',
+      position: 'bottom'
+    }
+  }
+
   public scatterChartOptions = {
     type: 'linear',
     position: 'bottom',
     responsive: 'true',
+    title: {
+      display: true,
+      text: 'Tag Polarity and Net Likes',
+      position: 'bottom'
+    },
     tooltips: {
       callbacks: {
          label: function(tooltipItem, data) {
@@ -233,39 +275,25 @@ export class ReviewComponent implements OnInit {
    }
   }
 
-  // Bar Chart
-  public barChartOptions = {
-    scaleShowVerticalLines: false,
-    responsive: true
-  };
-
-  public barChartType = 'bar';
-  public barChartLegend = true;
-
-  // Pie Chart 
-  public pieChartType = 'pie';
-  
-  // Doughnut Chart
-  public revChartLabels: Label = ['Revenue', 'Budget'];
-  public voteChartLabel: Label = ['Vote Average', ""]
-  public popularityChartLabel : Label = ["Popularity"]
-  public doughnutChartType: ChartType = 'doughnut';
-  public voteChartOptions = {
-    legend: {
-      display: false
-    },
-    tooltips: {
-    	filter: function(item, data) {
-        const label = data.labels[item.index];
-        if (label) return item;
-      }
-    },
+  public genreDistributionChartOptions = {
+    responsive: true,
     title: {
       display: true,
-      text: 'Vote Average',
+      text: 'Genre Population Distribution',
       position: 'bottom'
     }
   }
+
+  public barChartOptions = {
+    scaleShowVerticalLines: false,
+    responsive: true,
+    title: {
+      display: true,
+      text: 'Average Percentile Difference',
+      position: 'bottom'
+    }
+  };
+
   public popularityChartOptions ={
     title: {
       display: true,
@@ -276,6 +304,7 @@ export class ReviewComponent implements OnInit {
       display: false
     }
   }
+
   public revChartOptions ={
     title: {
       display: true,
@@ -326,7 +355,7 @@ export class ReviewComponent implements OnInit {
     beforeDraw: (chart: any) => {
       const ctx = chart.ctx;
       const votePercentile = (this.movie.vote_average / 10) * 100;
-      const txt = votePercentile + '%';
+      const txt = votePercentile.toFixed(2) + '%';
 
       //Get options from the center object in options
       const sidePadding = 60;

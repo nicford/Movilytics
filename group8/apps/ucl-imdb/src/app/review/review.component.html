@@ -153,7 +153,7 @@
 
                                 <div style="display: block">
                                     <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels"
-                                        [chartType]="pieChartType"></canvas>
+                                        [chartType]="pieChartType" [options]="genreDistributionChartOptions"></canvas>
                                 </div>
                             </div>
                         </div>
@@ -173,7 +173,7 @@
 
                             <div style="display: block">
                                 <canvas baseChart [data]="cf_piechart_data" [labels]="cf_piechart_labels"
-                                    [chartType]="pieChartType" [options]="pieChartOptions"></canvas>
+                                    [chartType]="pieChartType" [options]="cfChartOptions"></canvas>
                             </div>
                             <br>
                         </div>
