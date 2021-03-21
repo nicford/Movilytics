@@ -52,3 +52,7 @@ k8s-configuration/*secret*.yaml
 
 # sanitization script for test data
 apps/db/csv_data/convert.py
+
+# python ignores
+__pycache__
+secrets.py
