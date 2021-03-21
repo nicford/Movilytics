@@ -1,6 +1,6 @@
 import { CACHE_MANAGER, HttpService, Inject, Injectable } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
-import { CSV_ROW, PREDICTED_RATINGS } from '@group8/api-interfaces'
+import { CSV_ROW_PREDICT_RATINGS, PREDICTED_RATINGS, PREDICTED_PERSONALITY, CSV_ROW_PREDICT_PERSONALITY } from '@group8/api-interfaces'
 import { AudienceService } from '../audience/audience.service';
 
 @Injectable()
@@ -74,7 +74,7 @@ export class MovieReportService {
     }
 
 
-    async predictRatings(movie_id, csv_data: CSV_ROW[]) {
+    async predictRatings(movie_id, csv_data: CSV_ROW_PREDICT_RATINGS[]) {
         const result: PREDICTED_RATINGS = new PREDICTED_RATINGS();
         console.log(movie_id);
         console.log(csv_data);
@@ -107,6 +107,7 @@ export class MovieReportService {
             tag_ratings_sum += Number(item.tag_rating);
         })
         result.tag_rating_avg = tag_ratings_sum / avg_per_tag.length;
+        console.log(`avg_per_tag: ${result.tag_rating_avg}`);
 
         // 4. calculate avg rating from of provided ratings
         const rating_avg = ratings.reduce((sum, value) => sum + value, 0) / ratings.length
@@ -114,17 +115,33 @@ export class MovieReportService {
         console.log(rating_avg)
 
         // 5. calculate overall avg rating
-        const keys = Object.keys(result)
-        result.overall_avg = 0
+        result.overall_avg = 0;
+        const keys = Object.keys(result);
         keys.forEach((key) => {
             console.log(key)
             if (key != 'overall_avg') {
+                console.log(result[key])
                 result.overall_avg += result[key]
             }
-        }, 0)
-        result.overall_avg = result.overall_avg / (keys.length - 1)
+        })
+        console.log(`keys length: ${keys}`);
+        result.overall_avg = result.overall_avg / (keys.length - 1);
 
         return result;
+    }
+
+
+    async predictPersonality(csv_data: CSV_ROW_PREDICT_PERSONALITY[]) {
+        console.log(`csv_data in predict personality service: ${csv_data}`);
+        const tags: string[] = [];
+        // turn csv_data into a list of tags
+        csv_data.forEach((item) => {
+            tags.push(item.tag);
+        });
+
+        const predicted_personality: PREDICTED_PERSONALITY = (await this.databaseService.runQuery('SELECT * FROM get_personality($1)', [tags])).rows[0];
+
+        return predicted_personality;
     }
 
 

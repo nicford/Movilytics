@@ -29,18 +29,6 @@ export class AudienceService {
             console.log(`Movie has ${howmany_genre} genre`);
             let seg_data = fs.readFileSync('apps/api/src/app/audience_json_dump/segmentation.json');
             let parsed = JSON.parse(seg_data);
-            // const temp_genre_array = Object.keys(parsed);
-            // const length_of_each_genre = []
-            // temp_genre_array.forEach((genre)=>{
-            //     length_of_each_genre.push(parsed[genre].length);
-            // })
-
-            // // add metadata: number of genre a movie has
-            // parsed['metadata'] = {
-            //     'howmany_genre': howmany_genre,
-            //     'genres_array': temp_genre_array,
-            //     'length_of_each_genre': length_of_each_genre
-            // }
             return parsed;
         }
         ///////////////////////

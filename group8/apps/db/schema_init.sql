@@ -34,7 +34,7 @@ COMMENT ON EXTENSION tablefunc IS 'functions that manipulate whole tables, inclu
 -- Name: get_activity_trend(integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.get_activity_trend(movie_id integer DEFAULT NULL::integer) RETURNS TABLE(month timestamp without time zone, activity bigint, avg_rating numeric)
+CREATE FUNCTION public.get_activity_trend(movie_id integer DEFAULT NULL::integer) RETURNS TABLE(month text, activity bigint, avg_rating numeric)
     LANGUAGE plpgsql
     AS $$
 	begin
@@ -58,9 +58,9 @@ CREATE FUNCTION public.get_activity_trend(movie_id integer DEFAULT NULL::integer
 				)
 			
 			select 
-				processed.coalesce_month,
-				processed.activity,
-				coalesce(processed.avg_rating,0)
+				to_char(processed.coalesce_month, 'YYYY-MM'),
+				coalesce(processed.activity,0) as activity,
+				coalesce(processed.avg_rating,0) as avg_rating
 			from (
 				select 
 					coalesce(rating_month.month, t.month) as coalesce_month, 
@@ -143,12 +143,12 @@ CREATE FUNCTION public.get_genre_population_avg_diff(movie_id integer DEFAULT NU
 					   avg(western) as western_glob_avg,
 					   avg(tv_movie) as tv_movie_glob_avg
 					from user_genre_mapping
-					where user_id in (select user_id from ratings where mid = 862)
+					where user_id in (select user_id from ratings where mid = movie_id)
 				),
 				curr_avg as (
 					select 
 						avg(rating) as local_avg 
-					from ratings where mid = 862
+					from ratings where mid = movie_id
 				),
 				population_table as (
 					select 
@@ -172,7 +172,7 @@ CREATE FUNCTION public.get_genre_population_avg_diff(movie_id integer DEFAULT NU
 						count(*) filter (where adventure > (select genre_avg_rating from genre_info where genre_name = 'Adventure')) as adventure_count,
 						count(*) filter (where romance > (select genre_avg_rating from genre_info where genre_name = 'Romance')) as romance_count
 					from user_genre_mapping 
-					where user_id in (select user_id from ratings where mid = 862) 
+					where user_id in (select user_id from ratings where mid = movie_id) 
 				)
 
 				select 
@@ -277,7 +277,7 @@ ALTER FUNCTION public.get_movies(result_limit integer, result_offset integer, ke
 -- Name: get_overview(integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.get_overview(movie_id integer DEFAULT NULL::integer) RETURNS TABLE(mid integer, title text, overview text, budget integer, adult boolean, popularity numeric, poster_path character varying, video boolean, vote_average numeric, vote_count integer, runtime integer, status character varying, tagline text, released_year integer, revenue bigint, genre_list character varying[], language_list character varying[], country_list character varying[], avg_rating numeric, translation_list character varying[], tags_list character varying[], likes bigint, dislikes bigint)
+CREATE FUNCTION public.get_overview(movie_id integer DEFAULT NULL::integer) RETURNS TABLE(mid integer, title text, overview text, budget integer, adult boolean, popularity numeric, poster_path character varying, video boolean, vote_average numeric, vote_count integer, runtime integer, status character varying, tagline text, released_year integer, revenue bigint, genre_list character varying[], language_list character varying[], country_list character varying[], avg_rating numeric, translation_list character varying[], tags_list character varying[], one_star bigint, two_star bigint, three_star bigint, four_star bigint, five_star bigint, likes bigint, dislikes bigint)
     LANGUAGE plpgsql
     AS $$
 	begin
@@ -306,6 +306,11 @@ CREATE FUNCTION public.get_overview(movie_id integer DEFAULT NULL::integer) RETU
 				rating.avg_rating, 
 				translation_table.translation_list, 
 				tags.tags_list,
+				like_dislike.one_star,
+				like_dislike.two_star,
+				like_dislike.three_star,
+				like_dislike.four_star,
+				like_dislike.five_star,
 				like_dislike.likes,
 				like_dislike.dislikes
 			from movies 
@@ -317,6 +322,11 @@ CREATE FUNCTION public.get_overview(movie_id integer DEFAULT NULL::integer) RETU
 
 			left join(
 				select ratings.mid,
+					count(*) filter(where ratings.rating >= 1 and ratings.rating < 2) as one_star,
+					count(*) filter(where ratings.rating >= 2 and ratings.rating < 3) as two_star,
+					count(*) filter(where ratings.rating >= 3 and ratings.rating < 4) as three_star,
+					count(*) filter(where ratings.rating >= 4 and ratings.rating < 5) as four_star,
+					count(*) filter(where ratings.rating >= 5) as five_star,
 					count(*) filter(where ratings.rating >= (select movie_avg.avg_rating from movie_avg)) as likes,
 					count(*) filter(where ratings.rating < (select movie_avg.avg_rating from movie_avg)) as dislikes
 				from ratings 
@@ -473,7 +483,7 @@ ALTER FUNCTION public.get_tag_avg(movie_tag character varying[]) OWNER TO postgr
 -- Name: get_tag_likes_dislikes(integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.get_tag_likes_dislikes(movie_id integer DEFAULT NULL::integer) RETURNS TABLE(tag character varying, likes bigint, dislikes bigint)
+CREATE FUNCTION public.get_tag_likes_dislikes(movie_id integer DEFAULT NULL::integer) RETURNS TABLE(tag character varying, likes bigint, dislikes bigint, polarity numeric)
     LANGUAGE plpgsql
     AS $$
 	begin 
@@ -486,21 +496,34 @@ CREATE FUNCTION public.get_tag_likes_dislikes(movie_id integer DEFAULT NULL::int
 						select * from tags where tags.tag in (select tags.tag from tags where mid = movie_id)
 					) as t 
 					on ratings.mid = t.mid and ratings.user_id = t.user_id
-				)
-				,tag_data as (
+				),
+				tag_data as (
 					select j.tag, avg(rating) 
 					from (
 						select * from tag_list	
 					) as j
 					group by j.tag
+				),
+				like_dislike as (
+					select 
+						tag_list.tag,
+						count(*) filter(where tag_list.rating >= (select tag_data.avg from tag_data where tag_data.tag = tag_list.tag)) as likes,
+						count(*) filter(where tag_list.rating < (select tag_data.avg from tag_data where tag_data.tag = tag_list.tag)) as dislikes
+					from tag_list
+					group by tag_list.tag
 				)
-
-				select 
-					tag_list.tag,
-					count(*) filter(where tag_list.rating >= (select tag_data.avg from tag_data where tag_data.tag = tag_list.tag)) as likes,
-					count(*) filter(where tag_list.rating < (select tag_data.avg from tag_data where tag_data.tag = tag_list.tag)) as dislikes
-				from tag_list
-				group by tag_list.tag;
+				
+				select like_dislike.*, round(coalesce(tag_polarity.polarity,0), 2) as polarity from like_dislike
+				left join(
+					select tags.tag, coalesce(stddev(all_tag_ratings.rating), 0) as polarity from tags 
+					inner join (
+						select * from ratings 
+					) as all_tag_ratings
+					on all_tag_ratings.user_id = tags.user_id and all_tag_ratings.mid = tags.mid
+					group by tags.tag
+				) as tag_polarity
+				on like_dislike.tag = tag_polarity.tag;
+				
 end; $$;
 
 
@@ -1248,4 +1271,3 @@ ALTER TABLE ONLY public.user_predictive_rate
 -- PostgreSQL database dump complete
 --
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     

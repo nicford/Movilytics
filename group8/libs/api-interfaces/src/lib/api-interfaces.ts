@@ -65,7 +65,7 @@ export class searchResponse {
 }
 
 
-export class CSV_ROW {
+export class CSV_ROW_PREDICT_RATINGS {
   rating: number
   tags: string
 }
@@ -80,5 +80,23 @@ export class PREDICTED_RATINGS {
   genre_rating_avg: number;
 
   overall_avg: number;    // average of the four values above
+
+}
+
+
+export class CSV_ROW_PREDICT_PERSONALITY {
+  tag: string
+}
+
+export class PREDICTED_PERSONALITY {
+  openness: number;
+
+  agreeableness: number;
+
+  emotional_stability: number;
+
+  conscientiousness: number;
+
+  extraversion: number;    // average of the four values above
 
 }
