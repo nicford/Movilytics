@@ -21,6 +21,9 @@ export class ReviewComponent implements OnInit {
   polarityToggle = false
   usersegmentToggle = false
 
+  totalStars: number = 0
+  totalLikes: number = 0
+
   toggleDict = {
     'tagdataToggle': false,
     'activityToggle': false,
@@ -63,7 +66,10 @@ export class ReviewComponent implements OnInit {
     // REVIEW
     const review_res = this.movieService.getMovieReview(this.mid)
     const $res = review_res.subscribe(resData => {
+      console.log(resData)
       this.movie = resData
+      this.totalStars = this.convertString(this.movie.one_star) + this.convertString(this.movie.two_star) + this.convertString(this.movie.three_star) + this.convertString(this.movie.four_star) + this.convertString(this.movie.five_star);
+      this.totalLikes = this.convertString(this.movie.likes) + this.convertString(this.movie.dislikes)
       this.poster = this.getImage(this.movie.poster_path)
       this.lineChartType = 'line';
 
@@ -226,6 +232,20 @@ export class ReviewComponent implements OnInit {
     //   return resData? resData : "test"
     // })
 
+  }
+
+  convertString(mystr: string) {
+    if (mystr.trim().length==0) { 
+      return NaN;
+  }
+    return Number(mystr);
+  }
+
+  getBarWidth(mystr: string, myTotal: number) {
+    let mynum: number = this.convertString(mystr);
+    let ratio: number = (mynum / myTotal) * 100;
+    let trunc = Math.round(ratio)
+    return trunc;
   }
 
 }

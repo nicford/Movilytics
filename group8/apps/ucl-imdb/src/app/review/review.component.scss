@@ -23,3 +23,184 @@ ion-button {}
 .graph-title {
     display: flex;
 }
+
+.graph-container {
+    padding: 30px;
+}
+
+.heading {
+    font-size: 25px;
+    margin-right: 25px;
+}
+
+.fa {
+    font-size: 25px;
+}
+
+.checked {
+    color: orange;
+}
+
+
+/* Three column layout */
+
+.side {
+    float: left;
+    width: 5%;
+    margin-top: 10px;
+}
+
+.middle {
+    float: left;
+    width: 70%;
+    margin-top: 10px;
+}
+
+
+/* Place text to the right */
+
+.right {
+    left: auto;
+    width: 5%;
+    margin-top: 10px;
+}
+
+
+/* Clear floats after the columns */
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+/* The bar container */
+
+.bar-container {
+    position: relative;
+    width: 100%;
+    background-color: #131313;
+    text-align: center;
+    color: white;
+}
+
+
+/* Individual bars */
+
+.bar-5 {
+    height: 18px;
+    background-color: #4CAF50;
+}
+
+.bar-5 :hover {
+    background-color: #E3E3E3;
+}
+
+.bar-4 {
+    height: 18px;
+    background-color: #2196F3;
+}
+
+.bar-3 {
+    height: 18px;
+    background-color: #00bcd4;
+}
+
+.bar-2 {
+    height: 18px;
+    background-color: #ff9800;
+}
+
+.bar-1 {
+    height: 18px;
+    background-color: #f44336;
+}
+
+.bar-avg {
+    height: 18px;
+    background-color: #b9a700;
+}
+
+.rating-bars {
+    margin-bottom: 25px;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+    /* If you want dots under the hoverable text */
+}
+
+
+/* Tooltip text */
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    color: #85878d;
+    text-align: center;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    right: 50px;
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+}
+
+.rating-text {
+    color: #85878d;
+    text-align: center;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    margin-right: 2px;
+    margin-left: auto;
+    /* Position the tooltip text - see examples below! */
+    z-index: 1;
+    position: relative;
+    align-items: right;
+}
+
+.seperator {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 15px;
+    border-top: 3px solid rgb(51, 51, 51);
+}
+
+
+/* Show the tooltip text when you mouse over the tooltip container */
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.like-bar {
+    padding-bottom: 25px;
+}
+
+.all {
+    width: 100%;
+    /*centers the website*/
+}
+
+.likes {
+    height: 5px;
+    background: #4CAF50;
+    float: left;
+}
+
+.dislikes {
+    height: 5px;
+    background: #f44336;
+    float: right;
+}
+
+.bar {
+    width: 100%;
+}
