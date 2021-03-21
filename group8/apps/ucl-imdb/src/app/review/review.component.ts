@@ -1,20 +1,20 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ImagesService } from '../services/images.service';
 import { MoviesService } from '../services/movies.service';
 import { Label, PluginServiceGlobalRegistrationAndOptions } from 'ng2-charts';
 import { ChartType } from 'chart.js';
-import { movieRes } from './movieRes.interface';
+// import { movieRes } from './movieRes.interface';
 
 @Component({
   selector: 'group8-review',
   templateUrl: './review.component.html',
   styleUrls: ['./review.component.scss']
 })
-export class ReviewComponent implements OnInit {
+export class ReviewComponent {
 
-  totalStars: number = 0
-  totalLikes: number = 0
+  totalStars = 0
+  totalLikes = 0
   tag_likes = []
   tag_dislikes = []
 
@@ -65,7 +65,7 @@ export class ReviewComponent implements OnInit {
 
     // REVIEW
     const review_res = this.movieService.getMovieReview(this.mid)
-    const $res = review_res.subscribe(resData => {
+    review_res.subscribe(resData => {
       console.log(resData)
       this.movie = resData      
       this.totalStars = this.convertString(this.movie.one_star) + this.convertString(this.movie.two_star) + this.convertString(this.movie.three_star) + this.convertString(this.movie.four_star) + this.convertString(this.movie.five_star);
@@ -161,7 +161,7 @@ export class ReviewComponent implements OnInit {
   // to prevent slow loading problem when entering into a movie page
   getCF() {
     const audience_seg_res = this.movieService.getAudienceSeg(this.mid)
-    const $cf_result = audience_seg_res.subscribe(cf_resData => {
+    audience_seg_res.subscribe(cf_resData => {
       this.cf_res = cf_resData;
       this.cf_piechart_labels = this.cf_res.metadata.genres_array;
       this.cf_piechart_data = this.cf_res.metadata.length_of_each_genre;
@@ -435,8 +435,7 @@ export class ReviewComponent implements OnInit {
   public radarChartType = 'radar';
 
 
-  ngOnInit(): void {
-  }
+  
 
   getImage(posterPath: string) {
     const res = this.imageService.getPosterPath(posterPath)

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { searchDto } from '@group8/api-interfaces';
 import { apiEndpoint } from '@group8/api-interfaces';
 @Injectable({
   providedIn: 'root',
 })
 export class MoviesService {
-  constructor(private http:HttpClient) {}
+  constructor(private http: HttpClient) {}
   
   api_domain = apiEndpoint;
   // api_domain = "http://ef6ece8a82bc.ngrok.io/api";

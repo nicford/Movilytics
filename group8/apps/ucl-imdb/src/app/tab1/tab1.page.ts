@@ -34,30 +34,30 @@ export class Tab1Page {
   }
 
   getPopularMovies() {
-    let criteria = "popularity"
-    let status_arg = "Released"
+    const criteria = "popularity"
+    const status_arg = "Released"
     const obs = this.search(criteria, status_arg)
-    const $res = obs.subscribe(resData => {
+    obs.subscribe(resData => {
       console.log(resData)
       this.popularMovies = resData
     }).unsubscribe
   }
 
   getPolarizingMovies() {
-    let criteria = "polarity"
-    let status_arg = "Released"
+    const criteria = "polarity"
+    const status_arg = "Released"
     const obs = this.search(criteria, status_arg)
-    const $res = obs.subscribe(resData => {
+    obs.subscribe(resData => {
       console.log(resData)
       this.polarizingMovies = resData
     }).unsubscribe
   }
 
   getNewMovies() {
-    let criteria = "popularity"
-    let status_arg = "Upcoming"
-    let obs = this.search(criteria, status_arg)
-    const $res = obs.subscribe(resData => {
+    const criteria = "popularity"
+    const status_arg = "Upcoming"
+    const obs = this.search(criteria, status_arg)
+    obs.subscribe(resData => {
       console.log(resData)
       this.newMovies = resData
     }).unsubscribe
@@ -84,7 +84,7 @@ export class Tab1Page {
       keyword: null,
       genres_arg: null,
   };
-  const res: Observable<Object> = this.movieService.searchMovies(body);
+  const res: Observable<any> = this.movieService.searchMovies(body);
   return res  
   }
 }
