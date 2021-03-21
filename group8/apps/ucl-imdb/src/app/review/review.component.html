@@ -23,7 +23,7 @@
                                                 <div class="likes" [style.width]="this.getBarWidth(this.movie.likes, this.totalLikes) + '%'">
                                                 </div>
                                                 <div class="dislikes" [style.width]="this.getBarWidth(this.movie.dislikes, this.totalLikes) + '%'">
-                                                    <span class="tooltiptext">{{this.movie.likes}} Likes {{this.movie.dislikes}} Dislikes</span>
+                                                    <span class="tooltiptext">{{this.movie.likes}} Likes <br> {{this.movie.dislikes}} Dislikes</span>
 
                                                 </div>
                                             </div>
@@ -175,7 +175,7 @@
                                                 <ion-chip color="primary">
                                                     <ion-label>{{tag}}</ion-label>
                                                 </ion-chip>
-                                                <span class="tooltiptext">{{this.movie.tag_likes[i]}} Likes {{this.movie.tag_dislikes[i]}} Dislikes</span></div>
+                                                <span class="tooltiptext">{{this.movie.tag_likes[i]}} Likes <br> {{this.movie.tag_dislikes[i]}} Dislikes</span></div>
 
 
                                         </div>
