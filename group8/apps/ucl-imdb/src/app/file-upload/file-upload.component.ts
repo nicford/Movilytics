@@ -1,9 +1,10 @@
 import { HttpClient, HttpEventType } from '@angular/common/http';
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { apiEndpoint } from '@group8/api-interfaces';
 import { AlertController } from '@ionic/angular';
+import { EventEmitter } from 'events';
 
 @Component({
   selector: 'group8-file-upload',
@@ -17,9 +18,12 @@ export class FileUploadComponent {
   @Input()
     endpoint:string;
 
+  @Output() uploadComplete = new EventEmitter();
+
     fileName = '';
     uploadProgress: number;
     uploadSub: Subscription;
+    dataReceived = false;
     resData
 
     constructor(private http: HttpClient,
@@ -39,7 +43,11 @@ export class FileUploadComponent {
                 observe: 'events'
             })
             .pipe(
-                finalize(() => this.reset())
+                finalize(() => {
+                  this.reset();
+                  this.uploadComplete.emit(this.resData);
+                  this.dataReceived = true;
+                })
             );
 
             this.uploadSub = upload$.subscribe(event => {

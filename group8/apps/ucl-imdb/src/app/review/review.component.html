@@ -232,8 +232,11 @@
                             </div>
 
                             <div class="graph-container" *ngIf="this.toggleDict['personalitypredToggle']">
-                                <group8-file-upload endpoint="/movie-report/predict-personality" requiredFileType="text/csv"></group8-file-upload>
-
+                                <group8-file-upload #personalityUpload endpoint="/movie-report/predict-personality" requiredFileType="text/csv" (uploadFinished)="createGraph($event)" ></group8-file-upload>
+                                <h1>Data{{personalityUpload.resData}}</h1>
+                                    <div *ngIf="personalityUpload.dataReceived">
+                                        
+                                    </div>
                             </div>
                             <div class="seperator"></div>
 
