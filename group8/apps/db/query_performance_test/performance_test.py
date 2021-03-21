@@ -1,5 +1,10 @@
 import psycopg2
+import time
 from secrets import functions_test_cases, tables_test_cases, host, database, user, password
+
+"""
+BEFORE YOU RUN THIS SCRIPT, MAKE SUER YOU DON'T CACHE YOUR QUERIED RESULT
+"""
 
 report_export_path = './before_optimisation.txt'
 
@@ -30,8 +35,9 @@ try:
                 # Get Execution time
                 record = float(list(cursor)[-1][0][16:-3])
                 test_case_result.append(record)
-
                 f.write(f'iter {x}: {record} ms \n')
+                time.sleep(2)
+
 
             avg = sum(test_case_result)/10
             f.write(f'Average Execution time: {avg} ms \n')
