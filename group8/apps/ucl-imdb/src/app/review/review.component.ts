@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import * as Chart from 'chart.js';
 import { ImagesService } from '../services/images.service';
 import { MoviesService } from '../services/movies.service';
+import { Label, PluginServiceGlobalRegistrationAndOptions } from 'ng2-charts';
+import { ChartType } from 'chart.js';
 import { movieRes } from './movieRes.interface';
-import {TableModule} from 'primeng/table';
 
 @Component({
   selector: 'group8-review',
@@ -12,7 +12,7 @@ import {TableModule} from 'primeng/table';
   styleUrls: ['./review.component.scss']
 })
 export class ReviewComponent implements OnInit {
-
+  
 
   tagdataToggle = false
   activityToggle = false
@@ -45,6 +45,9 @@ export class ReviewComponent implements OnInit {
   lineChartLabels
   lineChartOptions
   lineChartColors
+  revChartData
+  voteChartData
+  popularityChartData
   pieChartLabels
   pieChartData
   barChartLabels
@@ -54,6 +57,7 @@ export class ReviewComponent implements OnInit {
   cf_res
   cf_piechart_labels
   cf_piechart_data
+  pieChartOptions
   @Input() mid: string
 
   constructor(private movieService: MoviesService, private activatedRouter: ActivatedRoute, private imageService: ImagesService) {
@@ -65,7 +69,19 @@ export class ReviewComponent implements OnInit {
     const $res = review_res.subscribe(resData => {
       this.movie = resData
       this.poster = this.getImage(this.movie.poster_path)
-      
+      this.revChartData = [{
+        data: [this.movie.revenue, this.movie.budget],
+        backgroundColor: ["#006400","#98FB98"]
+      }];
+      this.voteChartData = [{
+        data: [this.movie.vote_average, 10 - this.movie.vote_average],
+        backgroundColor: ["#FF8C00","#F0E68C"]
+      }];
+      this.popularityChartData = [{
+        data: [this.movie.popularity],
+        backgroundColor: ["#00BFFF"]
+      }];
+
       this.lineChartType = 'line';
 
       this.lineChartData = [
@@ -138,7 +154,34 @@ export class ReviewComponent implements OnInit {
       this.cf_res = cf_resData;
       this.cf_piechart_labels = this.cf_res.metadata.genres_array;
       this.cf_piechart_data = this.cf_res.metadata.length_of_each_genre;
-
+      this.pieChartOptions = {
+        responsive: 'true',
+        tooltips: {
+          callbacks: {
+            label: function(tooltipItem, data) {
+               const label = data.labels[tooltipItem.index];
+               const value = data.datasets[0].data[tooltipItem.index];
+               return (label + ' :' +  value);
+            },
+            afterLabel: function(tooltipItem, data){
+              const label = data.labels[tooltipItem.index];
+              const users = cf_resData[label];
+              const texts = [];
+              let user = ['Users Segemented: '];
+              texts.push("");
+              for(let i = 0; i < users.length; i++){
+                if(i % 6 == 0){
+                  texts.push(user);
+                  user = [];
+                } else {
+                  user.push(users[i]);  
+                }
+              }
+              return  texts;
+            }
+         }
+        }
+      }
     }).unsubscribe;
   }
 
@@ -203,9 +246,150 @@ export class ReviewComponent implements OnInit {
   public pieChartType = 'pie';
   
   // Doughnut Chart
-  public doughnutChartLabels = ['Sales Q1', 'Sales Q2', 'Sales Q3', 'Sales Q4'];
-  public doughnutChartData = [120, 150, 180, 90];
-  public doughnutChartType = 'doughnut';
+  public revChartLabels: Label = ['Revenue', 'Budget'];
+  public voteChartLabel: Label = ['Vote Average', ""]
+  public popularityChartLabel : Label = ["Popularity"]
+  public doughnutChartType: ChartType = 'doughnut';
+  public voteChartOptions = {
+    legend: {
+      display: false
+    },
+    tooltips: {
+    	filter: function(item, data) {
+        const label = data.labels[item.index];
+        if (label) return item;
+      }
+    },
+    title: {
+      display: true,
+      text: 'Vote Average',
+      position: 'bottom'
+    }
+  }
+  public popularityChartOptions ={
+    title: {
+      display: true,
+      text: 'Popularity',
+      position: 'bottom'
+    },
+    legend: {
+      display: false
+    }
+  }
+  public revChartOptions ={
+    title: {
+      display: true,
+      text: 'Net Profit',
+      position: 'bottom'
+    },
+    legend: {
+      display: false
+    }
+  }
+
+  public doughnutChartPlugins: PluginServiceGlobalRegistrationAndOptions[] = [{
+    beforeDraw: (chart: any) => {
+      const ctx = chart.ctx;
+      const netProfit = this.movie.revenue - this.movie.budget;
+      const txt = '$' + netProfit;
+
+      //Get options from the center object in options
+      const sidePadding = 60;
+      const sidePaddingCalculated = (sidePadding / 100) * (chart.innerRadius * 2)
+
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
+      const centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2);
+
+      //Get the width of the string and also the width of the element minus 10 to give it 5px side padding
+      const stringWidth = ctx.measureText(txt).width;
+      const elementWidth = (chart.innerRadius * 2) - sidePaddingCalculated;
+
+      // Find out how much the font can grow in width.
+      const widthRatio = elementWidth / stringWidth;
+      const newFontSize = Math.floor(25 * widthRatio);
+      const elementHeight = (chart.innerRadius * 2);
+
+      // Pick a new font size so it will not be larger than the height of label.
+      const fontSizeToUse = Math.min(newFontSize, elementHeight);
+
+      ctx.font = fontSizeToUse + 'px Roboto';
+      ctx.fillStyle = 'white';
+
+      // Draw text in center
+      ctx.fillText(txt, centerX, centerY);
+    }
+  }];
+
+  public voteAverageChart: PluginServiceGlobalRegistrationAndOptions[] = [{
+    beforeDraw: (chart: any) => {
+      const ctx = chart.ctx;
+      const votePercentile = (this.movie.vote_average / 10) * 100;
+      const txt = votePercentile + '%';
+
+      //Get options from the center object in options
+      const sidePadding = 60;
+      const sidePaddingCalculated = (sidePadding / 100) * (chart.innerRadius * 2)
+
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
+      const centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2);
+
+      //Get the width of the string and also the width of the element minus 10 to give it 5px side padding
+      const stringWidth = ctx.measureText(txt).width;
+      const elementWidth = (chart.innerRadius * 2) - sidePaddingCalculated;
+
+      // Find out how much the font can grow in width.
+      const widthRatio = elementWidth / stringWidth;
+      const newFontSize = Math.floor(20 * widthRatio);
+      const elementHeight = (chart.innerRadius * 2);
+
+      // Pick a new font size so it will not be larger than the height of label.
+      const fontSizeToUse = Math.min(newFontSize, elementHeight);
+
+      ctx.font = fontSizeToUse + 'px Roboto';
+      ctx.fillStyle = 'white';
+
+      // Draw text in center
+      ctx.fillText(txt, centerX, centerY);
+    }
+  }];
+
+  public popularityAverageChart: PluginServiceGlobalRegistrationAndOptions[] = [{
+    beforeDraw: (chart: any) => {
+      const ctx = chart.ctx;
+      const txt = this.movie.popularity;
+
+      //Get options from the center object in options
+      const sidePadding = 60;
+      const sidePaddingCalculated = (sidePadding / 100) * (chart.innerRadius * 2)
+
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
+      const centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2);
+
+      //Get the width of the string and also the width of the element minus 10 to give it 5px side padding
+      const stringWidth = ctx.measureText(txt).width;
+      const elementWidth = (chart.innerRadius * 2) - sidePaddingCalculated;
+
+      // Find out how much the font can grow in width.
+      const widthRatio = elementWidth / stringWidth;
+      const newFontSize = Math.floor(20 * widthRatio);
+      const elementHeight = (chart.innerRadius * 2);
+
+      // Pick a new font size so it will not be larger than the height of label.
+      const fontSizeToUse = Math.min(newFontSize, elementHeight);
+
+      ctx.font = fontSizeToUse + 'px Roboto';
+      ctx.fillStyle = 'white';
+
+      // Draw text in center
+      ctx.fillText(txt, centerX, centerY);
+    }
+  }];
 
   // Radar Chart
   public radarChartLabels = ['Q1', 'Q2', 'Q3', 'Q4'];

@@ -27,13 +27,8 @@
 
                                 </div>
                                 <ul class="movie-meta">
-                                    <li><strong>Rated:</strong> {{this.movie.vote_average}}/10</li>
                                     <li><strong>Length:</strong> {{this.movie.runtime}} min</li>
                                     <li><strong>Premiere:</strong> {{this.movie.released_year}}</li>
-                                    <li><strong>Budget:</strong> {{this.movie.budget}}</li>
-                                    <li><strong>Revenue:</strong> {{this.movie.revenue}}</li>
-                                    <li><strong>Popularity:</strong> {{this.movie.popularity}}</li>
-                                    <li><strong>Average Rating:</strong> {{this.movie.avg_rating}}</li>
                                     <li><strong>Adult:</strong> {{this.movie.adult}}</li>
                                     <li><strong>Language:</strong> <span
                                             *ngFor="let language of this.movie.language_list">{{language}} </span></li>
@@ -41,6 +36,11 @@
                                             *ngFor="let country of this.movie.country_list">{{country}} </span></li>
                                     <li><strong>Genres:</strong> <span
                                             *ngFor="let genre of this.movie.genre_list">{{genre}} </span></li>
+                                    <li><strong>Translation:</strong> 
+                                        <div class="entry-content">
+                                            <span *ngFor="let translation of this.movie.translation_list">{{translation}} </span>
+                                        </div>
+                                    </li>
                                     <li>
                                         <strong>Summary:</strong>
                                         <div class="entry-content">
@@ -62,6 +62,35 @@
 
                         <!-- Charts -->
                         <div *ngIf="this.movie.status == 'Released'">
+                            <div class = "row">
+                                <div style="display: block" class ="col-md-4">
+                                    <canvas baseChart
+                                                [datasets]="revChartData"
+                                                [labels]="revChartLabels"
+                                                [chartType]="doughnutChartType"
+                                                [plugins]="doughnutChartPlugins"
+                                                [options]="revChartOptions">
+                                    </canvas>
+                                </div>
+                                <div style="display: block" class ="col-md-4">
+                                    <canvas baseChart
+                                                [datasets]="popularityChartData"
+                                                [labels]="popularityChartLabel"
+                                                [chartType]="doughnutChartType"
+                                                [plugins]="popularityAverageChart"
+                                                [options]="popularityChartOptions">
+                                    </canvas>
+                                </div>
+                                <div style="display: block" class ="col-md-4">
+                                    <canvas baseChart
+                                                [datasets]="voteChartData"
+                                                [labels]="voteChartLabel"
+                                                [chartType]="doughnutChartType"
+                                                [plugins]="voteAverageChart"
+                                                [options]="voteChartOptions"></canvas>
+                                </div>
+                            </div>
+
                             <div>
                                 <h4 class="movie-title">Like Dislike Ratio</h4>
 
@@ -144,45 +173,9 @@
 
                             <div style="display: block">
                                 <canvas baseChart [data]="cf_piechart_data" [labels]="cf_piechart_labels"
-                                    [chartType]="pieChartType"></canvas>
+                                    [chartType]="pieChartType" [options]="pieChartOptions"></canvas>
                             </div>
-
                             <br>
-
-                            <!-- Table -->
-
-                            <!-- <div>
-                                <p-table>
-                                    <ng-template pTemplate="header">
-                                        <tr>
-                                            <th>Genre_name</th>
-                                            <th>User ID</th>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="body">
-                                        <tr *ngFor="let genre of this.cf_piechart_labels">
-                                            <td>
-                                                {{genre}}
-                                            </td>
-                                            <td>
-                                                {{this.cf_res[genre]}}
-                                            </td>
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
-                            </div> -->
-
-                            <table style="display: block" class="styled-table">
-                                <tr>
-                                    <th>Genre Name</th>
-                                    <th>User ID</th>
-                                </tr>
-                                <tr *ngFor="let genre of this.cf_piechart_labels" class="active-row">
-                                    <td> {{genre}} </td>
-                                    <td class="fitToCell"> {{this.cf_res[genre]}} </td>
-                                </tr>
-                            </table>
-
                         </div>
 
                         <!-- <div style="display: block">

@@ -12,13 +12,11 @@ import {ChartsModule} from 'ng2-charts';
 import { FileUploadComponent } from './file-upload/file-upload.component';
 import { MatIconModule } from '@angular/material/icon';
 
-import {TableModule} from 'primeng/table';
-
 @NgModule({
   declarations: [AppComponent, ReviewComponent, FileUploadComponent],
   entryComponents: [],
   imports: [BrowserModule, IonicModule.forRoot(), 
-            AppRoutingModule, HttpClientModule, ChartsModule, MatIconModule, TableModule
+            AppRoutingModule, HttpClientModule, ChartsModule, MatIconModule
             ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
