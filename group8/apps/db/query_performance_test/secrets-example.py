@@ -1,5 +1,3 @@
-import psycopg2
-
 
 functions_test_cases = [
     "explain analyze SELECT * FROM <YOUR FUNCTION QUERY>"

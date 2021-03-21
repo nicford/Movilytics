@@ -1,0 +1,128 @@
+================
+TEST CASE 0 
+Query: explain analyze SELECT * FROM get_activity_trend(862) 
+iter 0: 32.349 ms 
+iter 1: 9.318 ms 
+iter 2: 8.011 ms 
+iter 3: 8.041 ms 
+iter 4: 8.792 ms 
+iter 5: 7.535 ms 
+iter 6: 8.352 ms 
+iter 7: 8.24 ms 
+iter 8: 13.123 ms 
+iter 9: 8.354 ms 
+Average Execution time: 11.2115 ms 
+================
+
+================
+TEST CASE 1 
+Query: explain analyze SELECT * FROM get_genre_company_avg(862) 
+iter 0: 25.962 ms 
+iter 1: 3.544 ms 
+iter 2: 2.982 ms 
+iter 3: 3.14 ms 
+iter 4: 3.196 ms 
+iter 5: 3.192 ms 
+iter 6: 3.065 ms 
+iter 7: 3.0 ms 
+iter 8: 2.934 ms 
+iter 9: 3.081 ms 
+Average Execution time: 5.409599999999999 ms 
+================
+
+================
+TEST CASE 2 
+Query: explain analyze SELECT * FROM get_genre_population_avg_diff(862) 
+iter 0: 28.336 ms 
+iter 1: 20.696 ms 
+iter 2: 20.947 ms 
+iter 3: 21.033 ms 
+iter 4: 20.748 ms 
+iter 5: 25.409 ms 
+iter 6: 23.813 ms 
+iter 7: 21.071 ms 
+iter 8: 22.466 ms 
+iter 9: 22.757 ms 
+Average Execution time: 22.727600000000002 ms 
+================
+
+================
+TEST CASE 3 
+Query: explain analyze SELECT * FROM get_movies(keyword := 'Toy', sort_by := 'polarity', start_year := 2000, end_year := 2020, allowed_ratings := 3) 
+iter 0: 35.166 ms 
+iter 1: 19.719 ms 
+iter 2: 22.363 ms 
+iter 3: 20.585 ms 
+iter 4: 20.905 ms 
+iter 5: 21.899 ms 
+iter 6: 21.914 ms 
+iter 7: 20.269 ms 
+iter 8: 19.903 ms 
+iter 9: 21.098 ms 
+Average Execution time: 22.382099999999998 ms 
+================
+
+================
+TEST CASE 4 
+Query: explain analyze SELECT * FROM get_overview(862) 
+iter 0: 63.032 ms 
+iter 1: 29.101 ms 
+iter 2: 30.644 ms 
+iter 3: 34.016 ms 
+iter 4: 29.567 ms 
+iter 5: 32.07 ms 
+iter 6: 28.566 ms 
+iter 7: 29.698 ms 
+iter 8: 31.015 ms 
+iter 9: 27.879 ms 
+Average Execution time: 33.5588 ms 
+================
+
+================
+TEST CASE 5 
+Query: explain analyze SELECT * FROM get_personality('{Pixar, funny}') 
+iter 0: 12.869 ms 
+iter 1: 4.608 ms 
+iter 2: 7.724 ms 
+iter 3: 4.602 ms 
+iter 4: 4.64 ms 
+iter 5: 6.439 ms 
+iter 6: 5.908 ms 
+iter 7: 4.815 ms 
+iter 8: 6.947 ms 
+iter 9: 8.754 ms 
+Average Execution time: 6.7306 ms 
+================
+
+================
+TEST CASE 6 
+Query: explain analyze SELECT * FROM get_tag_likes_dislikes(862) 
+iter 0: 293.087 ms 
+iter 1: 260.786 ms 
+iter 2: 275.997 ms 
+iter 3: 266.384 ms 
+iter 4: 237.169 ms 
+iter 5: 246.411 ms 
+iter 6: 310.646 ms 
+iter 7: 301.891 ms 
+iter 8: 236.45 ms 
+iter 9: 235.997 ms 
+Average Execution time: 266.48179999999996 ms 
+================
+
+================
+TEST CASE 7 
+Query: explain analyze SELECT * FROM get_tag_avg('{Pixar, Funny}') 
+iter 0: 13.521 ms 
+iter 1: 15.833 ms 
+iter 2: 12.747 ms 
+iter 3: 14.541 ms 
+iter 4: 13.351 ms 
+iter 5: 14.123 ms 
+iter 6: 13.862 ms 
+iter 7: 13.702 ms 
+iter 8: 13.732 ms 
+iter 9: 12.838 ms 
+Average Execution time: 13.825 ms 
+================
+
