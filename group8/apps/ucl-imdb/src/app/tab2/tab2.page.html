@@ -1,9 +1,3 @@
-<ion-header collapse="condense">
-    <ion-toolbar>
-        <ion-title size="large">Tab 2</ion-title>
-    </ion-toolbar>
-</ion-header>
-
 <ion-content>
 
     <div id="site-content">
@@ -105,20 +99,22 @@
                         <div class="movie-list">
                             <div class="movie" *ngFor="let movie of this.movies">
                                 <ion-badge color="warning">{{movie.vote_average}}</ion-badge>
-                                <figure class="movie-poster"><img [src]="getImage(movie.poster_path)"></figure>
-                                <div class="movie-title">
-                                    <a (click)="goToReview(movie.mid)" [mid]="movie.mid">{{movie.title}}</a></div>
+                                <a href="tabs/tab2/{{movie.mid}}">
+                                    <figure class="movie-poster "><img [src]="getImage(movie.poster_path) "></figure>
+                                </a>
+                                <div class="movie-title ">
+                                    <a (click)="goToReview(movie.mid) " [mid]="movie.mid ">{{movie.title}}</a></div>
                                 <p>{{movie.tagline}}</p>
                             </div>
 
                         </div>
-                        <!-- <ion-fab vertical="bottom" edge horizontal="start" slot="fixed">
+                        <!-- <ion-fab vertical="bottom " edge horizontal="start " slot="fixed ">
                             <ion-fab-button>
-                                <ion-icon name="arrow-up-circle"></ion-icon>
+                                <ion-icon name="arrow-up-circle "></ion-icon>
                             </ion-fab-button>
                         </ion-fab> -->
-                        <ion-infinite-scroll (ionInfinite)="loadData($event)">
-                            <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading movies...">
+                        <ion-infinite-scroll (ionInfinite)="loadData($event) ">
+                            <ion-infinite-scroll-content loadingSpinner="bubbles " loadingText="Loading movies... ">
                             </ion-infinite-scroll-content>
                         </ion-infinite-scroll>
                     </div>
@@ -137,19 +133,19 @@
 
         </main>
 
-        <footer class="site-footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="widget">
-                            <h3 class="widget-title">About Us</h3>
+        <footer class="site-footer ">
+            <div class="container ">
+                <div class="row ">
+                    <div class="col-md-3 ">
+                        <div class="widget ">
+                            <h3 class="widget-title ">About Us</h3>
                             <p>We are a group of multidisciplinary engineering student at UCL with a passion for film and product development. </p>
                         </div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="widget">
-                            <h3 class="widget-title">Contact</h3>
-                            <ul class="no-bullet">
+                    <div class="col-md-3 ">
+                        <div class="widget ">
+                            <h3 class="widget-title ">Contact</h3>
+                            <ul class="no-bullet ">
                                 <li>Email: zcabktu@ucl.ac.uk</li>
                                 <li>Call: +44 7444474060</li>
                                 <li> <br> University College London, <br> Gower Street, <br> London, WC1E 6BT </li>
@@ -159,7 +155,7 @@
                 </div>
                 <!-- .row -->
 
-                <div class="colophon">Copyright 2021 IMDB, No rights reserved</div>
+                <div class="colophon ">Copyright 2021 IMDB, No rights reserved</div>
             </div>
             <!-- .container -->
 

@@ -449,6 +449,9 @@ export class ReviewComponent implements OnInit {
   }
 
   convertString(mystr: string) {
+    if (!mystr) {
+      return
+    }
     if (mystr.trim().length==0) { 
       return NaN;
   }
