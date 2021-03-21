@@ -463,9 +463,9 @@ export class ReviewComponent implements OnInit {
   }
 
   getBarWidth(mystr: string, myTotal: number) {
-    let mynum: number = this.convertString(mystr);
-    let ratio: number = (mynum / myTotal) * 100;
-    let trunc = Math.round(ratio)
+    const mynum: number = this.convertString(mystr);
+    const ratio: number = (mynum / myTotal) * 100;
+    const trunc = Math.round(ratio)
     return trunc;
   }
 
