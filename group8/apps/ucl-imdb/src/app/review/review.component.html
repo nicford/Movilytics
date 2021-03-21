@@ -165,7 +165,7 @@
                         <div class="graph-title">
                             <h5 class="movie-title">User Segmentation by Collaborative Filtering</h5>
                             <ion-button #usersegmentButton style="margin-right: 0; margin-left: auto;"
-                                (click)="collapseToggle('usersegmentButton')">
+                                (click)="collapseToggle('usersegmentButton'); this.getCF()">
                                 <ion-icon name="chevron-down-outline" icon-only></ion-icon>
                             </ion-button>
                         </div>

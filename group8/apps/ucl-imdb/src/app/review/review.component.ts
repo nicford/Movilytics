@@ -147,8 +147,12 @@ export class ReviewComponent implements OnInit {
       this.scatterChartLabels = this.movie.tag_labels;
 
     }).unsubscribe;
+  }
 
-    // AUDIENCE
+  // AUDIENCE Segmentation
+  // Not in Constructor and only triggered by collapse toggle button click in html 
+  // to prevent slow loading problem when entering into a movie page
+  getCF() {
     const audience_seg_res = this.movieService.getAudienceSeg(this.mid)
     const $cf_result = audience_seg_res.subscribe(cf_resData => {
       this.cf_res = cf_resData;
