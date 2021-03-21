@@ -9,7 +9,7 @@ create or replace function get_tag_avg(
 as $$
 	begin 
 		return query 
-			select tag_table.tag, avg(ratings.rating) as tag_rating  from ratings 
+			select tag_table.tag, COALESCE(avg(ratings.rating),0) as tag_rating  from ratings 
 			inner join (
 				select tags.user_id, tags.mid, tags.tag from tags 
 				where (movie_tag ISNULL or tags.tag =  any(movie_tag))

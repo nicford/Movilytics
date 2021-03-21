@@ -51,7 +51,7 @@ export class FileUploadComponent {
                 // if (typeof event !== 'undefined' && event) {
                 //   console.log(event["headers"].status);
                 // }
-                this.presentAlert()
+                // this.presentAlert()
                 
                 this.resData = event
                 console.log(this.resData)

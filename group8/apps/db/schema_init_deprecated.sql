@@ -90,7 +90,7 @@ CREATE FUNCTION public.get_genre_company_avg(movie_id integer DEFAULT NULL::inte
 		return query 
 			with 
 				genre_table as (
-					select COALESCE(avg(genre_info.genre_avg_rating), 0) as genre_avg 
+					select avg(genre_info.genre_avg_rating) as genre_avg 
 					from genre_info 
 						where genre_info.genre_id in (
 							select genres.genre_id from genres 
@@ -98,7 +98,7 @@ CREATE FUNCTION public.get_genre_company_avg(movie_id integer DEFAULT NULL::inte
 						)
 				),
 				company_table as (
-					select COALESCE(avg(company_info.avg_company_rating), 0) as company_avg 
+					select avg(company_info.avg_company_rating) as company_avg 
 					from company_info 
 						where company_info.company_id  in (
 							select companies.company_id from companies 
@@ -227,50 +227,46 @@ ALTER FUNCTION public.get_genre_population_avg_diff(movie_id integer) OWNER TO p
 
 CREATE FUNCTION public.get_movies(result_limit integer DEFAULT 100, result_offset integer DEFAULT 0, keyword text DEFAULT NULL::text, sort_by text DEFAULT NULL::text, ascending boolean DEFAULT true, start_year integer DEFAULT NULL::integer, end_year integer DEFAULT NULL::integer, allowed_ratings integer DEFAULT NULL::integer, genres_arg integer[] DEFAULT NULL::integer[], status_arg character varying DEFAULT NULL::character varying) RETURNS TABLE(mid integer, title text, poster_path character varying, vote_average numeric, tagline text, status character varying)
     LANGUAGE plpgsql
-    AS $$ 
+    AS $$
 	begin
 		return query
-			select unique_filtered.mid, unique_filtered.title, unique_filtered.poster_path, unique_filtered.vote_average, unique_filtered.tagline, unique_filtered.status
+			select filtered.mid, filtered.title, filtered.poster_path, filtered.vote_average, filtered.tagline, filtered.status
 			from (
-				select filtered.mid, filtered.title, filtered.poster_path, round(coalesce(filtered.avg_rating,0),1) as vote_average, filtered.tagline, filtered.status, filtered.popularity, filtered.released_year, filtered.polarity
-				from (
-					select movies.mid, movies.title, movies.poster_path, movies.vote_average, movies.tagline, movies.popularity, movies.released_year, movies.status, genres_table.genre_id, rating_table.avg_rating, rating_table.polarity
-					from movies
-					inner join(
-						select movie_stats.mid, movie_stats.avg_rating, movie_stats.polarity from movie_stats 
-					) as rating_table
-					on movies.mid = rating_table.mid
-					inner join(
-						select genres.mid, genres.genre_id from genres group by genres.mid, genres.genre_id	
-					) as genres_table
-					on movies.mid = genres_table.mid
-					where 
-					(keyword ISNULL OR movies.title ilike concat(keyword,'%'))
-					and 
-					(allowed_ratings ISNULL OR rating_table.avg_rating >= allowed_ratings)
-					and 
-					(status_arg ISNULL OR movies.status = status_arg)
-					and 
-					(genres_arg ISNULL OR genres_table.genre_id = ANY(genres_arg))
-					and 
-					(start_year ISNULL or movies.released_year >= start_year)
-					and
-					(end_year ISNULL or movies.released_year <= end_year)
-					ORDER BY movies.mid
-				) as filtered
-				group by filtered.mid, filtered.title, filtered.poster_path, filtered.avg_rating, filtered.tagline, filtered.status, filtered.popularity, filtered.released_year, filtered.polarity
-			) as unique_filtered
+				select distinct on (movies.mid) movies.mid, movies.title, movies.poster_path, movies.vote_average, movies.tagline, movies.popularity, movies.released_year, movies.status, genres_table.genre_id, rating_table.avg_rating, rating_table.polarity
+				from movies
+				inner join(
+					select movie_stats.mid, movie_stats.avg_rating, movie_stats.polarity from movie_stats 
+				) as rating_table
+				on movies.mid = rating_table.mid
+				inner join(
+					select genres.mid, genres.genre_id from genres group by genres.mid, genres.genre_id	
+				) as genres_table
+				on movies.mid = genres_table.mid
+				where 
+				(keyword ISNULL OR movies.title ilike concat('%',keyword,'%'))
+				and 
+				(allowed_ratings ISNULL OR rating_table.avg_rating >= allowed_ratings)
+				and 
+				(status_arg ISNULL OR movies.status = status_arg)
+				and 
+				(genres_arg ISNULL OR genres_table.genre_id = ANY(genres_arg))
+				and 
+				(start_year ISNULL or movies.released_year >= start_year)
+				and
+				(end_year ISNULL or movies.released_year <= end_year)
+				ORDER BY movies.mid
+			) as filtered
 			ORDER BY
-			CASE WHEN sort_by = 'popularity' AND ascending = FALSE THEN unique_filtered.popularity END DESC,
-			CASE WHEN sort_by = 'popularity' AND ascending = TRUE THEN unique_filtered.popularity END ASC,
-			CASE WHEN sort_by = 'title' AND ascending = FALSE THEN unique_filtered.title END DESC,
-			CASE WHEN sort_by = 'title' AND ascending = TRUE THEN unique_filtered.title END ASC,
-			CASE WHEN sort_by = 'year' AND ascending = FALSE THEN unique_filtered.released_year END DESC,
-			CASE WHEN sort_by = 'year' AND ascending = TRUE THEN unique_filtered.released_year END ASC,
-			CASE WHEN sort_by = 'polarity' AND ascending = FALSE THEN unique_filtered.polarity END DESC,
-			CASE WHEN sort_by = 'polarity' AND ascending = TRUE THEN unique_filtered.polarity END ASC,
-			CASE WHEN sort_by = 'rating' AND ascending = FALSE THEN unique_filtered.vote_average END DESC,
-			CASE WHEN sort_by = 'rating' AND ascending = TRUE THEN unique_filtered.vote_average END ASC
+			CASE WHEN sort_by = 'popularity' AND ascending = FALSE THEN filtered.popularity END DESC,
+			CASE WHEN sort_by = 'popularity' AND ascending = TRUE THEN filtered.popularity END ASC,
+			CASE WHEN sort_by = 'title' AND ascending = FALSE THEN filtered.title END DESC,
+			CASE WHEN sort_by = 'title' AND ascending = TRUE THEN filtered.title END ASC,
+			CASE WHEN sort_by = 'year' AND ascending = FALSE THEN filtered.released_year END DESC,
+			CASE WHEN sort_by = 'year' AND ascending = TRUE THEN filtered.released_year END ASC,
+			CASE WHEN sort_by = 'polarity' AND ascending = FALSE THEN filtered.polarity END DESC,
+			CASE WHEN sort_by = 'polarity' AND ascending = TRUE THEN filtered.polarity END ASC,
+			CASE WHEN sort_by = 'rating' AND ascending = FALSE THEN filtered.avg_rating END DESC,
+			CASE WHEN sort_by = 'rating' AND ascending = TRUE THEN filtered.avg_rating END ASC
 			limit result_limit offset result_offset;
 end; $$;
 
@@ -281,13 +277,13 @@ ALTER FUNCTION public.get_movies(result_limit integer, result_offset integer, ke
 -- Name: get_overview(integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.get_overview(movie_id integer DEFAULT NULL::integer) RETURNS TABLE(mid integer, title text, overview text, budget integer, adult boolean, popularity numeric, poster_path character varying, video boolean, vote_average numeric, vote_count integer, runtime integer, status character varying, tagline text, released_year integer, revenue bigint, genre_list character varying[], language_list character varying[], country_list character varying[], avg_rating numeric, translation_list character varying[], tags_list character varying[], one_star bigint, two_star bigint, three_star bigint, four_star bigint, five_star bigint, likes bigint, dislikes bigint, cast_names character varying[], cast_roles character varying[])
+CREATE FUNCTION public.get_overview(movie_id integer DEFAULT NULL::integer) RETURNS TABLE(mid integer, title text, overview text, budget integer, adult boolean, popularity numeric, poster_path character varying, video boolean, vote_average numeric, vote_count integer, runtime integer, status character varying, tagline text, released_year integer, revenue bigint, genre_list character varying[], language_list character varying[], country_list character varying[], avg_rating numeric, translation_list character varying[], tags_list character varying[], one_star bigint, two_star bigint, three_star bigint, four_star bigint, five_star bigint, likes bigint, dislikes bigint)
     LANGUAGE plpgsql
     AS $$
 	begin
 		return query
 			with movie_avg as (select movie_stats.mid, movie_stats.avg_rating from movie_stats where movie_stats.mid = movie_id)
-
+			
 			select 
 				movies.mid, 
 				movies.title,
@@ -316,11 +312,9 @@ CREATE FUNCTION public.get_overview(movie_id integer DEFAULT NULL::integer) RETU
 				like_dislike.four_star,
 				like_dislike.five_star,
 				like_dislike.likes,
-				like_dislike.dislikes,
-				people_list.cast_names,
-				people_list.cast_roles
+				like_dislike.dislikes
 			from movies 
-
+			
 			inner join(
 				select * from movie_avg
 			) as rating 
@@ -340,113 +334,72 @@ CREATE FUNCTION public.get_overview(movie_id integer DEFAULT NULL::integer) RETU
 				group by ratings.mid
 			) as like_dislike
 			on movies.mid = like_dislike.mid
-
+			
 			left join(
 				select 
-					genre_group.mid,
-					array_agg(genre_group.genre_name) as genre_list
-				from(
-					select genre_table.mid, genre_info.genre_id, genre_info.genre_name
-					from genre_info 
-					inner join(
-						select genres.mid, genres.genre_id from genres
-					) as genre_table
-					on genre_info.genre_id = genre_table.genre_id
-					where genre_table.mid = movie_id 
-					group by genre_table.mid, genre_info.genre_id, genre_info.genre_name
-				) as genre_group
-				group by genre_group.mid
+					genre_table.mid, 
+					array_agg(distinct genre_info.genre_name) as genre_list 
+				from genre_info
+				inner join(
+					select genres.mid, genres.genre_id from genres
+				) as genre_table
+				on genre_info.genre_id = genre_table.genre_id
+				where genre_table.mid = movie_id
+				group by genre_table.mid
 			) as genre 
 			on movies.mid = genre.mid
-
+			
 			left join (
 				select 
-					language_group.mid,
-					array_agg(language_group.language_name) as language_list
-				from(
-					select language_table.mid, language_info.language_id, language_info.language_name
-					from language_info 
-					inner join(
-						select spoken_languages.mid, spoken_languages.language_id from spoken_languages
-					) as language_table
-					on language_info.language_id = language_table.language_id
-					where language_table.mid = movie_id 
-					group by language_table.mid, language_info.language_id, language_info.language_name
-				) as language_group
-				group by language_group.mid
+					language_table.mid, 
+					array_agg(distinct language_info.language_name) as language_list
+				from language_info
+				inner join (
+					select spoken_languages.mid, spoken_languages.language_id from spoken_languages
+				) as language_table 
+				on language_info.language_id = language_table.language_id
+				where language_table.mid = movie_id
+				group by language_table.mid
 			) as lang
 			on movies.mid = lang.mid
-
+			
 			left join (
 				select 
-					country_group.mid,
-					array_agg(country_group.country_name) as country_list
-				from(
-					select country_table.mid, country_info.country_id, country_info.country_name
-					from country_info 
-					inner join(
-						select countries.mid, countries.country_id from countries
-					) as country_table
-					on country_info.country_id = country_table.country_id
-					where country_table.mid = movie_id 
-					group by country_table.mid, country_info.country_id, country_info.country_name
-				) as country_group
-				group by country_group.mid
+					country_table.mid, 
+					array_agg(distinct country_info.country_name) as country_list
+				from country_info
+				inner join (
+					select countries.mid, countries.country_id from countries
+				) as country_table 
+				on country_info.country_id = country_table.country_id
+				where country_table.mid = movie_id
+				group by country_table.mid
 			) as country
 			on movies.mid = country.mid
-
+			
 			left join(
 				select 
-					language_group.mid,
-					array_agg(language_group.language_name) as translation_list
-				from(
-					select translations.mid, language_table.language_id, language_table.language_name
-					from translations 
-					inner join(
-						select language_info.language_id, language_info.language_name from language_info 
-					) as language_table
-					on translations.language_id = language_table.language_id
-					where translations.mid = movie_id 
-					group by translations.mid, language_table.language_id, language_table.language_name
-				) as language_group
-				group by language_group.mid
+					language_table.mid, 
+					array_agg( distinct language_info.language_name ) as translation_list
+				from language_info
+				inner join (
+					select translations.mid, translations.language_id from translations
+				) as language_table 
+				on language_info.language_id = language_table.language_id
+				where language_table.mid = movie_id
+				group by language_table.mid
 			) as translation_table
 			on movies.mid = translation_table.mid
-
+			
 			left join(
 				select 
-					tags_table.mid, 
-					array_agg( tags_table.tag ) as tags_list
-				from (
-					select 
-						tags.mid,
-						tags.tag
-					from tags 
-					where tags.mid = movie_id
-					group by tags.mid, tags.tag
-				) as tags_table
-				group by tags_table.mid
+					tags.mid, 
+					array_agg( distinct tags.tag )as tags_list
+				from tags 
+				where tags.mid = movie_id
+				group by tags.mid
 			) as tags
-			on movies.mid = tags.mid
-
-			left join(
-				select 
-					people_group.mid,
-					array_agg(people_group.name) as cast_names,
-					array_agg(people_group.department) as cast_roles
-				from(
-					select people.mid, person_name.name, person_name.department
-					from people 
-					inner join(
-						select person.person_id, person.name, person.department from person 
-					) as person_name
-					on person_name.person_id = people.person_id
-					where people.mid = movie_id 
-					group by people.mid, person_name.name, person_name.department
-				) as people_group
-				group by people_group.mid
-			) as people_list 
-			on movies.mid = people_list.mid;
+			on movies.mid = tags.mid;
 end; $$;
 
 
@@ -469,10 +422,9 @@ CREATE FUNCTION public.get_personality(tag_inputs character varying[] DEFAULT NU
 				where mid in 
 				(
 					select 
-				 		mid 
+				 		distinct on (mid) mid 
 				 	from tags 
 				 	where tag = any(tag_inputs)
-					group by mid
 				)
 			), 
 			user_rating_map as (
@@ -483,9 +435,7 @@ CREATE FUNCTION public.get_personality(tag_inputs character varying[] DEFAULT NU
 					mov_ratings.avg_rating 
 				from user_predictive_rate 
 				inner join (
-					select 
-						avg_movie_ratings.mid, 
-						avg_movie_ratings.avg_rating from avg_movie_ratings
+					select * from avg_movie_ratings
 				) as mov_ratings
 				on user_predictive_rate.mid = mov_ratings.mid
 			)
@@ -498,14 +448,7 @@ CREATE FUNCTION public.get_personality(tag_inputs character varying[] DEFAULT NU
 			COALESCE(avg(traits.extraversion), 0) as extraversion
 		from user_rating_map 
 		inner join(
-			select 
-				user_traits.user_id, 
-				user_traits.openness, 
-				user_traits.agreeableness, 
-				user_traits.emotional_stability, 
-				user_traits.conscientiousness, 
-				user_traits.extraversion 
-			from user_traits
+			select * from user_traits
 		) as traits
 		on user_rating_map.user_id = traits.user_id
 		where user_rating_map.prediction > user_rating_map.avg_rating;
@@ -524,7 +467,7 @@ CREATE FUNCTION public.get_tag_avg(movie_tag character varying[] DEFAULT NULL::c
     AS $$
 	begin 
 		return query 
-			select tag_table.tag, COALESCE(avg(ratings.rating),0) as tag_rating  from ratings 
+			select tag_table.tag, avg(ratings.rating) as tag_rating  from ratings 
 			inner join (
 				select tags.user_id, tags.mid, tags.tag from tags 
 				where (movie_tag ISNULL or tags.tag =  any(movie_tag))
@@ -550,14 +493,14 @@ CREATE FUNCTION public.get_tag_likes_dislikes(movie_id integer DEFAULT NULL::int
 					select ratings.user_id, ratings.mid, ratings.rating, t.tag 
 					from ratings 
 					inner join (
-						select tags.mid, tags.user_id, tags.tag from tags where tags.tag in (select tags.tag from tags where mid = movie_id)
+						select * from tags where tags.tag in (select tags.tag from tags where mid = movie_id)
 					) as t 
 					on ratings.mid = t.mid and ratings.user_id = t.user_id
 				),
 				tag_data as (
 					select j.tag, avg(rating) 
 					from (
-						select tag_list.user_id, tag_list.mid, tag_list.rating, tag_list.tag  from tag_list	
+						select * from tag_list	
 					) as j
 					group by j.tag
 				),
@@ -570,11 +513,11 @@ CREATE FUNCTION public.get_tag_likes_dislikes(movie_id integer DEFAULT NULL::int
 					group by tag_list.tag
 				)
 				
-				select like_dislike.tag, like_dislike.likes, like_dislike.dislikes, round(coalesce(tag_polarity.polarity,0), 2) as polarity from like_dislike
+				select like_dislike.*, round(coalesce(tag_polarity.polarity,0), 2) as polarity from like_dislike
 				left join(
 					select tags.tag, coalesce(stddev(all_tag_ratings.rating), 0) as polarity from tags 
 					inner join (
-						select ratings.user_id, ratings.mid, ratings.rating from ratings 
+						select * from ratings 
 					) as all_tag_ratings
 					on all_tag_ratings.user_id = tags.user_id and all_tag_ratings.mid = tags.mid
 					group by tags.tag

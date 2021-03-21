@@ -29,14 +29,16 @@ create or replace function get_overview(
 		four_star bigint,
 		five_star bigint,
 		likes bigint,
-		dislikes bigint
+		dislikes bigint,
+		cast_names varchar(100)[],
+		cast_roles varchar(100)[]
 	)
 	language plpgsql
 as $$
 	begin
 		return query
 			with movie_avg as (select movie_stats.mid, movie_stats.avg_rating from movie_stats where movie_stats.mid = movie_id)
-			
+
 			select 
 				movies.mid, 
 				movies.title,
@@ -65,9 +67,11 @@ as $$
 				like_dislike.four_star,
 				like_dislike.five_star,
 				like_dislike.likes,
-				like_dislike.dislikes
+				like_dislike.dislikes,
+				people_list.cast_names,
+				people_list.cast_roles
 			from movies 
-			
+
 			inner join(
 				select * from movie_avg
 			) as rating 
@@ -87,70 +91,111 @@ as $$
 				group by ratings.mid
 			) as like_dislike
 			on movies.mid = like_dislike.mid
-			
+
 			left join(
 				select 
-					genre_table.mid, 
-					array_agg(distinct genre_info.genre_name) as genre_list 
-				from genre_info
-				inner join(
-					select genres.mid, genres.genre_id from genres
-				) as genre_table
-				on genre_info.genre_id = genre_table.genre_id
-				where genre_table.mid = movie_id
-				group by genre_table.mid
+					genre_group.mid,
+					array_agg(genre_group.genre_name) as genre_list
+				from(
+					select genre_table.mid, genre_info.genre_id, genre_info.genre_name
+					from genre_info 
+					inner join(
+						select genres.mid, genres.genre_id from genres
+					) as genre_table
+					on genre_info.genre_id = genre_table.genre_id
+					where genre_table.mid = movie_id 
+					group by genre_table.mid, genre_info.genre_id, genre_info.genre_name
+				) as genre_group
+				group by genre_group.mid
 			) as genre 
 			on movies.mid = genre.mid
-			
+
 			left join (
 				select 
-					language_table.mid, 
-					array_agg(distinct language_info.language_name) as language_list
-				from language_info
-				inner join (
-					select spoken_languages.mid, spoken_languages.language_id from spoken_languages
-				) as language_table 
-				on language_info.language_id = language_table.language_id
-				where language_table.mid = movie_id
-				group by language_table.mid
+					language_group.mid,
+					array_agg(language_group.language_name) as language_list
+				from(
+					select language_table.mid, language_info.language_id, language_info.language_name
+					from language_info 
+					inner join(
+						select spoken_languages.mid, spoken_languages.language_id from spoken_languages
+					) as language_table
+					on language_info.language_id = language_table.language_id
+					where language_table.mid = movie_id 
+					group by language_table.mid, language_info.language_id, language_info.language_name
+				) as language_group
+				group by language_group.mid
 			) as lang
 			on movies.mid = lang.mid
-			
+
 			left join (
 				select 
-					country_table.mid, 
-					array_agg(distinct country_info.country_name) as country_list
-				from country_info
-				inner join (
-					select countries.mid, countries.country_id from countries
-				) as country_table 
-				on country_info.country_id = country_table.country_id
-				where country_table.mid = movie_id
-				group by country_table.mid
+					country_group.mid,
+					array_agg(country_group.country_name) as country_list
+				from(
+					select country_table.mid, country_info.country_id, country_info.country_name
+					from country_info 
+					inner join(
+						select countries.mid, countries.country_id from countries
+					) as country_table
+					on country_info.country_id = country_table.country_id
+					where country_table.mid = movie_id 
+					group by country_table.mid, country_info.country_id, country_info.country_name
+				) as country_group
+				group by country_group.mid
 			) as country
 			on movies.mid = country.mid
-			
+
 			left join(
 				select 
-					language_table.mid, 
-					array_agg( distinct language_info.language_name ) as translation_list
-				from language_info
-				inner join (
-					select translations.mid, translations.language_id from translations
-				) as language_table 
-				on language_info.language_id = language_table.language_id
-				where language_table.mid = movie_id
-				group by language_table.mid
+					language_group.mid,
+					array_agg(language_group.language_name) as translation_list
+				from(
+					select translations.mid, language_table.language_id, language_table.language_name
+					from translations 
+					inner join(
+						select language_info.language_id, language_info.language_name from language_info 
+					) as language_table
+					on translations.language_id = language_table.language_id
+					where translations.mid = movie_id 
+					group by translations.mid, language_table.language_id, language_table.language_name
+				) as language_group
+				group by language_group.mid
 			) as translation_table
 			on movies.mid = translation_table.mid
-			
+
 			left join(
 				select 
-					tags.mid, 
-					array_agg( distinct tags.tag )as tags_list
-				from tags 
-				where tags.mid = movie_id
-				group by tags.mid
+					tags_table.mid, 
+					array_agg( tags_table.tag ) as tags_list
+				from (
+					select 
+						tags.mid,
+						tags.tag
+					from tags 
+					where tags.mid = movie_id
+					group by tags.mid, tags.tag
+				) as tags_table
+				group by tags_table.mid
 			) as tags
-			on movies.mid = tags.mid;
+			on movies.mid = tags.mid
+
+			left join(
+				select 
+					people_group.mid,
+					array_agg(people_group.name) as cast_names,
+					array_agg(people_group.department) as cast_roles
+				from(
+					select people.mid, person_name.name, person_name.department
+					from people 
+					inner join(
+						select person.person_id, person.name, person.department from person 
+					) as person_name
+					on person_name.person_id = people.person_id
+					where people.mid = movie_id 
+					group by people.mid, person_name.name, person_name.department
+				) as people_group
+				group by people_group.mid
+			) as people_list 
+			on movies.mid = people_list.mid;
 end; $$

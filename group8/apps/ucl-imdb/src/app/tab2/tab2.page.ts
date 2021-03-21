@@ -1,6 +1,4 @@
-import { Content } from '@angular/compiler/src/render3/r3_ast';
-import { stringify } from '@angular/compiler/src/util';
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { searchDto } from '@group8/api-interfaces';
 import { IonContent, IonRange, IonSearchbar, IonSegment, IonSelect } from '@ionic/angular';
@@ -43,8 +41,8 @@ export class Tab2Page {
   }
 
   // default values for sorting and ordering
-  selected_order: string = 'false'
-  selected_sort: string = 'popularity'
+  selected_order = 'false'
+  selected_sort = 'popularity'
 
   movies: movieRes[] // hold the movies currently on screen
   offset = 0 // counter for infinite scroll and database  
@@ -61,8 +59,6 @@ export class Tab2Page {
     this.templateSearch()
   }
 
-  ngOnInit() {
-  }
 
   // for the advanced bar to be visible and interactable
   toggleAdvanced() {
@@ -71,10 +67,10 @@ export class Tab2Page {
 
   // auto search on change of sort/order selects
   selectChange($event) {
-    let obs = this.search()
-    const $res = obs.subscribe(resData => {
+    const obs = this.search()
+    obs.subscribe(resData => {
       console.log(resData)
-      let temp: movieRes[] = JSON.parse(JSON.stringify(resData))
+      const temp: movieRes[] = JSON.parse(JSON.stringify(resData))
       this.movies = temp
     }).unsubscribe
   }
@@ -89,15 +85,15 @@ export class Tab2Page {
 
   // the function to be called for searching on the template
   templateSearch() {
-    let obs = this.search()
-    const $res = obs.subscribe(resData => {
-      let temp: movieRes[] = JSON.parse(JSON.stringify(resData))
+    const obs = this.search()
+    obs.subscribe(resData => {
+      const temp: movieRes[] = JSON.parse(JSON.stringify(resData))
       this.movies = temp
     }).unsubscribe
   }
 
   // the search logi to be called in the component
-  search(reset:boolean=true) {
+  search(reset=true) {
     if (reset) {
       this.offset = 0
     }
@@ -138,7 +134,7 @@ export class Tab2Page {
       genres_arg: (req_genres_arg.length != 0)? req_genres_arg: null,
   };
     console.log(body);
-    const res: Observable<Object> = this.movieService.searchMovies(body);
+    const res: Observable<any> = this.movieService.searchMovies(body);
     return res
   }
 
@@ -158,7 +154,7 @@ export class Tab2Page {
 
   // frontend logic to reset the color of selected tags
   resetTagColors() {
-    let n = this.tagDefaultColor.length
+    const n = this.tagDefaultColor.length
     for (let i = 0; i < n; i++) {
       this.tagDefaultColor[i] = "none"
     }
@@ -194,11 +190,11 @@ export class Tab2Page {
   // infinite scroll 
   loadData($event) {
     this.offset = this.offset + 40
-    let obs = this.search(false)
-    const $res = obs.subscribe(resData => {
-      let incoming: movieRes[] = JSON.parse(JSON.stringify(resData))
-      let old: movieRes[] = this.movies
-      let temp: movieRes[] = old.concat(incoming)
+    const obs = this.search(false)
+    obs.subscribe(resData => {
+      const incoming: movieRes[] = JSON.parse(JSON.stringify(resData))
+      const old: movieRes[] = this.movies
+      const temp: movieRes[] = old.concat(incoming)
       this.movies = temp
       $event.target.complete();
     }).unsubscribe

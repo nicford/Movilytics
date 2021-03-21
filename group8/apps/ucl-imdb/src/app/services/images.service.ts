@@ -25,6 +25,7 @@ export class ImagesService {
 
   getBackdropPath(backdrop_path: string) {
     const result = this.backdrop_endpoint + backdrop_path
+    return result;
   }
 
 }

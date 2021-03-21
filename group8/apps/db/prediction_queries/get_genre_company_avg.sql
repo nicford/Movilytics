@@ -12,7 +12,7 @@ as $$
 		return query 
 			with 
 				genre_table as (
-					select avg(genre_info.genre_avg_rating) as genre_avg 
+					select COALESCE(avg(genre_info.genre_avg_rating), 0) as genre_avg 
 					from genre_info 
 						where genre_info.genre_id in (
 							select genres.genre_id from genres 
@@ -20,7 +20,7 @@ as $$
 						)
 				),
 				company_table as (
-					select avg(company_info.avg_company_rating) as company_avg 
+					select COALESCE(avg(company_info.avg_company_rating), 0) as company_avg 
 					from company_info 
 						where company_info.company_id  in (
 							select companies.company_id from companies 
