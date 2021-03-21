@@ -201,12 +201,11 @@
                                 <h5 class="movie-title">Viewer's Genre Distribution</h5>
                                 <ion-button #genredistToggle style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('genredistToggle')">
                                     <ion-icon name="chevron-down-outline" icon-only></ion-icon>
-                                </ion-button>
-                                <div class="graph-container" *ngIf="this.toggleDict['genredistToggle']">
-
-                                    <div style="display: block">
-                                        <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType" [options]="genreDistributionChartOptions"></canvas>
-                                    </div>
+                                </ion-button> 
+                            </div>
+                            <div class="graph-container" *ngIf="this.toggleDict['genredistToggle']">
+                                <div style="display: block">
+                                    <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType" [options]="genreDistributionChartOptions"></canvas>
                                 </div>
                             </div>
                         </div>
