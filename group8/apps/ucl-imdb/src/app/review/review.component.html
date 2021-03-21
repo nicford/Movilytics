@@ -17,11 +17,15 @@
                             <div class="col-md-6">
                                 <h2 class="movie-title">{{this.movie.title}}</h2>
                                 <div class="like-bar">
-                                    <div id="all">
-                                        <div id="bar tooltip">
-                                            <div class="likes" [style.width]="this.getBarWidth(this.movie.likes, this.totalLikes) + '%'">
-                                            </div>
-                                            <div class="dislikes" [style.width]="this.getBarWidth(this.movie.dislikes, this.totalLikes) + '%'">
+                                    <div class="all tooltip">
+                                        <div class="bar">
+                                            <div>
+                                                <div class="likes" [style.width]="this.getBarWidth(this.movie.likes, this.totalLikes) + '%'">
+                                                </div>
+                                                <div class="dislikes" [style.width]="this.getBarWidth(this.movie.dislikes, this.totalLikes) + '%'">
+                                                    <span class="tooltiptext">{{this.movie.likes}} Likes {{this.movie.dislikes}} Dislikes</span>
+
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -35,9 +39,9 @@
                                     <li><strong>Length:</strong> {{this.movie.runtime}} min</li>
                                     <li><strong>Premiere:</strong> {{this.movie.released_year}}</li>
                                     <li><strong>Adult:</strong> {{this.movie.adult}}</li>
-                                    <li><strong>Language:</strong> <span *ngFor="let language of this.movie.language_list">{{language}} </span></li>
+                                    <li><strong>Language: </strong> <span *ngFor="let language of this.movie.language_list">{{language}} </span></li>
                                     <li><strong>Countries:</strong> <span *ngFor="let country of this.movie.country_list">{{country}} </span></li>
-                                    <li><strong>Genres:</strong> <span *ngFor="let genre of this.movie.genre_list">{{genre}} </span></li>
+                                    <li><strong>Genres: </strong> <span *ngFor="let genre of this.movie.genre_list">{{genre}} </span></li>
                                     <li><strong>Translation:</strong>
                                         <div class="entry-content">
                                             <span *ngFor="let translation of this.movie.translation_list">{{translation}} </span>
@@ -165,10 +169,20 @@
                             </div>
                             <div class="graph-container" *ngIf="this.toggleDict['tagdataToggle']">
                                 <div class="row">
+                                    <div class="advanced-search">
+                                        <div class="tag-chips">
+                                            <div class="tooltip" *ngFor="let tag of this.movie.tag_labels; let i=index">
+                                                <ion-chip color="primary">
+                                                    <ion-label>{{tag}}</ion-label>
+                                                </ion-chip>
+                                                <span class="tooltiptext">{{this.movie.tag_likes[i]}} Likes {{this.movie.tag_dislikes[i]}} Dislikes</span></div>
+
+
+                                        </div>
+                                    </div>
                                     <div class="col-md-6">
-                                        <ul>
-                                            <li><strong>Tags:</strong><span *ngFor="let tag of this.movie.tag_labels">{{tag}} </span></li>
-                                        </ul>
+
+
                                         <div style="display: block">
                                             <canvas baseChart [datasets]="scatterChartData" [labels]="scatterChartLabels" [options]="scatterChartOptions" [chartType]="scatterChartType">
                                             </canvas>
@@ -203,37 +217,56 @@
                                     <ion-icon name="chevron-down-outline" icon-only></ion-icon>
                                 </ion-button>
                             </div>
-                        </div>
-                        <div class="graph-container" *ngIf="this.toggleDict['genredistToggle']">
+                            <div class="graph-container" *ngIf="this.toggleDict['genredistToggle']">
 
-                            <div style="display: block">
-                                <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType" [options]="genreDistributionChartOptions"></canvas>
+                                <div style="display: block">
+                                    <canvas baseChart [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType" [options]="genreDistributionChartOptions"></canvas>
+                                </div>
                             </div>
                         </div>
+                        <div *ngIf="this.movie?.status == 'Upcoming'">
+                            <div class="graph-title">
+                                <h5 class="movie-title">Personality Prediction</h5>
+                                <ion-button #personalitypredToggle style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('personalitypredToggle')">
+                                    <ion-icon name="chevron-down-outline" icon-only></ion-icon>
+                                </ion-button>
+                            </div>
 
+                            <div class="graph-container" *ngIf="this.toggleDict['personalitypredToggle']">
+                                <group8-file-upload endpoint="/movie-report/predict-personality" requiredFileType="text/csv"></group8-file-upload>
+
+                            </div>
+                            <div class="seperator"></div>
+
+                            <div class="graph-title">
+                                <h5 class="movie-title">Ratings Prediction</h5>
+                                <ion-button #ratingspredToggle style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('ratingspredToggle')">
+                                    <ion-icon name="chevron-down-outline" icon-only></ion-icon>
+                                </ion-button>
+                            </div>
+
+                            <div class="graph-container" *ngIf="this.toggleDict['ratingspredToggle']">
+                                <group8-file-upload endpoint="/movie-report/predict-ratings/{{this.movie.mid}}" requiredFileType="text/csv"></group8-file-upload>
+
+                            </div>
+                        </div>
+                        <div class="seperator"></div>
+
+                        <div class="graph-title">
+                            <h5 class="movie-title">User Segmentation by Collaborative Filtering</h5>
+                            <ion-button #usersegmentToggle style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('usersegmentToggle')">
+                                <ion-icon name="chevron-down-outline" icon-only></ion-icon>
+                            </ion-button>
+                        </div>
+                        <div class="graph-container" *ngIf="this.toggleDict['usersegmentToggle']">
+
+                            <div style="display: block">
+                                <canvas baseChart [data]="cf_piechart_data" [labels]="cf_piechart_labels" [chartType]="pieChartType" [options]="cfChartOptions"></canvas>
+                            </div>
+                            <br>
+                        </div>
                     </div>
                 </div>
-
-                <div *ngIf="this.movie?.status == 'Upcoming'">
-                    <group8-file-upload requiredFileType="text/csv"></group8-file-upload>
-                </div>
-
-                <div class="seperator"></div>
-
-                <div class="graph-title">
-                    <h5 class="movie-title">User Segmentation by Collaborative Filtering</h5>
-                    <ion-button #usersegmentButton style="margin-right: 0; margin-left: auto;" (click)="collapseToggle('genreavgToggle')">
-                        <ion-icon name="chevron-down-outline" icon-only></ion-icon>
-                    </ion-button>
-                </div>
-                <div class="graph-container" *ngIf="this.toggleDict['usersegmentButton']">
-
-                    <div style="display: block">
-                        <canvas baseChart [data]="cf_piechart_data" [labels]="cf_piechart_labels" [chartType]="pieChartType" [options]="cfChartOptions"></canvas>
-                    </div>
-                    <br>
-                </div>
-
 
             </div>
         </main>

@@ -12,17 +12,11 @@ import { movieRes } from './movieRes.interface';
   styleUrls: ['./review.component.scss']
 })
 export class ReviewComponent implements OnInit {
-  
-
-  tagdataToggle = false
-  activityToggle = false
-  genredistToggle = false
-  genreavgToggle = false
-  polarityToggle = false
-  usersegmentToggle = false
 
   totalStars: number = 0
   totalLikes: number = 0
+  tag_likes = []
+  tag_dislikes = []
 
   toggleDict = {
     'tagdataToggle': false,
@@ -31,6 +25,8 @@ export class ReviewComponent implements OnInit {
     'genreavgToggle': false,
     'polarityToggle': false,
     'usersegmentToggle': false,
+    'personalitypredToggle': false,
+    'ratingspredToggle': false,
   }
 
 
@@ -71,7 +67,7 @@ export class ReviewComponent implements OnInit {
     const review_res = this.movieService.getMovieReview(this.mid)
     const $res = review_res.subscribe(resData => {
       console.log(resData)
-      this.movie = resData
+      this.movie = resData      
       this.totalStars = this.convertString(this.movie.one_star) + this.convertString(this.movie.two_star) + this.convertString(this.movie.three_star) + this.convertString(this.movie.four_star) + this.convertString(this.movie.five_star);
       this.totalLikes = this.convertString(this.movie.likes) + this.convertString(this.movie.dislikes)
       this.poster = this.getImage(this.movie.poster_path)

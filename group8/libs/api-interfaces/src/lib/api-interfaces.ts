@@ -100,3 +100,5 @@ export class PREDICTED_PERSONALITY {
   extraversion: number;    // average of the four values above
 
 }
+
+export const apiEndpoint = "http://5fcf906f2af8.ngrok.io/api"

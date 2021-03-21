@@ -4,44 +4,31 @@
         <div class="container">
             <div class="page">
                 <div class="row">
-                    <h1 class="main-label">Trending Movies</h1>
 
-
-                    <div class="col-md-3">
-                        <div class="row">
-                            <div class="col-sm-6 col-md-12" *ngFor="let movie of this.popularMovies?.slice(0,2)">
-                                <div class="latest-movie">
-                                    <a href="tabs/tab2/{{movie.mid}}"><img [src]="getImage(movie.poster_path)" alt="Movie 3"></a>
-                                </div>
+                    <!-- .row -->
+                    <div class="row">
+                        <h1 class="main-label">Trending Upcoming Releases</h1>
+                        <div class="col-sm-6 col-md-3" *ngFor="let movie of this.newMovies">
+                            <div class="latest-movie">
+                                <a href="tabs/tab2/{{movie.mid}}"><img [src]="getImage(movie.poster_path)" alt="Movie 3"></a>
                             </div>
-
                         </div>
                     </div>
-                </div>
-                <!-- .row -->
-                <div class="row">
-                    <div class="col-sm-6 col-md-3" *ngFor="let movie of this.popularMovies?.slice(2,6)">
-                        <div class="latest-movie">
-                            <a href="tabs/tab2/{{movie.mid}}"><img [src]="getImage(movie.poster_path)" alt="Movie 3"></a>
+                    <!-- .row -->
+
+                    <!-- .row -->
+                    <div class="row">
+                        <h1 class="main-label">Heated Movies</h1>
+                        <div class="col-sm-6 col-md-3" *ngFor="let movie of this.polarizingMovies">
+                            <div class="latest-movie">
+                                <a href="tabs/tab2/{{movie.mid}}"><img [src]="getImage(movie.poster_path)" alt="Movie 3"></a>
+                            </div>
                         </div>
                     </div>
+                    <!-- .row -->
+
+
                 </div>
-                <!-- .row -->
-
-
-
-                <!-- .row -->
-                <div class="row">
-                    <h1 class="main-label">Heated Movies</h1>
-                    <div class="col-sm-6 col-md-3" *ngFor="let movie of this.polarizingMovies">
-                        <div class="latest-movie">
-                            <a href="tabs/tab2/{{movie.mid}}"><img [src]="getImage(movie.poster_path)" alt="Movie 3"></a>
-                        </div>
-                    </div>
-                </div>
-                <!-- .row -->
-
-
             </div>
         </div>
         <!-- .container -->
