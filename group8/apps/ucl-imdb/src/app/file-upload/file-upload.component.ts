@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
 import { apiEndpoint } from '@group8/api-interfaces';
 import { AlertController } from '@ionic/angular';
-import { EventEmitter } from 'events';
+import { EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'group8-file-upload',

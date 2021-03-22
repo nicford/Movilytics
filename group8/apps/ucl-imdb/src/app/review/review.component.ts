@@ -64,6 +64,9 @@ export class ReviewComponent {
   personalityChartLabels
   personalityChartDataset
   personalityChartOptions
+
+  predictedPersonalityDataReady = false;
+
   @Input() mid: string
 
   constructor(private movieService: MoviesService, private activatedRouter: ActivatedRoute, private imageService: ImagesService) {
@@ -478,23 +481,30 @@ export class ReviewComponent {
     }];
   }
 
-  createPersonalityChart(resData: any){
+  createPersonalityChart(resData: any) {
+    console.log("resdata:");
+    console.log(resData);
     this.personalityChartLabels = ['Openness', 'Agreeableness', 'Emotional Stability', 'Conscientiousness', 'Extraversion'];
     this.personalityChartDataset = [
       {
-        data: [resData.openness]
+        data: [resData.openness],
+        label: this.personalityChartLabels[0]
       },
       {
-        data: [resData.agreeableness]
+        data: [resData.agreeableness],
+        label: this.personalityChartLabels[1]
       },
       {
-        data: [resData.emotional_stability]
+        data: [resData.emotional_stability],
+        label: this.personalityChartLabels[2]
       },
       {
-        data: [resData.conscientiousness]
+        data: [resData.conscientiousness],
+        label: this.personalityChartLabels[3]
       },
       {
-        data: [resData.extraversion]
+        data: [resData.extraversion],
+        label: this.personalityChartLabels[4]
       }
     ];
     this.personalityChartOptions = {
@@ -504,6 +514,7 @@ export class ReviewComponent {
         position: 'bottom'
       }
     }
+    this.predictedPersonalityDataReady = true;
   }
   
 
