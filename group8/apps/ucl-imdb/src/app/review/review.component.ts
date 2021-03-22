@@ -57,6 +57,13 @@ export class ReviewComponent {
   cf_piechart_labels
   cf_piechart_data
   cfChartOptions
+  predictionChartLabels
+  predictionChartData
+  predictionChartOptions
+  predictionChartPlugIns: PluginServiceGlobalRegistrationAndOptions[]
+  personalityChartLabels
+  personalityChartDataset
+  personalityChartOptions
   @Input() mid: string
 
   constructor(private movieService: MoviesService, private activatedRouter: ActivatedRoute, private imageService: ImagesService) {
@@ -199,10 +206,7 @@ export class ReviewComponent {
         }
       }
     }).unsubscribe;
-  }
-
-  public scatterChartType = 'scatter';
-  
+  }  
   public barChartLegend = true;
 
   public revChartLabels: Label = ['Revenue', 'Budget'];
@@ -212,6 +216,8 @@ export class ReviewComponent {
   public doughnutChartType: ChartType = 'doughnut';
   public pieChartType: ChartType = 'pie';
   public barChartType: ChartType = 'bar';
+  public scatterChartType: ChartType = 'scatter';
+  public radarChartType: ChartType = 'radar';
 
   public voteChartOptions = {
     legend: {
@@ -426,15 +432,79 @@ export class ReviewComponent {
     }
   }];
 
-  // Radar Chart
-  public radarChartLabels = ['Q1', 'Q2', 'Q3', 'Q4'];
-  public radarChartData = [
-    {data: [120, 130, 180, 70], label: '2017'},
-    {data: [90, 150, 200, 45], label: '2018'}
-  ];
-  public radarChartType = 'radar';
+  createPredictionChart(resData: any){
+    this.predictionChartLabels = ['Genre Rating', 'Company Rating', 'Provided Tag Rating', 'Provided Panel Rating'];
+    this.predictionChartData = [resData.genre_rating_avg, resData.company_rating_avg, resData.tag_rating_avg, resData.provided_ratings_avg];
+    this.predictionChartOptions = {
+      title: {
+        display: true,
+        text: 'Predicted Movie Rating',
+        position: 'bottom'
+      }
+    };
 
+    this.predictionChartPlugIns = [{
+      beforeDraw: (chart: any) => {
+        const ctx = chart.ctx;
+        const txt = resData.overall_avg.toFixed(2);
+  
+        //Get options from the center object in options
+        const sidePadding = 60;
+        const sidePaddingCalculated = (sidePadding / 100) * (chart.innerRadius * 2)
+  
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        const centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
+        const centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2);
+  
+        //Get the width of the string and also the width of the element minus 10 to give it 5px side padding
+        const stringWidth = ctx.measureText(txt).width;
+        const elementWidth = (chart.innerRadius * 2) - sidePaddingCalculated;
+  
+        // Find out how much the font can grow in width.
+        const widthRatio = elementWidth / stringWidth;
+        const newFontSize = Math.floor(20 * widthRatio);
+        const elementHeight = (chart.innerRadius * 2);
+  
+        // Pick a new font size so it will not be larger than the height of label.
+        const fontSizeToUse = Math.min(newFontSize, elementHeight);
+  
+        ctx.font = fontSizeToUse + 'px Roboto';
+        ctx.fillStyle = 'white';
+  
+        // Draw text in center
+        ctx.fillText(txt, centerX, centerY);
+      }
+    }];
+  }
 
+  createPersonalityChart(resData: any){
+    this.personalityChartLabels = ['Openness', 'Agreeableness', 'Emotional Stability', 'Conscientiousness', 'Extraversion'];
+    this.personalityChartDataset = [
+      {
+        data: [resData.openness]
+      },
+      {
+        data: [resData.agreeableness]
+      },
+      {
+        data: [resData.emotional_stability]
+      },
+      {
+        data: [resData.conscientiousness]
+      },
+      {
+        data: [resData.extraversion]
+      }
+    ];
+    this.personalityChartOptions = {
+      title: {
+        display: true,
+        text: 'Predicted Movie Rating',
+        position: 'bottom'
+      }
+    }
+  }
   
 
   getImage(posterPath: string) {
