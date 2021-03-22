@@ -15,7 +15,9 @@
                                 <figure class="movie-poster"><img [src]="this.poster"></figure>
                             </div>
                             <div class="col-md-6">
-                                <h2 class="movie-title">{{this.movie.title}}</h2>
+                                <h2 class="movie-title">
+                                    <a href="https://www.google.com/search?q={{this.movie.title}} movie" target="_blank">{{this.movie.title}}</a>
+                                </h2>
                                 <div class="like-bar">
                                     <div class="all tooltip">
                                         <div class="bar">
@@ -56,10 +58,16 @@
                                 </ul>
 
                                 <ul class="starring">
-                                    <li><strong>Directors:</strong> Kirk de Mico (as Kirk DeMico). Chris Sanders</li>
-                                    <li><strong>Writers:</strong> Chris Sanders (screenplay), Kirk De Micco (screenplay)
+                                    <li><strong>Cast:</strong>
+                                        <div class="entry-content" *ngIf="this.movie.cast_names">
+                                            <span *ngFor="let cast of this.movie.cast_names">
+                                                <a href="https://www.google.com/search?q={{cast}}" target="_blank">{{cast}}</a>; 
+                                            </span>
+                                        </div>
+                                        <div class="entry-content" *ngIf="! this.movie.cast_names">
+                                            <span>Not available yet</span>
+                                        </div>
                                     </li>
-                                    <li><strong>Stars:</strong> Nicolas Cage, Ryan Reynolds, Emma Stone</li>
                                 </ul>
                             </div>
                         </div>
