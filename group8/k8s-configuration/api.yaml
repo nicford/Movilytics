@@ -77,11 +77,13 @@ kind: Service
 metadata:
   name: api-external-service
 spec:
+  externalIPs:
+    - 127.0.0.1
   selector:
     app: api
   type: LoadBalancer
   ports:
     - protocol: TCP
-      port: 3333  # port on host
-      targetPort: 3333
+      port: 80  # port on host
+      targetPort: 80
       nodePort: 30000

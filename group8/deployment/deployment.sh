@@ -1,20 +1,24 @@
 # NOTE: before
 
-## stage 0: setup by starting minikube
+## stage 0: setup by starting docker and minikube 
+sudo systemctl start docker
 minikube start
 eval $(minikube docker-env)
+
+cd ..
+echo `pwd`
 
 ## stage 1, build projects
 
 # 1.1 build frontend
-echo "STAGE 1.1: STARTED BUILDING FRONTEND"
-ng build ucl-imdb --prod --buildOptimizer --extractLicenses --no-namedChunks --optimization --outputHashing=all --no-sourceMap --no-vendorChunk
-echo "SUCCESSFULLY FINISHED BUILDING FRONTEND"
+# echo "STAGE 1.1: STARTED BUILDING FRONTEND"
+# ng build ucl-imdb --prod --buildOptimizer --extractLicenses --no-namedChunks --optimization --outputHashing=all --no-sourceMap --no-vendorChunk
+# echo "SUCCESSFULLY FINISHED BUILDING FRONTEND"
 
-# 1.2 build API
-echo "STAGE 1.2: STARTED BUILDING API"
-ng build api --prod --extractLicenses --generatePackageJson --optimization     # TODO: specify number of workers and memory limit
-echo "SUCCESSFULLY FINISHED BUILDING API"
+# # 1.2 build API
+# echo "STAGE 1.2: STARTED BUILDING API"
+# ng build api --prod --extractLicenses --generatePackageJson --optimization     # TODO: specify number of workers and memory limit
+# echo "SUCCESSFULLY FINISHED BUILDING API"
 
 
 ## stage 2, build docker images
@@ -35,5 +39,5 @@ echo "STAGE 2.2: SUCCESSFULLY FINISHED BUILDING DATABASE DOCKER IMAGE"
 ## stage 3: Deploy to kubernetes
 echo "STAGE 3: DEPLOY TO KUBERNETES"
 cd k8s-configuration
-./update_all_configs.sh     # update deployments
-./restart_all_deployments.sh
+sudo ./update_all_configs.sh     # update deployments
+sudo ./restart_all_deployments.sh
