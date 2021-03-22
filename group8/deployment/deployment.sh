@@ -1,9 +1,9 @@
 # NOTE: before
 
 ## stage 0: setup by starting docker and minikube 
-sudo systemctl start docker
-minikube start
-eval $(minikube docker-env)
+# sudo systemctl start docker
+# minikube start
+# eval $(minikube docker-env)
 
 cd ..
 echo `pwd`
