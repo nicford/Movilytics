@@ -40,12 +40,12 @@
                                     <li><strong>Length:</strong> {{this.movie.runtime}} min</li>
                                     <li><strong>Premiere:</strong> {{this.movie.released_year}}</li>
                                     <li><strong>Adult:</strong> {{this.movie.adult}}</li>
-                                    <li><strong>Language: </strong> <span *ngFor="let language of this.movie.language_list">{{language}} </span></li>
-                                    <li><strong>Countries:</strong> <span *ngFor="let country of this.movie.country_list">{{country}} </span></li>
-                                    <li><strong>Genres: </strong> <span *ngFor="let genre of this.movie.genre_list">{{genre}} </span></li>
+                                    <li><strong>Language: </strong> <span *ngFor="let language of this.movie.language_list">{{language}}; </span></li>
+                                    <li><strong>Countries:</strong> <span *ngFor="let country of this.movie.country_list">{{country}}; </span></li>
+                                    <li><strong>Genres: </strong> <span *ngFor="let genre of this.movie.genre_list">{{genre}}; </span></li>
                                     <li><strong>Translation:</strong>
                                         <div class="entry-content">
-                                            <span *ngFor="let translation of this.movie.translation_list">{{translation}} </span>
+                                            <span *ngFor="let translation of this.movie.translation_list">{{translation}}; </span>
                                         </div>
                                     </li>
                                     <li>
