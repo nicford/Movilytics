@@ -1,13 +1,9 @@
 import { CACHE_MANAGER, Get, HttpService, Inject, Injectable } from '@nestjs/common';
-// import { QueryResult } from 'pg';
 import { DatabaseService } from '../database/database.service';
 import { Cache } from 'cache-manager';
-
-import { exec } from 'child_process';
-import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as dotenv from "dotenv";
-import { searchDto, searchResponse } from '@group8/api-interfaces';
+import { searchDto } from '@group8/api-interfaces';
 import { sha1 } from 'object-hash';
 
 
@@ -23,7 +19,6 @@ export class MoviesService {
               ) {
                 console.log(__dirname);
                 console.log(process.cwd());
-                // cons /ole.log(exec('ls -lha'));
               }
 
   
