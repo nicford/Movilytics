@@ -7,6 +7,7 @@
 2. Run your docker by:
     ```
     $ cd group8
+    $ npm install
     $ docker-compose up
     ```
 
