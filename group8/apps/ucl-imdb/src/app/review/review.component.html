@@ -26,7 +26,6 @@
                                                 </div>
                                                 <div class="dislikes" [style.width]="this.getBarWidth(this.movie.dislikes, this.totalLikes) + '%'">
                                                     <span class="tooltiptext">{{this.movie.likes}} Likes <br> {{this.movie.dislikes}} Dislikes</span>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -189,8 +188,6 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-
-
                                         <div style="display: block">
                                             <canvas baseChart [datasets]="scatterChartData" [labels]="scatterChartLabels" [options]="scatterChartOptions" [chartType]="scatterChartType">
                                             </canvas>
@@ -201,6 +198,10 @@
                                             <canvas baseChart [datasets]="lineChartData" [labels]="lineChartLabels" [options]="lineChartOptions" [chartType]="lineChartType"></canvas>
                                         </div>
                                     </div>
+                                </div>
+                                <div style="display: block">
+                                    <canvas baseChart [datasets]="likelinessChartData" [labels]="pieChartLabels" [chartType]="barChartType" [options]="likelinessChartOptions" >
+                                    </canvas>
                                 </div>
                             </div>
                             <div class="seperator"></div>
@@ -240,8 +241,8 @@
                             </div>
 
                             <div class="graph-container" *ngIf="this.toggleDict['personalitypredToggle']">
-                                <group8-file-upload #personalityUpload endpoint="/movie-report/predict-personality" requiredFileType="text/csv" (uploadComplete)="createPersonalityChart($event)"></group8-file-upload>
-                                <div style='display:block' *ngIf="this.predictedPersonalityDataReady">
+                                <group8-file-upload #personalityUpload endpoint="/movie-report/predict-personality" requiredFileType="text/csv" (uploadComplete)="createPersonalityChart($event)" ></group8-file-upload>
+                                <div style ='display:block' *ngIf="this.predictedPersonalityDataReady">
                                     <canvas baseChart [datasets]='personalityChartDataset' [labels]="personalityChartLabels" [options]="personalityChartOptions" [chartType]="radarChartType"></canvas>
                                 </div>
                             </div>
@@ -256,7 +257,7 @@
 
                             <div class="graph-container" *ngIf="this.toggleDict['ratingspredToggle']">
                                 <group8-file-upload endpoint="/movie-report/predict-ratings/{{this.movie.mid}}" requiredFileType="text/csv" (uploadComplete)="createPredictionChart($event)"></group8-file-upload>
-                                <div style='display:block' *ngIf="this.predictedRatingDataReady">
+                                <div style ='display:block' *ngIf="this.predictedRatingDataReady">
                                     <canvas baseChart [datasets]='predictionChartData' [labels]="predictionChartLabels" [options]="predictionChartOptions" [plugins]="predictionChartPlugIns" [chartType]="doughnutChartType"></canvas>
                                 </div>
                             </div>

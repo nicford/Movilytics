@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ImagesService } from '../services/images.service';
 import { MoviesService } from '../services/movies.service';
 import { Label, PluginServiceGlobalRegistrationAndOptions } from 'ng2-charts';
-import { ChartType, Chart } from 'chart.js';
+import { ChartType, Chart, ChartDataSets } from 'chart.js';
 // import { movieRes } from './movieRes.interface';
 
 @Component({
@@ -51,6 +51,7 @@ export class ReviewComponent {
   pieChartData
   barChartLabels
   barChartData
+  likelinessChartData: ChartDataSets[]
   scatterChartData
   scatterChartLabels
   cf_res
@@ -163,6 +164,84 @@ export class ReviewComponent {
           ], label: 'Percentile Difference'
         },
       ];
+
+      this.likelinessChartData = [
+        {
+          data: [
+            genre_details_dict.animation_glob_avg_likeliness,
+            genre_details_dict.adventure_glob_avg_likeliness,
+            genre_details_dict.family_glob_avg_likeliness,
+            genre_details_dict.comedy_glob_avg_likeliness,
+            genre_details_dict.fantasy_glob_avg_likeliness,
+            genre_details_dict.romance_glob_avg_likeliness,
+            genre_details_dict.drama_glob_avg_likeliness,
+            genre_details_dict.action_glob_avg_likeliness,
+            genre_details_dict.crime_glob_avg_likeliness,
+            genre_details_dict.thriller_glob_avg_likeliness,
+            genre_details_dict.horror_glob_avg_likeliness,
+            genre_details_dict.history_glob_avg_likeliness,
+            genre_details_dict.science_fiction_glob_avg_likeliness,
+            genre_details_dict.mystery_glob_avg_likeliness,
+            genre_details_dict.war_glob_avg_likeliness,
+            genre_details_dict.music_glob_avg_likeliness,
+            genre_details_dict.documentary_glob_avg_likeliness,
+            genre_details_dict.western_glob_avg_likeliness,
+            genre_details_dict.tv_movie_glob_avg_likeliness
+          ],
+          label: "Percentage Likelihood Based on Movie Genres"
+        },
+        {
+          data: [
+            genre_details_dict.animation_tag_avg,
+            genre_details_dict.adventure_tag_avg,
+            genre_details_dict.family_tag_avg,
+            genre_details_dict.comedy_tag_avg,
+            genre_details_dict.fantasy_tag_avg,
+            genre_details_dict.romance_tag_avg,
+            genre_details_dict.drama_tag_avg,
+            genre_details_dict.action_tag_avg,
+            genre_details_dict.crime_tag_avg,
+            genre_details_dict.thriller_tag_avg,
+            genre_details_dict.horror_tag_avg,
+            genre_details_dict.history_tag_avg,
+            genre_details_dict.science_fiction_tag_avg,
+            genre_details_dict.mystery_tag_avg,
+            genre_details_dict.war_tag_avg,
+            genre_details_dict.music_tag_avg,
+            genre_details_dict.documentary_tag_avg,
+            genre_details_dict.western_tag_avg,
+            genre_details_dict.tv_movie_tag_avg
+          ],
+          label: "Percentage Likelihood Based on Tags"
+        },
+        {
+          data: [
+            genre_details_dict.animation_tag_avg_total,
+            genre_details_dict.adventure_tag_avg_total,
+            genre_details_dict.family_tag_avg_total,
+            genre_details_dict.comedy_tag_avg_total,
+            genre_details_dict.fantasy_tag_avg_total,
+            genre_details_dict.romance_tag_avg_total,
+            genre_details_dict.drama_tag_avg_total,
+            genre_details_dict.action_tag_avg_total,
+            genre_details_dict.crime_tag_avg_total,
+            genre_details_dict.thriller_tag_avg_total,
+            genre_details_dict.horror_tag_avg_total,
+            genre_details_dict.history_tag_avg_total,
+            genre_details_dict.science_fiction_tag_avg_total,
+            genre_details_dict.mystery_tag_avg_total,
+            genre_details_dict.war_tag_avg_total,
+            genre_details_dict.music_tag_avg_total,
+            genre_details_dict.documentary_tag_avg_total,
+            genre_details_dict.western_tag_avg_total,
+            genre_details_dict.tv_movie_tag_avg_total
+          ],
+          label: "Combined Percentage Likelihood",
+          type: 'line',
+          fill: 'false'
+        }
+      ]
+    
 
       this.scatterChartData = [{ data: this.movie.tag_scatter, label: "Tags" }];
       this.scatterChartLabels = this.movie.tag_labels;
@@ -309,6 +388,16 @@ export class ReviewComponent {
     title: {
       display: true,
       text: 'Average Percentile Difference',
+      position: 'bottom'
+    }
+  };
+
+  public likelinessChartOptions = {
+    scaleShowVerticalLines: false,
+    responsive: true,
+    title: {
+      display: true,
+      text: 'Viewers Percentage Likeliness for all Genres',
       position: 'bottom'
     }
   };
@@ -547,7 +636,7 @@ export class ReviewComponent {
     if (mystr.trim().length == 0) {
       return NaN;
     }
-    let value = this.convertString(mystr);
+     const value = this.convertString(mystr);
     return Number(Math.round(parseFloat(value + 'e' + 2)) + 'e-' + 2);
 
   }

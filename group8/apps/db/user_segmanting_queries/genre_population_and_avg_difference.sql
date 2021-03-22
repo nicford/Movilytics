@@ -40,7 +40,26 @@ create or replace function get_genre_population_avg_diff(
 		western_glob_avg decimal,
 		western_count bigint,
 		tv_movie_glob_avg decimal,
-		tv_movie_count bigint
+		tv_movie_count bigint,
+		animation_tag_avg decimal,
+		adventure_tag_avg decimal,
+		family_tag_avg decimal,
+		comedy_tag_avg decimal,
+		fantasy_tag_avg decimal,
+		romance_tag_avg decimal,
+		drama_tag_avg decimal,
+		action_tag_avg decimal,
+		crime_tag_avg decimal,
+		thriller_tag_avg decimal,
+		horror_tag_avg decimal,
+		history_tag_avg decimal,
+		science_fiction_tag_avg decimal,
+		mystery_tag_avg decimal,
+		war_tag_avg decimal,
+		music_tag_avg decimal,
+		documentary_tag_avg decimal,
+		western_tag_avg decimal,
+		tv_movie_tag_avg decimal
 	)
 	language plpgsql
 as $$
@@ -48,32 +67,57 @@ as $$
 		return query 
 			with 
 				global_avg as (
-					select avg(animation) as animation_glob_avg,
-					   avg(adventure) as adventure_glob_avg,
-					   avg(family) as family_glob_avg,
-					   avg(comedy) as comedy_glob_avg,
-					   avg(fantasy) as fantasy_glob_avg,
-					   avg(romance) as romance_glob_avg,
-					   avg(drama) as drama_glob_avg,
-					   avg(action) as action_glob_avg,
-					   avg(crime) as crime_glob_avg,
-					   avg(thriller) as thriller_glob_avg,
-					   avg(horror) as horror_glob_avg,
-					   avg(history) as history_glob_avg,
-					   avg(science_fiction) as science_fiction_glob_avg,
-					   avg(mystery) as mystery_glob_avg,
-					   avg(war) as war_glob_avg,
-					   avg(music) as music_glob_avg,
-					   avg(documentary) as documentary_glob_avg,
-					   avg(western) as western_glob_avg,
-					   avg(tv_movie) as tv_movie_glob_avg
+					select COALESCE(avg(animation),0) as animation_glob_avg,
+					   COALESCE(avg(adventure),0) as adventure_glob_avg,
+					   COALESCE(avg(family),0) as family_glob_avg,
+					   COALESCE(avg(comedy),0) as comedy_glob_avg,
+					   COALESCE(avg(fantasy),0) as fantasy_glob_avg,
+					   COALESCE(avg(romance),0) as romance_glob_avg,
+					   COALESCE(avg(drama),0) as drama_glob_avg,
+					   COALESCE(avg(action),0) as action_glob_avg,
+					   COALESCE(avg(crime),0) as crime_glob_avg,
+					   COALESCE(avg(thriller),0) as thriller_glob_avg,
+					   COALESCE(avg(horror),0) as horror_glob_avg,
+					   COALESCE(avg(history),0) as history_glob_avg,
+					   COALESCE(avg(science_fiction),0) as science_fiction_glob_avg,
+					   COALESCE(avg(mystery),0) as mystery_glob_avg,
+					   COALESCE(avg(war),0) as war_glob_avg,
+					   COALESCE(avg(music),0) as music_glob_avg,
+					   COALESCE(avg(documentary),0) as documentary_glob_avg,
+					   COALESCE(avg(western),0) as western_glob_avg,
+					   COALESCE(avg(tv_movie),0) as tv_movie_glob_avg
 					from user_genre_mapping
 					where user_id in (select user_id from ratings where mid = movie_id)
+				), 
+				tag_avg as (
+					select 
+						COALESCE(avg(animation),0) as animation_tag_avg,
+						COALESCE(avg(adventure),0) as adventure_tag_avg,
+						COALESCE(avg(family),0) as family_tag_avg,
+						COALESCE(avg(comedy),0) as comedy_tag_avg,
+						COALESCE(avg(fantasy),0) as fantasy_tag_avg,
+						COALESCE(avg(romance),0) as romance_tag_avg,
+						COALESCE(avg(drama),0) as drama_tag_avg,
+						COALESCE(avg(action),0) as action_tag_avg,
+						COALESCE(avg(crime),0) as crime_tag_avg,
+						COALESCE(avg(thriller),0) as thriller_tag_avg,
+						COALESCE(avg(horror),0) as horror_tag_avg,
+						COALESCE(avg(history),0) as history_tag_avg,
+						COALESCE(avg(science_fiction),0) as science_fiction_tag_avg,
+						COALESCE(avg(mystery),0) as mystery_tag_avg,
+						COALESCE(avg(war),0) as war_tag_avg,
+						COALESCE(avg(music),0) as music_tag_avg,
+						COALESCE(avg(documentary),0) as documentary_tag_avg,
+						COALESCE(avg(western),0) as western_tag_avg,
+						COALESCE(avg(tv_movie),0) as tv_movie_tag_avg
+					from user_genre_mapping
+					where user_id in (select user_id from tags where mid = movie_id group by user_id)
 				),
 				curr_avg as (
 					select 
-						avg(rating) as local_avg 
-					from ratings where mid = movie_id
+						COALESCE(avg_rating, 0) as local_avg 
+					from movie_stats 
+					where mid = movie_id
 				),
 				population_table as (
 					select 
@@ -139,6 +183,25 @@ as $$
 					global_avg.western_glob_avg,
 					population_table.western_count,
 					global_avg.tv_movie_glob_avg,
-					population_table.tv_movie_count
-				from global_avg, curr_avg, population_table;
+					population_table.tv_movie_count,
+					tag_avg.animation_tag_avg,
+					tag_avg.adventure_tag_avg,
+					tag_avg.family_tag_avg,
+					tag_avg.comedy_tag_avg,
+					tag_avg.fantasy_tag_avg,
+					tag_avg.romance_tag_avg,
+					tag_avg.drama_tag_avg,
+					tag_avg.action_tag_avg,
+					tag_avg.crime_tag_avg,
+					tag_avg.thriller_tag_avg,
+					tag_avg.horror_tag_avg,
+					tag_avg.history_tag_avg,
+					tag_avg.science_fiction_tag_avg,
+					tag_avg.mystery_tag_avg,
+					tag_avg.war_tag_avg,
+					tag_avg.music_tag_avg,
+					tag_avg.documentary_tag_avg,
+					tag_avg.western_tag_avg,
+					tag_avg.tv_movie_tag_avg
+				from global_avg, curr_avg, population_table, tag_avg;
 end; $$
