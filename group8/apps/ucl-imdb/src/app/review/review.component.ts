@@ -74,12 +74,10 @@ export class ReviewComponent {
   constructor(private movieService: MoviesService, private activatedRouter: ActivatedRoute, private imageService: ImagesService) {
     Chart.defaults.global.defaultFontColor = 'grey';
     this.mid = this.activatedRouter.snapshot.paramMap.get("reviewID");
-    console.log(this.mid)
 
     // REVIEW
     const review_res = this.movieService.getMovieReview(this.mid)
     review_res.subscribe(resData => {
-      console.log(resData)
       this.movie = resData
       this.totalStars = this.convertString(this.movie.one_star) + this.convertString(this.movie.two_star) + this.convertString(this.movie.three_star) + this.convertString(this.movie.four_star) + this.convertString(this.movie.five_star);
       this.totalLikes = this.convertString(this.movie.likes) + this.convertString(this.movie.dislikes)
@@ -534,7 +532,6 @@ export class ReviewComponent {
     Number(resData.body.company_rating_avg),
     Number(resData.body.tag_rating_avg),
     Number(resData.body.provided_ratings_avg)];
-    console.log(this.predictionChartData)
     this.predictionChartOptions = {
       title: {
         display: true,
@@ -548,7 +545,6 @@ export class ReviewComponent {
         const ctx = chart.ctx;
         const avg = Number(resData.body.overall_avg)
         const txt = avg.toFixed(2);
-        console.log(txt)
 
         //Get options from the center object in options
         const sidePadding = 60;
@@ -583,8 +579,6 @@ export class ReviewComponent {
   }
 
   createPersonalityChart(resData: any) {
-    console.log("resdata:");
-    console.log(resData);
 
     this.personalityChartLabels = ['Openness', 'Agreeableness', 'Emotional Stability', 'Conscientiousness', 'Extraversion'];
     this.personalityChartDataset = [
