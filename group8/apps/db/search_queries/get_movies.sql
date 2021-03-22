@@ -17,14 +17,17 @@ create or replace function get_movies (
 		poster_path varchar(255), 
 		vote_average decimal, 
 		tagline text, 
-		status varchar(50))
+		status varchar(50),
+		popularity decimal,
+		polarity decimal
+	)
 	language plpgsql
 as $$ 
 	begin
 		return query
-			select unique_filtered.mid, unique_filtered.title, unique_filtered.poster_path, unique_filtered.vote_average, unique_filtered.tagline, unique_filtered.status
+			select unique_filtered.mid, unique_filtered.title, unique_filtered.poster_path, unique_filtered.vote_average, unique_filtered.tagline, unique_filtered.status, unique_filtered.popularity, unique_filtered.polarity
 			from (
-				select filtered.mid, filtered.title, filtered.poster_path, round(coalesce(filtered.avg_rating,0),1) as vote_average, filtered.tagline, filtered.status, filtered.popularity, filtered.released_year, filtered.polarity
+				select filtered.mid, filtered.title, filtered.poster_path, round(coalesce(filtered.avg_rating,0),1) as vote_average, filtered.tagline, filtered.status, round(coalesce(filtered.popularity,0),1) as popularity, filtered.released_year, round(coalesce(filtered.polarity,0),2) as polarity
 				from (
 					select movies.mid, movies.title, movies.poster_path, movies.vote_average, movies.tagline, movies.popularity, movies.released_year, movies.status, genres_table.genre_id, rating_table.avg_rating, rating_table.polarity
 					from movies

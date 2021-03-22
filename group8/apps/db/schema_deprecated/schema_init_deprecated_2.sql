@@ -269,14 +269,14 @@ ALTER FUNCTION public.get_genre_population_avg_diff(movie_id integer) OWNER TO p
 -- Name: get_movies(integer, integer, text, text, boolean, integer, integer, integer, integer[], character varying); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.get_movies(result_limit integer DEFAULT 100, result_offset integer DEFAULT 0, keyword text DEFAULT NULL::text, sort_by text DEFAULT NULL::text, ascending boolean DEFAULT true, start_year integer DEFAULT NULL::integer, end_year integer DEFAULT NULL::integer, allowed_ratings integer DEFAULT NULL::integer, genres_arg integer[] DEFAULT NULL::integer[], status_arg character varying DEFAULT NULL::character varying) RETURNS TABLE(mid integer, title text, poster_path character varying, vote_average numeric, tagline text, status character varying, popularity numeric, polarity numeric)
+CREATE FUNCTION public.get_movies(result_limit integer DEFAULT 100, result_offset integer DEFAULT 0, keyword text DEFAULT NULL::text, sort_by text DEFAULT NULL::text, ascending boolean DEFAULT true, start_year integer DEFAULT NULL::integer, end_year integer DEFAULT NULL::integer, allowed_ratings integer DEFAULT NULL::integer, genres_arg integer[] DEFAULT NULL::integer[], status_arg character varying DEFAULT NULL::character varying) RETURNS TABLE(mid integer, title text, poster_path character varying, vote_average numeric, tagline text, status character varying)
     LANGUAGE plpgsql
     AS $$ 
 	begin
 		return query
-			select unique_filtered.mid, unique_filtered.title, unique_filtered.poster_path, unique_filtered.vote_average, unique_filtered.tagline, unique_filtered.status, unique_filtered.popularity, unique_filtered.polarity
+			select unique_filtered.mid, unique_filtered.title, unique_filtered.poster_path, unique_filtered.vote_average, unique_filtered.tagline, unique_filtered.status
 			from (
-				select filtered.mid, filtered.title, filtered.poster_path, round(coalesce(filtered.avg_rating,0),1) as vote_average, filtered.tagline, filtered.status, round(coalesce(filtered.popularity,0),1) as popularity, filtered.released_year, round(coalesce(filtered.polarity,0),2) as polarity
+				select filtered.mid, filtered.title, filtered.poster_path, round(coalesce(filtered.avg_rating,0),1) as vote_average, filtered.tagline, filtered.status, filtered.popularity, filtered.released_year, filtered.polarity
 				from (
 					select movies.mid, movies.title, movies.poster_path, movies.vote_average, movies.tagline, movies.popularity, movies.released_year, movies.status, genres_table.genre_id, rating_table.avg_rating, rating_table.polarity
 					from movies
