@@ -636,7 +636,7 @@ export class ReviewComponent {
     if (mystr.trim().length == 0) {
       return NaN;
     }
-    let value = this.convertString(mystr);
+     const value = this.convertString(mystr);
     return Number(Math.round(parseFloat(value + 'e' + 2)) + 'e-' + 2);
 
   }
