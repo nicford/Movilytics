@@ -18,13 +18,12 @@
                                 <h2 class="movie-title">{{this.movie.title}}</h2>
                                 <div class="like-bar">
                                     <div class="all tooltip">
-                                        <div class="bar">
+                                        <div class="bar" *ngIf="this.movie.status == 'Released'">
                                             <div>
                                                 <div class="likes" [style.width]="this.getBarWidth(this.movie.likes, this.totalLikes) + '%'">
                                                 </div>
                                                 <div class="dislikes" [style.width]="this.getBarWidth(this.movie.dislikes, this.totalLikes) + '%'">
-                                                    <span class="tooltiptext">{{this.movie.likes}} Likes <br>
-                                                        {{this.movie.dislikes}} Dislikes</span>
+                                                    <span class="tooltiptext">{{this.movie.likes}} Likes <br> {{this.movie.dislikes}} Dislikes</span>
 
                                                 </div>
                                             </div>
@@ -45,8 +44,7 @@
                                     <li><strong>Genres: </strong> <span *ngFor="let genre of this.movie.genre_list">{{genre}} </span></li>
                                     <li><strong>Translation:</strong>
                                         <div class="entry-content">
-                                            <span *ngFor="let translation of this.movie.translation_list">{{translation}}
-                                            </span>
+                                            <span *ngFor="let translation of this.movie.translation_list">{{translation}} </span>
                                         </div>
                                     </li>
                                     <li>
@@ -98,8 +96,7 @@
                                     </div>
                                     <div class="middle">
                                         <div class="bar-container ">
-                                            <div class="bar-5" [style.width]="this.getBarWidth(this.movie.five_star, this.totalStars) + '%'">
-                                            </div>
+                                            <div class="bar-5" [style.width]="this.getBarWidth(this.movie.five_star, this.totalStars) + '%'"></div>
                                         </div>
                                     </div>
                                     <span class="rating-text">{{this.movie.five_star}} votes</span>
@@ -111,8 +108,7 @@
                                     </div>
                                     <div class="middle">
                                         <div class="bar-container ">
-                                            <div class="bar-4" [style.width]="this.getBarWidth(this.movie.four_star, this.totalStars) + '%'">
-                                            </div>
+                                            <div class="bar-4" [style.width]="this.getBarWidth(this.movie.four_star, this.totalStars) + '%'"></div>
                                         </div>
                                     </div>
                                     <span class="rating-text">{{this.movie.four_star}} votes</span>
@@ -124,8 +120,7 @@
                                     </div>
                                     <div class="middle">
                                         <div class="bar-container ">
-                                            <div class="bar-3" [style.width]="this.getBarWidth(this.movie.three_star, this.totalStars) + '%'">
-                                            </div>
+                                            <div class="bar-3" [style.width]="this.getBarWidth(this.movie.three_star, this.totalStars) + '%'"></div>
                                         </div>
                                     </div>
                                     <span class="rating-text">{{this.movie.three_star}} votes</span>
@@ -137,8 +132,7 @@
                                     </div>
                                     <div class="middle">
                                         <div class="bar-container ">
-                                            <div class="bar-2" [style.width]="this.getBarWidth(this.movie.two_star, this.totalStars) + '%'">
-                                            </div>
+                                            <div class="bar-2" [style.width]="this.getBarWidth(this.movie.two_star, this.totalStars) + '%'"></div>
                                         </div>
                                     </div>
                                     <span class="rating-text">{{this.movie.two_star}} votes</span>
@@ -150,8 +144,7 @@
                                     </div>
                                     <div class="middle">
                                         <div class="bar-container ">
-                                            <div class="bar-1" [style.width]="this.getBarWidth(this.movie.one_star, this.totalStars) + '%'">
-                                            </div>
+                                            <div class="bar-1" [style.width]="this.getBarWidth(this.movie.one_star, this.totalStars) + '%'"></div>
                                         </div>
                                     </div>
                                     <span class="rating-text">{{this.movie.one_star}} votes</span>
@@ -162,11 +155,10 @@
                                     </div>
                                     <div class="middle">
                                         <div class="bar-container ">
-                                            <div class="bar-avg" [style.width]="this.convertString(this.movie.avg_rating)*10 + '%'">
-                                            </div>
+                                            <div class="bar-avg" [style.width]="this.convertString(this.movie.avg_rating)*10 + '%'"></div>
                                         </div>
                                     </div>
-                                    <span class="rating-text">{{this.movie.avg_rating}}</span>
+                                    <span class="rating-text">{{ (this.truncNum(this.movie.avg_rating)) }}</span>
                                 </div>
                             </div>
                             <div class="seperator"></div>
@@ -185,9 +177,7 @@
                                                 <ion-chip color="primary">
                                                     <ion-label>{{tag}}</ion-label>
                                                 </ion-chip>
-                                                <span class="tooltiptext">{{this.movie.tag_likes[i]}} Likes <br>
-                                                    {{this.movie.tag_dislikes[i]}} Dislikes</span>
-                                            </div>
+                                                <span class="tooltiptext">{{this.movie.tag_likes[i]}} Likes <br> {{this.movie.tag_dislikes[i]}} Dislikes</span></div>
 
 
                                         </div>
@@ -244,8 +234,7 @@
                             </div>
 
                             <div class="graph-container" *ngIf="this.toggleDict['personalitypredToggle']">
-                                <group8-file-upload #personalityUpload endpoint="/movie-report/predict-personality" requiredFileType="text/csv" (uploadComplete)="createPersonalityChart($event)">
-                                </group8-file-upload>
+                                <group8-file-upload #personalityUpload endpoint="/movie-report/predict-personality" requiredFileType="text/csv" (uploadComplete)="createPersonalityChart($event)"></group8-file-upload>
                                 <div style='display:block' *ngIf="this.predictedPersonalityDataReady">
                                     <canvas baseChart [datasets]='personalityChartDataset' [labels]="personalityChartLabels" [options]="personalityChartOptions" [chartType]="radarChartType"></canvas>
                                 </div>
@@ -260,10 +249,9 @@
                             </div>
 
                             <div class="graph-container" *ngIf="this.toggleDict['ratingspredToggle']">
-                                <group8-file-upload #predictionUpload endpoint="/movie-report/predict-ratings/{{this.movie.mid}}" requiredFileType="text/csv" (uploadComplete)="createPredictionChart($event)">
-                                </group8-file-upload>
+                                <group8-file-upload endpoint="/movie-report/predict-ratings/{{this.movie.mid}}" requiredFileType="text/csv" (uploadComplete)="createPredictionChart($event)"></group8-file-upload>
                                 <div style='display:block' *ngIf="this.predictedRatingDataReady">
-                                    <canvas baseChart [data]='predictionChartData' [labels]="predictionChartLabels" [options]="predictionChartOptions" [plugins]="predictionChartPlugIns" [chartType]="doughnutChartType"></canvas>
+                                    <canvas baseChart [datasets]='predictionChartData' [labels]="predictionChartLabels" [options]="predictionChartOptions" [plugins]="predictionChartPlugIns" [chartType]="doughnutChartType"></canvas>
                                 </div>
                             </div>
                         </div>

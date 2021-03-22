@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsInt, IsBooleanString, IsString, IsOptional, IsArray } from 'class-validator';
+import { IsNotEmpty, IsInt, IsBooleanString, IsString, IsOptional, IsArray, IsNumber } from 'class-validator';
 
 
 export interface Message {
@@ -38,9 +38,9 @@ export class searchDto {
   end_year: number = null;
 
   // @IsInt()
-  @IsArray()
+  @IsNumber()
   @IsOptional()
-  allowed_ratings: number[] = null;
+  allowed_ratings: number = null;
 
   @IsArray()
   @IsOptional()

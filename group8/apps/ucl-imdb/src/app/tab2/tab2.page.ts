@@ -100,6 +100,8 @@ export class Tab2Page {
     let req_ascending = "false"
     let req_sort_by = "popularity";
     let req_keyword = null;
+    let req_rating = null;
+
 
     if (this.sortOrder) {
       req_ascending = (this.sortOrder.value == "true" || this.sortOrder.value == "false")? this.sortOrder.value as string : "false";
@@ -110,11 +112,13 @@ export class Tab2Page {
     if (this.searchBar) {
       req_keyword = (this.searchBar.value != "")? (this.searchBar.value) : null;
     }
+    if (this.filterRating) {
+      req_rating = (this.filterRating)? +(this.filterRating.value): 0;
+    }
     let req_status_arg = (this.segmentRelease)? this.segmentRelease.value as string : "Released";
     if (req_status_arg == "Both") {req_status_arg = null}
     const req_range_upper = (this.rangeValues)? (this.rangeValues.upper) : "2021";
     const req_range_lower = (this.rangeValues)? (this.rangeValues.lower) : "1888";
-    const req_rating = (this.filterRating)? this.filterRating.value as number : 5;
 
     const req_genres_arg = []
     for (const tagName of this.searchTags) {
@@ -129,7 +133,7 @@ export class Tab2Page {
       result_offset: this.offset,
       start_year: req_range_lower,
       end_year: req_range_upper,
-      allowed_ratings: null,
+      allowed_ratings: req_rating,
       keyword: req_keyword,
       genres_arg: (req_genres_arg.length != 0)? req_genres_arg: null,
   };

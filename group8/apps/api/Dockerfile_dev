@@ -1,7 +1,7 @@
 # DEVELOPMENT IMAGE
 FROM node:current-alpine3.10 As development
 
-# RUN mkdir -p /usr/src/app
+RUN mkdir -p /usr/src/app
 # # RUN cd /usr/src && mkdir -p app
 WORKDIR /usr/src/app
 

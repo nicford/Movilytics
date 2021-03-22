@@ -1,5 +1,5 @@
 # PRODUCTION IMAGE
-FROM node:latest as production
+FROM node:current-alpine3.10 as production
 
 WORKDIR /usr/src/app
 

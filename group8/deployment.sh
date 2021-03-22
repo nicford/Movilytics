@@ -1,5 +1,9 @@
 # NOTE: before
 
+## stage 0: setup by starting minikube
+minikube start
+eval $(minikube docker-env)
+
 ## stage 1, build projects
 
 # 1.1 build frontend
@@ -31,4 +35,5 @@ echo "STAGE 2.2: SUCCESSFULLY FINISHED BUILDING DATABASE DOCKER IMAGE"
 ## stage 3: Deploy to kubernetes
 echo "STAGE 3: DEPLOY TO KUBERNETES"
 cd k8s-configuration
-./update_all_configs.sh
+./update_all_configs.sh     # update deployments
+./restart_all_deployments.sh
