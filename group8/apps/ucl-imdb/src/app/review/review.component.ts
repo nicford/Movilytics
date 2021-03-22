@@ -186,7 +186,8 @@ export class ReviewComponent {
             genre_details_dict.western_glob_avg_likeliness,
             genre_details_dict.tv_movie_glob_avg_likeliness
           ],
-          label: "Percentage Likelihood Based on Movie Genres"
+          label: "Percentage Likelihood Based on Movie Genres",
+          order: 3
         },
         {
           data: [
@@ -210,7 +211,8 @@ export class ReviewComponent {
             genre_details_dict.western_tag_avg,
             genre_details_dict.tv_movie_tag_avg
           ],
-          label: "Percentage Likelihood Based on Tags"
+          label: "Percentage Likelihood Based on Tags",
+          order: 2
         },
         {
           data: [
@@ -235,6 +237,7 @@ export class ReviewComponent {
             genre_details_dict.tv_movie_tag_avg_total
           ],
           label: "Combined Percentage Likelihood",
+          order: 1,
           type: 'line',
           fill: 'false'
         }
@@ -340,32 +343,32 @@ export class ReviewComponent {
     scales: {
       xAxes: [{
         gridLines: {
-          zeroLineColor: 'white'
+          zeroLineColor: '#84878D'
         },
         display: true,
         scaleLabel: {
           display: true,
           labelString: 'Net Likes',
-          fontColor: 'white',
+          fontColor: '#84878D',
           fontSize: 12
         },
         ticks: {
-          fontColor: "white"
+          fontColor: "#84878D"
         }
       }],
       yAxes: [{
         gridLines: {
-          zeroLineColor: 'white'
+          zeroLineColor: '#84878D'
         },
         display: true,
         scaleLabel: {
           display: true,
           labelString: 'Polarity',
-          fontColor: 'white',
+          fontColor: '#84878D',
           fontSize: 12
         },
         ticks: {
-          fontColor: "white"
+          fontColor: "#84878D"
         }
       }]
     }
@@ -376,7 +379,7 @@ export class ReviewComponent {
     title: {
       display: true,
       text: 'Genre Population Distribution',
-      position: 'bottom'
+      position: 'bottom'  
     }
   }
 
@@ -450,7 +453,7 @@ export class ReviewComponent {
       const fontSizeToUse = Math.min(newFontSize, elementHeight);
 
       ctx.font = fontSizeToUse + 'px Roboto';
-      ctx.fillStyle = 'white';
+      ctx.fillStyle = '#84878D';
 
       // Draw text in center
       ctx.fillText(txt, centerX, centerY);
@@ -485,7 +488,7 @@ export class ReviewComponent {
       const fontSizeToUse = Math.min(newFontSize, elementHeight);
 
       ctx.font = fontSizeToUse + 'px Roboto';
-      ctx.fillStyle = 'white';
+      ctx.fillStyle = '#84878D';
 
       // Draw text in center
       ctx.fillText(txt, centerX, centerY);
@@ -519,7 +522,7 @@ export class ReviewComponent {
       const fontSizeToUse = Math.min(newFontSize, elementHeight);
 
       ctx.font = fontSizeToUse + 'px Roboto';
-      ctx.fillStyle = 'white';
+      ctx.fillStyle = '#84878D';
 
       // Draw text in center
       ctx.fillText(txt, centerX, centerY);
@@ -568,7 +571,7 @@ export class ReviewComponent {
         const fontSizeToUse = Math.min(newFontSize, elementHeight);
 
         ctx.font = fontSizeToUse + 'px Roboto';
-        ctx.fillStyle = 'white';
+        ctx.fillStyle = '#84878D';
 
         // Draw text in center
         ctx.fillText(txt, centerX, centerY);
@@ -641,7 +644,4 @@ export class ReviewComponent {
     const trunc = Math.round(ratio)
     return trunc;
   }
-
-
-
 }
