@@ -58,10 +58,12 @@
                                 </ul>
 
                                 <ul class="starring">
-                                    <li><strong>Directors:</strong> Kirk de Mico (as Kirk DeMico). Chris Sanders</li>
-                                    <li><strong>Writers:</strong> Chris Sanders (screenplay), Kirk De Micco (screenplay)
+                                    <li><strong>Cast:</strong>
+                                        <div class="entry-content">
+                                            <span *ngFor="let cast of this.movie.cast_names">{{cast}}
+                                            </span>
+                                        </div>
                                     </li>
-                                    <li><strong>Stars:</strong> Nicolas Cage, Ryan Reynolds, Emma Stone</li>
                                 </ul>
                             </div>
                         </div>
