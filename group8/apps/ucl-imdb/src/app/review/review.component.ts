@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ImagesService } from '../services/images.service';
 import { MoviesService } from '../services/movies.service';
 import { Label, PluginServiceGlobalRegistrationAndOptions } from 'ng2-charts';
-import { ChartType } from 'chart.js';
+import { ChartType, Chart } from 'chart.js';
 // import { movieRes } from './movieRes.interface';
 
 @Component({
@@ -70,6 +70,7 @@ export class ReviewComponent {
   @Input() mid: string
 
   constructor(private movieService: MoviesService, private activatedRouter: ActivatedRoute, private imageService: ImagesService) {
+    Chart.defaults.global.defaultFontColor = 'grey';
     this.mid=this.activatedRouter.snapshot.paramMap.get("reviewID");
     console.log(this.mid)
 
@@ -484,27 +485,12 @@ export class ReviewComponent {
   createPersonalityChart(resData: any) {
     console.log("resdata:");
     console.log(resData);
+    
     this.personalityChartLabels = ['Openness', 'Agreeableness', 'Emotional Stability', 'Conscientiousness', 'Extraversion'];
     this.personalityChartDataset = [
       {
-        data: [resData.openness],
-        label: this.personalityChartLabels[0]
-      },
-      {
-        data: [resData.agreeableness],
-        label: this.personalityChartLabels[1]
-      },
-      {
-        data: [resData.emotional_stability],
-        label: this.personalityChartLabels[2]
-      },
-      {
-        data: [resData.conscientiousness],
-        label: this.personalityChartLabels[3]
-      },
-      {
-        data: [resData.extraversion],
-        label: this.personalityChartLabels[4]
+        data: [Number(resData.body.openness), Number(resData.body.agreeableness), Number(resData.body.emotional_stability), Number(resData.body.conscientiousness), Number(resData.body.extraversion) ],
+        label: "predicted personality"
       }
     ];
     this.personalityChartOptions = {
@@ -512,7 +498,12 @@ export class ReviewComponent {
         display: true,
         text: 'Predicted Movie Rating',
         position: 'bottom'
-      }
+      },
+      scale: {
+        ticks: {
+            min: 0
+        }
+    }
     }
     this.predictedPersonalityDataReady = true;
   }

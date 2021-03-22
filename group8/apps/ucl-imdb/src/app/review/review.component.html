@@ -234,7 +234,6 @@
                             <div class="graph-container" *ngIf="this.toggleDict['personalitypredToggle']">
                                 <group8-file-upload #personalityUpload endpoint="/movie-report/predict-personality" requiredFileType="text/csv" (uploadComplete)="createPersonalityChart($event)" ></group8-file-upload>
                                 <div style ='display:block' *ngIf="this.predictedPersonalityDataReady">
-                                    <h1>Data{{personalityUpload.resData}}</h1>
                                     <canvas baseChart [datasets]='personalityChartDataset' [labels]="personalityChartLabels" [options]="personalityChartOptions" [chartType]="radarChartType"></canvas>
                                 </div>
                             </div>
