@@ -540,11 +540,25 @@ export class ReviewComponent {
     return Number(mystr);
   }
 
+  truncNum(mystr: string) {
+    if (!mystr) {
+      return
+    }
+    if (mystr.trim().length == 0) {
+      return NaN;
+    }
+    let value = this.convertString(mystr);
+    return Number(Math.round(parseFloat(value + 'e' + 2)) + 'e-' + 2);
+
+  }
+
   getBarWidth(mystr: string, myTotal: number) {
     const mynum: number = this.convertString(mystr);
     const ratio: number = (mynum / myTotal) * 100;
     const trunc = Math.round(ratio)
     return trunc;
   }
+
+
 
 }
