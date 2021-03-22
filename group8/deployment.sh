@@ -1,5 +1,9 @@
 # NOTE: before
 
+## stage 0: setup by starting minikube
+minikube start
+eval $(minikube docker-env)
+
 ## stage 1, build projects
 
 # 1.1 build frontend
