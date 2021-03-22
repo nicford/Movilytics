@@ -429,7 +429,10 @@ export class ReviewComponent {
     beforeDraw: (chart: any) => {
       const ctx = chart.ctx;
       const netProfit = this.movie.revenue - this.movie.budget;
-      const txt = '$' + netProfit;
+      let txt = '$' + Math.abs(netProfit);
+      if (netProfit < 0){
+        txt = '-' + txt;
+      }
 
       //Get options from the center object in options
       const sidePadding = 60;
