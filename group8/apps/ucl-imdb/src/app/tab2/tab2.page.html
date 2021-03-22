@@ -99,13 +99,21 @@
                     <div class="movies-container">
                         <div class="movie-list">
                             <div class="movie" *ngFor="let movie of this.movies">
-                                <ion-badge color="warning" *ngIf="movie.status=='Released'">{{movie.vote_average}}</ion-badge>
-                                <a href="tabs/tab2/{{movie.mid}}">
+
+                                <a href="tabs/tab2/{{movie.mid}} ">
                                     <figure class="movie-poster "><img [src]="getImage(movie.poster_path) "></figure>
                                 </a>
+
                                 <div class="movie-title ">
-                                    <a (click)="goToReview(movie.mid)">{{movie.title}}</a></div>
+                                    <a (click)="goToReview(movie.mid) ">{{movie.title}}</a></div>
+                                <span class="poster-badges">
+                                    <ion-badge color="warning"  *ngIf="movie.status=='Released'">{{movie.vote_average}}</ion-badge>
+                                    <ion-badge color="primary " *ngIf="movie.status=='Released' ">{{movie.polarity}}</ion-badge>
+                                    <ion-badge color="danger"  *ngIf="movie.status=='Released'">{{movie.popularity}}</ion-badge>
+                                </span>
+
                                 <p>{{movie.tagline}}</p>
+
                             </div>
 
                         </div>

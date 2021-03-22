@@ -152,12 +152,17 @@ ion-segment {
     margin-left: auto;
 }
 
-ion-badge {
-    position: absolute;
+.poster-badges {
+    display: flex;
+    margin-top: 7.5px;
     border-radius: 30%;
-    margin: 7.5px;
     $badge-font-size: 2em;
     z-index: 1000;
+    margin-bottom: 7.5px;
+}
+
+ion-badge {
+    margin-right: 5px;
 }
 
 .top_three {
