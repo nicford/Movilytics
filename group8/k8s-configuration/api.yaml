@@ -17,12 +17,12 @@ spec:
       containers:
         - name: api
           image: api-group8
-          imagePullPolicy: Never
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3333
           env:
             - name: STATIC_FILES_PATH
-              value: ./ucl-imdb
+              value: /usr/src/app/ucl-imdb
             - name: PRODUCTION
               value: 'true'
             - name: POSTGRES_USER
@@ -82,6 +82,6 @@ spec:
   type: LoadBalancer
   ports:
     - protocol: TCP
-      port: 3333
+      port: 3333  # port on host
       targetPort: 3333
       nodePort: 30000
