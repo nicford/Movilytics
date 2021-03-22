@@ -66,6 +66,7 @@ export class ReviewComponent {
   personalityChartOptions
 
   predictedPersonalityDataReady = false;
+  predictedRatingDataReady = false;
 
   @Input() mid: string
 
@@ -480,6 +481,8 @@ export class ReviewComponent {
         ctx.fillText(txt, centerX, centerY);
       }
     }];
+
+    this.predictedRatingDataReady = true;
   }
 
   createPersonalityChart(resData: any) {
@@ -490,7 +493,7 @@ export class ReviewComponent {
     this.personalityChartDataset = [
       {
         data: [Number(resData.body.openness), Number(resData.body.agreeableness), Number(resData.body.emotional_stability), Number(resData.body.conscientiousness), Number(resData.body.extraversion) ],
-        label: "predicted personality"
+        label: "Predicted Personality"
       }
     ];
     this.personalityChartOptions = {

@@ -248,7 +248,9 @@
 
                             <div class="graph-container" *ngIf="this.toggleDict['ratingspredToggle']">
                                 <group8-file-upload endpoint="/movie-report/predict-ratings/{{this.movie.mid}}" requiredFileType="text/csv"></group8-file-upload>
-
+                                <div style ='display:block' *ngIf="this.predictedRatingDataReady">
+                                    <canvas baseChart [data]='predictionChartData' [labels]="predictionChartLabels" [options]="predictionChartOptions" [plugins]="predictionChartPlugIns" [chartType]="doughnutChartType"></canvas>
+                                </div>
                             </div>
                         </div>
                         <div class="seperator"></div>
