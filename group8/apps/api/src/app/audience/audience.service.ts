@@ -26,7 +26,7 @@ export class AudienceService {
         
         // if a movie has less than 2 genres, segment users considering all genres
         if (howmany_genre < 2) {
-            console.log(`Movie has ${howmany_genre} genre`);
+            // console.log(`Movie has ${howmany_genre} genre`);
             let seg_data = fs.readFileSync('apps/api/src/app/audience_json_dump/segmentation.json');
             let parsed = JSON.parse(seg_data);
             return parsed;
@@ -61,7 +61,6 @@ export class AudienceService {
         // Get columns to select from user_genre_mapping
         const genres_array = Object.keys(genre_avg_rating_dict);
         const columns_for_query = genres_array.join(','); // animation,family
-        console.log(columns_for_query);
         
         const user_genre_query = 'SELECT ' + columns_for_query + ' FROM user_genre_mapping'
         const mapping_response = await this.databaseService.runQuery(user_genre_query, []);
@@ -102,7 +101,7 @@ export class AudienceService {
             })
             user_item_matrix.push(row);
         })
-        console.log(user_item_matrix)
+        // console.log(user_item_matrix)
 
         /////////////////////////////////////////////////////////
         // <Run CF for all users and segment users by Recommended Genre>
@@ -112,7 +111,7 @@ export class AudienceService {
         genres_array.forEach((item) => {
             segmentation[item] = []
         })
-        console.log(segmentation) // { animation: [], family: [] }
+        // console.log(segmentation) // { animation: [], family: [] }
 
         // const segmentation = {
         //     'family': [],
@@ -159,7 +158,7 @@ export class AudienceService {
             'genres_array': genres_array,
             'length_of_each_genre': length_of_each_genre
         }
-        console.log(segmentation)
+        // console.log(segmentation)
 
         return segmentation;
     }
