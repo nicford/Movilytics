@@ -66,29 +66,30 @@ export class ReviewComponent {
   personalityChartOptions
 
   predictedPersonalityDataReady = false;
+  predictedRatingDataReady = false;
 
   @Input() mid: string
 
   constructor(private movieService: MoviesService, private activatedRouter: ActivatedRoute, private imageService: ImagesService) {
     Chart.defaults.global.defaultFontColor = 'grey';
-    this.mid=this.activatedRouter.snapshot.paramMap.get("reviewID");
+    this.mid = this.activatedRouter.snapshot.paramMap.get("reviewID");
     console.log(this.mid)
 
     // REVIEW
     const review_res = this.movieService.getMovieReview(this.mid)
     review_res.subscribe(resData => {
       console.log(resData)
-      this.movie = resData      
+      this.movie = resData
       this.totalStars = this.convertString(this.movie.one_star) + this.convertString(this.movie.two_star) + this.convertString(this.movie.three_star) + this.convertString(this.movie.four_star) + this.convertString(this.movie.five_star);
       this.totalLikes = this.convertString(this.movie.likes) + this.convertString(this.movie.dislikes)
       this.poster = this.getImage(this.movie.poster_path)
       this.revChartData = [{
         data: [this.movie.revenue, this.movie.budget],
-        backgroundColor: ["#006400","#98FB98"]
+        backgroundColor: ["#006400", "#98FB98"]
       }];
       this.voteChartData = [{
         data: [this.movie.vote_average, 10 - this.movie.vote_average],
-        backgroundColor: ["#FF8C00","#F0E68C"]
+        backgroundColor: ["#FF8C00", "#F0E68C"]
       }];
       this.popularityChartData = [{
         data: [this.movie.popularity],
@@ -98,10 +99,10 @@ export class ReviewComponent {
       this.lineChartType = 'line';
 
       this.lineChartData = [
-        {data: this.movie.trend_activty, label: "Activity"}, 
-        {data: this.movie.trend_ratings, label: "Ratings"}
+        { data: this.movie.trend_activty, label: "Activity" },
+        { data: this.movie.trend_ratings, label: "Ratings" }
       ];
-      
+
       this.lineChartLabels = this.movie.trend_months
       this.lineChartOptions = {
         scaleShowVerticalLines: false,
@@ -112,56 +113,58 @@ export class ReviewComponent {
           position: 'bottom'
         }
       };
-      
-      const genre_details_dict = this.movie.genre_pop_and_perc_diff[0];
-      this.pieChartLabels = ['Animation', 'Adventure', 'Family', 'Comedy', 'Fantasy', 'Romance', 'Drama', 'Action','Crime','Thriller','Horror','History','Science Fiction', 'Mystery','War','Music','Documentary','Western','TV Movie'];
-      this.pieChartData = [
-                            genre_details_dict.animation_count, 
-                            genre_details_dict.adventure_count, 
-                            genre_details_dict.family_count, 
-                            genre_details_dict.comedy_count, 
-                            genre_details_dict.fantasy_count, 
-                            genre_details_dict.romance_count, 
-                            genre_details_dict.drama_count,
-                            genre_details_dict.action_count,
-                            genre_details_dict.crime_count,
-                            genre_details_dict.thriller_count,
-                            genre_details_dict.horror_count,
-                            genre_details_dict.history_count,
-                            genre_details_dict.science_fiction_count,
-                            genre_details_dict.mystery_count,
-                            genre_details_dict.war_count,
-                            genre_details_dict.music_count,
-                            genre_details_dict.documentary_count,
-                            genre_details_dict.western_count,
-                            genre_details_dict.tv_movie_count
-                          ];
 
-      this.barChartData = [
-        {data: [
-                genre_details_dict.animation_glob_avg, 
-                genre_details_dict.adventure_glob_avg, 
-                genre_details_dict.family_glob_avg, 
-                genre_details_dict.comedy_glob_avg, 
-                genre_details_dict.fantasy_glob_avg, 
-                genre_details_dict.romance_glob_avg, 
-                genre_details_dict.drama_glob_avg,
-                genre_details_dict.action_glob_avg,
-                genre_details_dict.crime_glob_avg,
-                genre_details_dict.thriller_glob_avg,
-                genre_details_dict.horror_glob_avg,
-                genre_details_dict.history_glob_avg,
-                genre_details_dict.science_fiction_glob_avg,
-                genre_details_dict.mystery_glob_avg,
-                genre_details_dict.war_glob_avg,
-                genre_details_dict.music_glob_avg,
-                genre_details_dict.documentary_glob_avg,
-                genre_details_dict.western_glob_avg,
-                genre_details_dict.tv_movie_glob_avg
-        ], label: 'Percentile Difference'},
+      const genre_details_dict = this.movie.genre_pop_and_perc_diff[0];
+      this.pieChartLabels = ['Animation', 'Adventure', 'Family', 'Comedy', 'Fantasy', 'Romance', 'Drama', 'Action', 'Crime', 'Thriller', 'Horror', 'History', 'Science Fiction', 'Mystery', 'War', 'Music', 'Documentary', 'Western', 'TV Movie'];
+      this.pieChartData = [
+        genre_details_dict.animation_count,
+        genre_details_dict.adventure_count,
+        genre_details_dict.family_count,
+        genre_details_dict.comedy_count,
+        genre_details_dict.fantasy_count,
+        genre_details_dict.romance_count,
+        genre_details_dict.drama_count,
+        genre_details_dict.action_count,
+        genre_details_dict.crime_count,
+        genre_details_dict.thriller_count,
+        genre_details_dict.horror_count,
+        genre_details_dict.history_count,
+        genre_details_dict.science_fiction_count,
+        genre_details_dict.mystery_count,
+        genre_details_dict.war_count,
+        genre_details_dict.music_count,
+        genre_details_dict.documentary_count,
+        genre_details_dict.western_count,
+        genre_details_dict.tv_movie_count
       ];
 
-      this.scatterChartData = [{data: this.movie.tag_scatter, label: "Tags"}];
+      this.barChartData = [
+        {
+          data: [
+            genre_details_dict.animation_glob_avg,
+            genre_details_dict.adventure_glob_avg,
+            genre_details_dict.family_glob_avg,
+            genre_details_dict.comedy_glob_avg,
+            genre_details_dict.fantasy_glob_avg,
+            genre_details_dict.romance_glob_avg,
+            genre_details_dict.drama_glob_avg,
+            genre_details_dict.action_glob_avg,
+            genre_details_dict.crime_glob_avg,
+            genre_details_dict.thriller_glob_avg,
+            genre_details_dict.horror_glob_avg,
+            genre_details_dict.history_glob_avg,
+            genre_details_dict.science_fiction_glob_avg,
+            genre_details_dict.mystery_glob_avg,
+            genre_details_dict.war_glob_avg,
+            genre_details_dict.music_glob_avg,
+            genre_details_dict.documentary_glob_avg,
+            genre_details_dict.western_glob_avg,
+            genre_details_dict.tv_movie_glob_avg
+          ], label: 'Percentile Difference'
+        },
+      ];
+
+      this.scatterChartData = [{ data: this.movie.tag_scatter, label: "Tags" }];
       this.scatterChartLabels = this.movie.tag_labels;
 
     }).unsubscribe;
@@ -185,37 +188,37 @@ export class ReviewComponent {
         },
         tooltips: {
           callbacks: {
-            label: function(tooltipItem, data) {
-               const label = data.labels[tooltipItem.index];
-               const value = data.datasets[0].data[tooltipItem.index];
-               return (label + ' :' +  value);
+            label: function (tooltipItem, data) {
+              const label = data.labels[tooltipItem.index];
+              const value = data.datasets[0].data[tooltipItem.index];
+              return (label + ' :' + value);
             },
-            afterLabel: function(tooltipItem, data){
+            afterLabel: function (tooltipItem, data) {
               const label = data.labels[tooltipItem.index];
               const users = cf_resData[label];
               const texts = [];
               let user = ['Users Segemented: '];
               texts.push("");
-              for(let i = 0; i < users.length; i++){
-                if(i % 6 == 0){
+              for (let i = 0; i < users.length; i++) {
+                if (i % 6 == 0) {
                   texts.push(user);
                   user = [];
                 } else {
-                  user.push(users[i]);  
+                  user.push(users[i]);
                 }
               }
-              return  texts;
+              return texts;
             }
-         }
+          }
         }
       }
     }).unsubscribe;
-  }  
+  }
   public barChartLegend = true;
 
   public revChartLabels: Label = ['Revenue', 'Budget'];
   public voteChartLabel: Label = ['Vote Average', ""]
-  public popularityChartLabel : Label = ["Popularity"]
+  public popularityChartLabel: Label = ["Popularity"]
 
   public doughnutChartType: ChartType = 'doughnut';
   public pieChartType: ChartType = 'pie';
@@ -228,7 +231,7 @@ export class ReviewComponent {
       display: false
     },
     tooltips: {
-    	filter: function(item, data) {
+      filter: function (item, data) {
         const label = data.labels[item.index];
         if (label) return item;
       }
@@ -251,23 +254,23 @@ export class ReviewComponent {
     },
     tooltips: {
       callbacks: {
-         label: function(tooltipItem, data) {
-            const label = data.labels[tooltipItem.index];
-            return label + ': (' + tooltipItem.xLabel + ', ' + tooltipItem.yLabel + ')';
-         }
+        label: function (tooltipItem, data) {
+          const label = data.labels[tooltipItem.index];
+          return label + ': (' + tooltipItem.xLabel + ', ' + tooltipItem.yLabel + ')';
+        }
       }
-   },
-   scales: {
+    },
+    scales: {
       xAxes: [{
         gridLines: {
-            zeroLineColor: 'white'
+          zeroLineColor: 'white'
         },
         display: true,
         scaleLabel: {
-            display: true,
-            labelString: 'Net Likes',
-            fontColor: 'white',
-            fontSize:12
+          display: true,
+          labelString: 'Net Likes',
+          fontColor: 'white',
+          fontSize: 12
         },
         ticks: {
           fontColor: "white"
@@ -275,20 +278,20 @@ export class ReviewComponent {
       }],
       yAxes: [{
         gridLines: {
-            zeroLineColor: 'white'
+          zeroLineColor: 'white'
         },
         display: true,
         scaleLabel: {
-            display: true,
-            labelString: 'Polarity',
-            fontColor: 'white',
-            fontSize:12
+          display: true,
+          labelString: 'Polarity',
+          fontColor: 'white',
+          fontSize: 12
         },
         ticks: {
           fontColor: "white"
         }
       }]
-   }
+    }
   }
 
   public genreDistributionChartOptions = {
@@ -310,7 +313,7 @@ export class ReviewComponent {
     }
   };
 
-  public popularityChartOptions ={
+  public popularityChartOptions = {
     title: {
       display: true,
       text: 'Popularity',
@@ -321,7 +324,7 @@ export class ReviewComponent {
     }
   }
 
-  public revChartOptions ={
+  public revChartOptions = {
     title: {
       display: true,
       text: 'Net Profit',
@@ -436,9 +439,13 @@ export class ReviewComponent {
     }
   }];
 
-  createPredictionChart(resData: any){
+  createPredictionChart(resData: any) {
     this.predictionChartLabels = ['Genre Rating', 'Company Rating', 'Provided Tag Rating', 'Provided Panel Rating'];
-    this.predictionChartData = [resData.genre_rating_avg, resData.company_rating_avg, resData.tag_rating_avg, resData.provided_ratings_avg];
+    this.predictionChartData = [Number(resData.body.genre_rating_avg),
+    Number(resData.body.company_rating_avg),
+    Number(resData.body.tag_rating_avg),
+    Number(resData.body.provided_ratings_avg)];
+    console.log(this.predictionChartData)
     this.predictionChartOptions = {
       title: {
         display: true,
@@ -450,47 +457,51 @@ export class ReviewComponent {
     this.predictionChartPlugIns = [{
       beforeDraw: (chart: any) => {
         const ctx = chart.ctx;
-        const txt = resData.overall_avg.toFixed(2);
-  
+        const avg = Number(resData.body.overall_avg)
+        const txt = avg.toFixed(2);
+        console.log(txt)
+
         //Get options from the center object in options
         const sidePadding = 60;
         const sidePaddingCalculated = (sidePadding / 100) * (chart.innerRadius * 2)
-  
+
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         const centerX = ((chart.chartArea.left + chart.chartArea.right) / 2);
         const centerY = ((chart.chartArea.top + chart.chartArea.bottom) / 2);
-  
+
         //Get the width of the string and also the width of the element minus 10 to give it 5px side padding
         const stringWidth = ctx.measureText(txt).width;
         const elementWidth = (chart.innerRadius * 2) - sidePaddingCalculated;
-  
+
         // Find out how much the font can grow in width.
         const widthRatio = elementWidth / stringWidth;
         const newFontSize = Math.floor(20 * widthRatio);
         const elementHeight = (chart.innerRadius * 2);
-  
+
         // Pick a new font size so it will not be larger than the height of label.
         const fontSizeToUse = Math.min(newFontSize, elementHeight);
-  
+
         ctx.font = fontSizeToUse + 'px Roboto';
         ctx.fillStyle = 'white';
-  
+
         // Draw text in center
         ctx.fillText(txt, centerX, centerY);
       }
     }];
+
+    this.predictedRatingDataReady = true;
   }
 
   createPersonalityChart(resData: any) {
     console.log("resdata:");
     console.log(resData);
-    
+
     this.personalityChartLabels = ['Openness', 'Agreeableness', 'Emotional Stability', 'Conscientiousness', 'Extraversion'];
     this.personalityChartDataset = [
       {
-        data: [Number(resData.body.openness), Number(resData.body.agreeableness), Number(resData.body.emotional_stability), Number(resData.body.conscientiousness), Number(resData.body.extraversion) ],
-        label: "predicted personality"
+        data: [Number(resData.body.openness), Number(resData.body.agreeableness), Number(resData.body.emotional_stability), Number(resData.body.conscientiousness), Number(resData.body.extraversion)],
+        label: "Predicted Personality"
       }
     ];
     this.personalityChartOptions = {
@@ -501,13 +512,13 @@ export class ReviewComponent {
       },
       scale: {
         ticks: {
-            min: 0
+          min: 0
         }
-    }
+      }
     }
     this.predictedPersonalityDataReady = true;
   }
-  
+
 
   getImage(posterPath: string) {
     const res = this.imageService.getPosterPath(posterPath)
@@ -523,9 +534,9 @@ export class ReviewComponent {
     if (!mystr) {
       return
     }
-    if (mystr.trim().length==0) { 
+    if (mystr.trim().length == 0) {
       return NaN;
-  }
+    }
     return Number(mystr);
   }
 

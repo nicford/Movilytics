@@ -101,4 +101,4 @@ export class PREDICTED_PERSONALITY {
 
 }
 
-export const apiEndpoint = "http://5fcf906f2af8.ngrok.io/api"
+export const apiEndpoint = "http://localhost:3333/api"
