@@ -58,7 +58,9 @@
                                 <ul class="starring">
                                     <li><strong>Cast:</strong>
                                         <div class="entry-content" *ngIf="this.movie.cast_names">
-                                            <span *ngFor="let cast of this.movie.cast_names">{{cast}}  </span>
+                                            <span *ngFor="let cast of this.movie.cast_names">
+                                                <a href="https://www.google.com/search?q={{cast}}" target="_blank">{{cast}}</a>; 
+                                            </span>
                                         </div>
                                         <div class="entry-content" *ngIf="! this.movie.cast_names">
                                             <span>Not available yet</span>
