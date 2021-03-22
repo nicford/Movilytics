@@ -176,6 +176,8 @@ export class AudienceService {
 
         const rows = genre_population_response.rows[0];
         const processed_population_map = {};
+        const genre_avg = [];
+        let counter = 0;
         let local_avg = 0;
         let total_population = 0;
 
@@ -189,14 +191,46 @@ export class AudienceService {
             else if (key.endsWith("_count")){
                 total_population = total_population + val;
             } 
+
+            else if (key.endsWith("tag_avg")){
+                let tagAvg = Number((val / 5) * 100);
+                if(isNaN(tagAvg)) {
+                    tagAvg = 0;
+                }
+                
+                let rating_avg = genre_avg[counter]
+                if(tagAvg != 0) {
+                    rating_avg = Number(((tagAvg + rating_avg) / 2).toFixed(2));
+                }
+                
+                tagAvg = Number(tagAvg.toFixed(2));
+                if(isNaN(rating_avg)){
+                    rating_avg = 0;
+                }
+
+                counter += 1;
+                const totalKey = key + '_total';
+
+                processed_population_map[key] = tagAvg;
+                processed_population_map[totalKey] = rating_avg;            
+            }
             
-            else if (key.endsWith("_avg")){
+            else if (key.endsWith("glob_avg")){
+                const new_key = key + "_likeliness";
+                let likeliness = Number((val / 5 ) * 100);
+                genre_avg.push(likeliness);
+
+                likeliness = Number(likeliness.toFixed(2));
                 const tmp = ((local_avg - val) / val) * 100; 
                 let percentage_difference = Number(tmp.toFixed(2));
                 if(isNaN(percentage_difference)) {
                     percentage_difference = 0;
                 }
+                if(isNaN(likeliness)) {
+                    likeliness = 0;
+                }
                 processed_population_map[key] = percentage_difference;
+                processed_population_map[new_key] = likeliness;
             }
         })
 

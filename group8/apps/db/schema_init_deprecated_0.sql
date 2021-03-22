@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 13.2
+-- Dumped from database version 13.2 (Debian 13.2-1.pgdg100+1)
 -- Dumped by pg_dump version 13.2
 
 SET statement_timeout = 0;
@@ -116,64 +116,39 @@ ALTER FUNCTION public.get_genre_company_avg(movie_id integer) OWNER TO postgres;
 -- Name: get_genre_population_avg_diff(integer); Type: FUNCTION; Schema: public; Owner: postgres
 --
 
-CREATE FUNCTION public.get_genre_population_avg_diff(movie_id integer DEFAULT NULL::integer) RETURNS TABLE(local_avg numeric, animation_glob_avg numeric, animation_count bigint, adventure_glob_avg numeric, adventure_count bigint, family_glob_avg numeric, family_count bigint, comedy_glob_avg numeric, comedy_count bigint, fantasy_glob_avg numeric, fantasy_count bigint, romance_glob_avg numeric, romance_count bigint, drama_glob_avg numeric, drama_count bigint, action_glob_avg numeric, action_count bigint, crime_glob_avg numeric, crime_count bigint, thriller_glob_avg numeric, thriller_count bigint, horror_glob_avg numeric, horror_count bigint, history_glob_avg numeric, history_count bigint, science_fiction_glob_avg numeric, science_fiction_count bigint, mystery_glob_avg numeric, mystery_count bigint, war_glob_avg numeric, war_count bigint, music_glob_avg numeric, music_count bigint, documentary_glob_avg numeric, documentary_count bigint, western_glob_avg numeric, western_count bigint, tv_movie_glob_avg numeric, tv_movie_count bigint, animation_tag_avg numeric, adventure_tag_avg numeric, family_tag_avg numeric, comedy_tag_avg numeric, fantasy_tag_avg numeric, romance_tag_avg numeric, drama_tag_avg numeric, action_tag_avg numeric, crime_tag_avg numeric, thriller_tag_avg numeric, horror_tag_avg numeric, history_tag_avg numeric, science_fiction_tag_avg numeric, mystery_tag_avg numeric, war_tag_avg numeric, music_tag_avg numeric, documentary_tag_avg numeric, western_tag_avg numeric, tv_movie_tag_avg numeric)
+CREATE FUNCTION public.get_genre_population_avg_diff(movie_id integer DEFAULT NULL::integer) RETURNS TABLE(local_avg numeric, animation_glob_avg numeric, animation_count bigint, adventure_glob_avg numeric, adventure_count bigint, family_glob_avg numeric, family_count bigint, comedy_glob_avg numeric, comedy_count bigint, fantasy_glob_avg numeric, fantasy_count bigint, romance_glob_avg numeric, romance_count bigint, drama_glob_avg numeric, drama_count bigint, action_glob_avg numeric, action_count bigint, crime_glob_avg numeric, crime_count bigint, thriller_glob_avg numeric, thriller_count bigint, horror_glob_avg numeric, horror_count bigint, history_glob_avg numeric, history_count bigint, science_fiction_glob_avg numeric, science_fiction_count bigint, mystery_glob_avg numeric, mystery_count bigint, war_glob_avg numeric, war_count bigint, music_glob_avg numeric, music_count bigint, documentary_glob_avg numeric, documentary_count bigint, western_glob_avg numeric, western_count bigint, tv_movie_glob_avg numeric, tv_movie_count bigint)
     LANGUAGE plpgsql
     AS $$
 	begin
 		return query 
 			with 
 				global_avg as (
-					select COALESCE(avg(animation),0) as animation_glob_avg,
-					   COALESCE(avg(adventure),0) as adventure_glob_avg,
-					   COALESCE(avg(family),0) as family_glob_avg,
-					   COALESCE(avg(comedy),0) as comedy_glob_avg,
-					   COALESCE(avg(fantasy),0) as fantasy_glob_avg,
-					   COALESCE(avg(romance),0) as romance_glob_avg,
-					   COALESCE(avg(drama),0) as drama_glob_avg,
-					   COALESCE(avg(action),0) as action_glob_avg,
-					   COALESCE(avg(crime),0) as crime_glob_avg,
-					   COALESCE(avg(thriller),0) as thriller_glob_avg,
-					   COALESCE(avg(horror),0) as horror_glob_avg,
-					   COALESCE(avg(history),0) as history_glob_avg,
-					   COALESCE(avg(science_fiction),0) as science_fiction_glob_avg,
-					   COALESCE(avg(mystery),0) as mystery_glob_avg,
-					   COALESCE(avg(war),0) as war_glob_avg,
-					   COALESCE(avg(music),0) as music_glob_avg,
-					   COALESCE(avg(documentary),0) as documentary_glob_avg,
-					   COALESCE(avg(western),0) as western_glob_avg,
-					   COALESCE(avg(tv_movie),0) as tv_movie_glob_avg
+					select avg(animation) as animation_glob_avg,
+					   avg(adventure) as adventure_glob_avg,
+					   avg(family) as family_glob_avg,
+					   avg(comedy) as comedy_glob_avg,
+					   avg(fantasy) as fantasy_glob_avg,
+					   avg(romance) as romance_glob_avg,
+					   avg(drama) as drama_glob_avg,
+					   avg(action) as action_glob_avg,
+					   avg(crime) as crime_glob_avg,
+					   avg(thriller) as thriller_glob_avg,
+					   avg(horror) as horror_glob_avg,
+					   avg(history) as history_glob_avg,
+					   avg(science_fiction) as science_fiction_glob_avg,
+					   avg(mystery) as mystery_glob_avg,
+					   avg(war) as war_glob_avg,
+					   avg(music) as music_glob_avg,
+					   avg(documentary) as documentary_glob_avg,
+					   avg(western) as western_glob_avg,
+					   avg(tv_movie) as tv_movie_glob_avg
 					from user_genre_mapping
 					where user_id in (select user_id from ratings where mid = movie_id)
-				), 
-				tag_avg as (
-					select 
-						COALESCE(avg(animation),0) as animation_tag_avg,
-						COALESCE(avg(adventure),0) as adventure_tag_avg,
-						COALESCE(avg(family),0) as family_tag_avg,
-						COALESCE(avg(comedy),0) as comedy_tag_avg,
-						COALESCE(avg(fantasy),0) as fantasy_tag_avg,
-						COALESCE(avg(romance),0) as romance_tag_avg,
-						COALESCE(avg(drama),0) as drama_tag_avg,
-						COALESCE(avg(action),0) as action_tag_avg,
-						COALESCE(avg(crime),0) as crime_tag_avg,
-						COALESCE(avg(thriller),0) as thriller_tag_avg,
-						COALESCE(avg(horror),0) as horror_tag_avg,
-						COALESCE(avg(history),0) as history_tag_avg,
-						COALESCE(avg(science_fiction),0) as science_fiction_tag_avg,
-						COALESCE(avg(mystery),0) as mystery_tag_avg,
-						COALESCE(avg(war),0) as war_tag_avg,
-						COALESCE(avg(music),0) as music_tag_avg,
-						COALESCE(avg(documentary),0) as documentary_tag_avg,
-						COALESCE(avg(western),0) as western_tag_avg,
-						COALESCE(avg(tv_movie),0) as tv_movie_tag_avg
-					from user_genre_mapping
-					where user_id in (select user_id from tags where mid = movie_id group by user_id)
 				),
 				curr_avg as (
 					select 
-						COALESCE(avg_rating, 0) as local_avg 
-					from movie_stats 
-					where mid = movie_id
+						avg(rating) as local_avg 
+					from ratings where mid = movie_id
 				),
 				population_table as (
 					select 
@@ -239,27 +214,8 @@ CREATE FUNCTION public.get_genre_population_avg_diff(movie_id integer DEFAULT NU
 					global_avg.western_glob_avg,
 					population_table.western_count,
 					global_avg.tv_movie_glob_avg,
-					population_table.tv_movie_count,
-					tag_avg.animation_tag_avg,
-					tag_avg.adventure_tag_avg,
-					tag_avg.family_tag_avg,
-					tag_avg.comedy_tag_avg,
-					tag_avg.fantasy_tag_avg,
-					tag_avg.romance_tag_avg,
-					tag_avg.drama_tag_avg,
-					tag_avg.action_tag_avg,
-					tag_avg.crime_tag_avg,
-					tag_avg.thriller_tag_avg,
-					tag_avg.horror_tag_avg,
-					tag_avg.history_tag_avg,
-					tag_avg.science_fiction_tag_avg,
-					tag_avg.mystery_tag_avg,
-					tag_avg.war_tag_avg,
-					tag_avg.music_tag_avg,
-					tag_avg.documentary_tag_avg,
-					tag_avg.western_tag_avg,
-					tag_avg.tv_movie_tag_avg
-				from global_avg, curr_avg, population_table, tag_avg;
+					population_table.tv_movie_count
+				from global_avg, curr_avg, population_table;
 end; $$;
 
 
