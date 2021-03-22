@@ -98,7 +98,7 @@
                     <div class="movies-container">
                         <div class="movie-list">
                             <div class="movie" *ngFor="let movie of this.movies">
-                                <ion-badge color="warning">{{movie.vote_average}}</ion-badge>
+                                <ion-badge color="warning" *ngIf="movie.status=='Released'">{{movie.vote_average}}</ion-badge>
                                 <a href="tabs/tab2/{{movie.mid}}">
                                     <figure class="movie-poster "><img [src]="getImage(movie.poster_path) "></figure>
                                 </a>
