@@ -16,4 +16,4 @@
     - access to pgAdmin by: `localhost:8080`
     - access the API by: `localhost:3333/your/api/endpoint`
 
-
+![demo-gif](https://github.com/nicford/databases-group8/blob/main/demo_gif.gif)
