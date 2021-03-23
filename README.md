@@ -12,7 +12,7 @@
     ```
 
     Now you can:
-    - serve web-app by: `ng serve`
+    - serve web-app by: `ng serve` then `localhost:4200`
     - access to pgAdmin by: `localhost:8080`
     - access the API by: `localhost:3333/your/api/endpoint`
 
